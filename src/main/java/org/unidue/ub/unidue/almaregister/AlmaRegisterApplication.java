@@ -18,7 +18,6 @@ public class AlmaRegisterApplication {
         SpringApplication.run(AlmaRegisterApplication.class, args);
     }
 
-    /*
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> servletContainer() {
         return server -> {
@@ -39,7 +38,5 @@ public class AlmaRegisterApplication {
         ajpConnector.setAttribute("packetSize", 65536);
         return ajpConnector;
     }
-
-     */
 
 }
