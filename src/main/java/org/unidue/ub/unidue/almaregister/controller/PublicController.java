@@ -11,16 +11,6 @@ public class PublicController {
         return "index";
     }
 
-    @GetMapping("/privacy")
-    public String getPrivacyPage() {
-        return "privacy";
-    }
-
-    @GetMapping("/nutzungsbedingungen")
-    public String getTermsOfConditions() {
-        return "terms";
-    }
-
     @GetMapping("/actions")
     public String getActionsPage() {
         return "actions";

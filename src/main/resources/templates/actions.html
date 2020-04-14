@@ -4,7 +4,7 @@
 <body>
 <div class="jumbotron">
     <div class="tile">
-        <h1 th:text="#{register}"></h1>
+        <h1 th:text="#{actions}"></h1>
     </div>
 </div>
 
@@ -12,12 +12,11 @@
     <div class="ui-g">
         <div class="ui-g-12 ui-md-10 ui-md-offset-1">
             <div class="tile">
-                <h3>Freischaltung des Uni-Accounts</h3>
+                <h3>Anmeldung für die Ausleihe</h3>
                 <form th:action="@{/secure/review}" method="post">
-                    <p>Um Ihren Universitäts-Account für die Nutzung der Bibliothek freischalten zu lassen, lesen Sie sich bitte
+                    <p>Um Ihren Uni-Account für die Nutzung der Bibliothek freischalten zu lassen, lesen Sie sich bitte
                         die <a href="https://www.uni-due.de/ub/files/docs/benord.pdf">Benutzungsordnung</a> und die <a href="https://www.uni-due.de/ub/dsgvo_katalog.php">Datenschutzhinweise</a> durch. Sobald sie diese anerkannt haben,
-                        können Sie über den Button "Registrieren" einen Benutzeraccount anlegen.</p>
-                    <p><a th:href="@{/actions}">Was erwartet mich?</a></p>
+                        können Sie über Registrieren einen Benutzeraccount anlegen.</p>
                     <br/>
                     <fieldset class="section">
                         <legend>Nutzungsbedingungen</legend>
