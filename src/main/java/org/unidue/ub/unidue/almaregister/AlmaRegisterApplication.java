@@ -1,9 +1,11 @@
 package org.unidue.ub.unidue.almaregister;
 
 import org.apache.catalina.connector.Connector;
+import org.apache.coyote.ajp.AbstractAjpProtocol;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +15,9 @@ public class AlmaRegisterApplication {
 
     @Value("${tomcat.ajp.port:8009}")
     int ajpPort;
+
+    @Value("${tomcat.ajp.secret:bad_wolf}")
+    String ajpSecret;
 
     public static void main(String[] args) {
         SpringApplication.run(AlmaRegisterApplication.class, args);
@@ -36,7 +41,9 @@ public class AlmaRegisterApplication {
         ajpConnector.setAttribute("connectionTimeout", 20000);
         ajpConnector.setScheme("http");
         ajpConnector.setAttribute("packetSize", 65536);
+        ((AbstractAjpProtocol) ajpConnector.getProtocolHandler()).setSecret(ajpSecret);
         return ajpConnector;
     }
+
 
 }
