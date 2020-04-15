@@ -9,8 +9,6 @@ import org.unidue.ub.unidue.almaregister.model.Email;
 import org.unidue.ub.unidue.almaregister.model.UserAccountType;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 @Service
@@ -30,7 +28,7 @@ public class AlmaUserService {
         this.httpServletRequest = httpServletRequest;
     }
 
-    public AlmaUser generateAlmaUserFromShibbolethData() {
+    public AlmaUser generateAlmaUserFromShibbolethData() throws MissingShibbolethDataException {
         String id = this.httpServletRequest.getHeader("AJP_uid");
         String email = this.httpServletRequest.getHeader("AJP_mail");
         String givenName = this.httpServletRequest.getHeader("AJP_givenName");
@@ -46,6 +44,8 @@ public class AlmaUserService {
         contactInfo.setEmail(Collections.singletonList(emailData));
         almaUser.setContactInfo(contactInfo);
         UserAccountType userAccountType = new UserAccountType();
+        if (type == null)
+            throw new MissingShibbolethDataException("no type given");
         if (type.contains("student"))
             userAccountType.setValue("student");
         else if (type.contains("staff"))

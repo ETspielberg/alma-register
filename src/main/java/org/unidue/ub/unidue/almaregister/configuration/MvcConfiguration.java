@@ -13,22 +13,28 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 
-@Configuration
 /**
+ * serves as configuration for the spring model-view-controller
  * thanks to Baeldung at https://www.baeldung.com/spring-boot-internationalization
  */
+@Configuration
 public class MvcConfiguration implements WebMvcConfigurer {
 
-    @Bean
     /**
      * resolves the locale to be used
+     * @return the LocaleResolver with german es standard locale
      */
+    @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
         sessionLocaleResolver.setDefaultLocale(Locale.GERMAN);
         return sessionLocaleResolver;
     }
 
+    /**
+     * intercepts changes in the locale by changes in the parameter "lang"
+     * @return  the locale change interceptor
+     */
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
@@ -36,11 +42,19 @@ public class MvcConfiguration implements WebMvcConfigurer {
         return localeChangeInterceptor;
     }
 
+    /**
+     * adds the locale change interceptors to the interceptor registry
+     * @param registry autowired to the interceptor registry
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
     }
 
+    /**
+     * sets the message source for the localization to 'classpath:locale/messages' with utf-8-encoding
+     * @return the message source for the localization
+     */
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -49,6 +63,10 @@ public class MvcConfiguration implements WebMvcConfigurer {
         return messageSource;
     }
 
+    /**
+     * sets the location of static files for the resource handler
+     * @param registry the resource handler registry
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(

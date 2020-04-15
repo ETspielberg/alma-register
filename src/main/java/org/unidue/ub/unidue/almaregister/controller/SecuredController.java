@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.unidue.ub.unidue.almaregister.model.AlmaUser;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
+import org.unidue.ub.unidue.almaregister.service.MissingShibbolethDataException;
 
 import java.security.Principal;
 import java.util.LinkedHashMap;
@@ -26,7 +27,7 @@ public class SecuredController {
     }
 
     @PostMapping("/review")
-    public String getReviewPage(Model model) {
+    public String getReviewPage(Model model) throws MissingShibbolethDataException {
         AlmaUser almaUser = this.almaUserService.generateAlmaUserFromShibbolethData();
         model.addAttribute("almaUser", almaUser);
         return "review";
@@ -52,5 +53,14 @@ public class SecuredController {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @ExceptionHandler(MissingShibbolethDataException.class)
+    public ModelAndView handleException(MissingShibbolethDataException ex)
+    {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("error");
+        modelAndView.addObject("message", ex.getMessage());
+        return modelAndView;
     }
 }

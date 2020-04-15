@@ -18,9 +18,16 @@ public class FeignConfiguration {
 
     private static Logger log = LoggerFactory.getLogger(FeignConfiguration.class);
 
+    /**
+     * appropriate request interceptor to add the authentication information.
+     * @return the request interceptor
+     */
     @Bean
     public RequestInterceptor apiKeyInterceptor() {
+        // add authentication information as query parameter 'apikey'
         ApiKeyAuth apiKeyAuth = new ApiKeyAuth("query", "apikey");
+
+        //set the api key as defied in the properties
         apiKeyAuth.setApiKey(almaUserApiKey);
         return apiKeyAuth;
     }

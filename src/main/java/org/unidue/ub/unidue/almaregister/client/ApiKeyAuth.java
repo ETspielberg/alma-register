@@ -9,6 +9,11 @@ public class ApiKeyAuth implements RequestInterceptor {
 
     private String apiKey;
 
+    /**
+     * adds the necessary authentication parameter to the API call
+     * @param location the place where to put the authentication data. possible values are 'query', 'header' or 'cookie'
+     * @param paramName the pparametername for the authentication data, i.e. the query parameter, header or cookie name.
+     */
     public ApiKeyAuth(String location, String paramName) {
         this.location = location;
         this.paramName = paramName;
@@ -30,6 +35,9 @@ public class ApiKeyAuth implements RequestInterceptor {
         this.apiKey = apiKey;
     }
 
+    /**
+     * @param template the request template the authentication data are added to.
+     */
     @Override
     public void apply(RequestTemplate template) {
         if ("query".equals(location)) {
