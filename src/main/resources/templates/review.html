@@ -14,8 +14,24 @@
         <div class="ui-g-12 ui-md-10 ui-md-offset-1">
             <div class="tile">
                 <h3>Ihre Daten</h3>
-                <form th:action="@{/secure/confirmation}"></form>
+                <form th:action="@{/secure/confirmation}" th:object="${almaUser}"></form>
                 <p>Folgende Daten werden zur Erstellung Ihres Accounts übertragen. Bitte prüfen Sie diese und bestätigen die Korrektheit.</p>
+                <div>
+                    <input id="firstname" type="text" size="30" class="form-control" th:field="*{almaUser.firstName}">
+                    <label for="firstname">  Vorname</label>
+                </div>
+                <div>
+                    <input id="primaryId" type="text" size="30" class="form-control" th:field="*{almaUser.primaryId}">
+                    <label for="primaryId"> ID </label>
+                </div>
+                <div>
+                    <input id="fullName" type="text" size="30" class="form-control" th:field="*{almaUser.fullName}">
+                    <label for="fullName"> ID </label>
+                </div>
+                <div>
+                    <input id="email" type="text" size="30" class="form-control" th:field="*{almaUser.contactInfo.email[0].emailAddress}">
+                    <label for="email">  <p>Ich habe die <a href="https://www.uni-due.de/ub/dsgvo_katalog.php">Datenschutzhinweise</a> zur Kenntnis genommen und bin damit einverstanden.<strong>*</strong></p></label>
+                </div>
                 <input type="submit" class="btn btn-primary" value="Die Daten sind korrekt"/>
                 </form>
             </div>
