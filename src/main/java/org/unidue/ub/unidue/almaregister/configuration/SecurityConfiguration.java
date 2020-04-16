@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/secure/**").httpBasic().disable()
+            http.antMatcher("/megasecure/**").httpBasic().disable()
                     .authorizeRequests().and()
                     .addFilterAfter(shibbolethFilter(), RequestHeaderAuthenticationFilter.class).authorizeRequests()
                 .antMatchers("/secure/**").authenticated()
