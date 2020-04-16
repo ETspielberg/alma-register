@@ -59,7 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Bean(name = "shibbolethFilter")
         public RequestHeaderAuthenticationFilter shibbolethFilter() {
             RequestHeaderAuthenticationFilter requestHeaderAuthenticationFilter = new RequestHeaderAuthenticationFilter();
-            requestHeaderAuthenticationFilter.setPrincipalRequestHeader("AJP_USER");
+            requestHeaderAuthenticationFilter.setPrincipalRequestHeader("AJP_SHIB_USER");
             requestHeaderAuthenticationFilter.setAuthenticationManager(authenticationManager());
             return requestHeaderAuthenticationFilter;
         }

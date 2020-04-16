@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,15 +45,15 @@ public class ApplicationInitializer {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
             try {
                 Resource[] resources = resolver.getResources("classpath*:templates/*.html");
-                log.info("found " + resources.length + " pages to copy to local folder");
+                log.debug("found " + resources.length + " pages to copy to local folder");
                 for (Resource resource : resources) {
                     File input = resource.getFile();
                     String filename = input.getName();
 
                     File output = new File(localTemplateFolder + filename);
-                    log.info("copying file " + filename + " from path " + input.getPath() + " to " + output.getPath());
+                    log.debug("copying file " + filename + " from path " + input.getPath() + " to " + output.getPath());
                     try {
-                        Files.copy(input.toPath(), output.toPath());
+                        Files.copy(input.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     } catch (FileAlreadyExistsException faee) {
                         log.info("file " + filename + " already exists in local template folder");
                     }

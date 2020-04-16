@@ -1,42 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
-<head/>
+<head>
+<title th:text="#{index.heading}"></title>
+</head>
 <body>
-<div class="jumbotron">
-    <div class="tile">
-        <h1 th:text="#{register}"></h1>
-    </div>
-</div>
-
-
 <div class="container-background bg-colored bg-gray" layout:fragment="content">
     <div class="container">
         <div class="row">
             <div class="col">
-                <div class="jumbotron">
-                    <h1>Freischaltung des Uni-Accounts</h1>
+                    <h1 th:text="#{index.heading}"></h1>
                     <form th:action="@{/secure/review}" method="post">
-                        <p>Um Ihren Universitäts-Account für die Nutzung der Bibliothek freischalten zu lassen, lesen Sie sich bitte
-                            die <a href="https://www.uni-due.de/ub/files/docs/benord.pdf">Benutzungsordnung</a> und die <a href="https://www.uni-due.de/ub/dsgvo_katalog.php">Datenschutzhinweise</a> durch. Sobald sie diese anerkannt haben,
-                            können Sie über den Button "Registrieren" einen Benutzeraccount anlegen.</p>
-                        <p><a th:href="@{/actions}">Was erwartet mich?</a></p>
+                        <p th:utext="#{index.description}"></p>
                         <br/>
                         <fieldset class="section">
-                            <legend>Nutzungsbedingungen</legend>
+                            <legend th:text="#{index.checkboxes.label}">Nutzungsbedingungen</legend>
                             <div class="field fieldOption">
                                 <div>
                                     <input type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
-                                    <label for="termsAndConditions">  <p>Die <a href="https://www.uni-due.de/ub/files/docs/benord.pdf">Benutzungsordnung</a> für die UB und das ZIM erkenne ich an.<strong>*</strong></p></label>
+                                    <label th:utext="#{index.terms.label}" for="termsAndConditions">  </label>
                                 </div>
                                 <div>
                                     <input type="checkbox" name="privacy" id="privacy" required />
-                                    <label for="privacy">  <p>Ich habe die <a href="https://www.uni-due.de/ub/dsgvo_katalog.php">Datenschutzhinweise</a> zur Kenntnis genommen und bin damit einverstanden.<strong>*</strong></p></label>
+                                    <label th:utext="#{index.privacy.label}" for="privacy"></label>
                                 </div>
                             </div>
                         </fieldset>
-                        <input type="submit" class="btn btn-primary" value="Registrieren"/>
+                        <input type="submit" class="btn btn-primary" th:value="#{index.submit.value}" value="Registrieren"/>
                     </form>
-                </div>
             </div>
         </div>
     </div>

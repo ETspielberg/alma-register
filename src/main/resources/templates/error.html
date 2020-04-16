@@ -1,22 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="general :: generalHead"/>
+<html lang="en" layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="#{error.heading}"></title>
+</head>
 <body>
-<div class="jumbotron">
-    <div class="tile">
-        <h1 th:text="#{error}"></h1>
-    </div>
-</div>
-
-<div class="container">
-    <div class="ui-g">
-        <div class="ui-g-12 ui-md-10 ui-md-offset-1">
-            <div class="tile">
-                <h3>Es ist ein Fehler aufgetreten.</h3>
+<div class="container-background bg-colored bg-gray" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 th:text="#{error.heading}"></h1>
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>
