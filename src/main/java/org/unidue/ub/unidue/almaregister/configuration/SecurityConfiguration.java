@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
@@ -23,7 +24,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public static class PublicSecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.httpBasic().disable().authorizeRequests().anyRequest().permitAll();
+            http.httpBasic().disable().authorizeRequests().anyRequest().permitAll().and().sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
         }
     }
 
