@@ -29,11 +29,11 @@ public class AlmaUserService {
     }
 
     public AlmaUser generateAlmaUserFromShibbolethData() throws MissingShibbolethDataException {
-        String id = this.httpServletRequest.getHeader("AJP_uid");
-        String email = this.httpServletRequest.getHeader("AJP_mail");
-        String givenName = this.httpServletRequest.getHeader("AJP_givenName");
-        String displayName = this.httpServletRequest.getHeader("AJP_displayName");
-        String type = this.httpServletRequest.getHeader("AJP_eduScopedAffiliation");
+        String id = (String) this.httpServletRequest.getAttribute("persistent-id");
+        String email = (String) this.httpServletRequest.getAttribute("mail");
+        String givenName = (String) this.httpServletRequest.getAttribute("givenName");
+        String displayName = (String) this.httpServletRequest.getAttribute("sn");
+        String type = (String) this.httpServletRequest.getAttribute("affiliation");
         AlmaUser almaUser = new AlmaUser();
         almaUser.setFirstName(givenName);
         almaUser.setFullName(displayName);

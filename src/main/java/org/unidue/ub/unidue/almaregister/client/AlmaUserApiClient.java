@@ -22,7 +22,7 @@ public interface AlmaUserApiClient {
      * @param sourceUserId The ID of the user in the source institution. Optional. (optional, default to &quot;&quot;)
      * @return Object
      */
-    @RequestMapping(method= RequestMethod.POST, value="/almaws/v1/users?social_authentication={socialAuthentication}&send_pin_number_letter={sendPinNumberLetter}&source_institution_code={sourceInstitutionCode}&source_user_id={sourceUserId}")
+    @RequestMapping(method= RequestMethod.POST, value="/almaws/v1/users?social_authentication={social_authentication}&send_pin_number_letter={send_pin_number_letter}&source_institution_code={source_institution_code}&source_user_id={source_user_id}")
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     AlmaUser postAlmawsV1Users(AlmaUser body, @PathVariable("social_authentication") String socialAuthentication, @PathVariable("send_pin_number_letter") String sendPinNumberLetter, @PathVariable("source_institution_code") String sourceInstitutionCode, @PathVariable("source_user_id") String sourceUserId);
 

@@ -4,7 +4,6 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 
 import javax.annotation.PostConstruct;
@@ -17,10 +16,17 @@ public class ThymeleafConfiguration {
 
     private final SpringTemplateEngine springTemplateEngine;
 
+    /**
+     * constructor based autowiring
+     * @param springTemplateEngine the template engine used by spring
+     */
     ThymeleafConfiguration(SpringTemplateEngine springTemplateEngine) {
         this.springTemplateEngine = springTemplateEngine;
     }
 
+    /**
+     * sets the template folder to the local template folder.
+     */
     @PostConstruct
     public void extension() {
         FileTemplateResolver localResolver = new FileTemplateResolver();

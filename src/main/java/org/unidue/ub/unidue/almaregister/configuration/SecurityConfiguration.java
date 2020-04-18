@@ -20,6 +20,9 @@ import java.util.List;
 
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    /**
+     * Security configuration which allows general access to all files except
+     */
     @Configuration
     public static class PublicSecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Override
@@ -30,6 +33,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 
+    /**
+     * Security configuration for the access to the shibboleth protected endpoint. The order ensures that in case of
+     * shibboleth allowed access this config is evaluated first. The user details are taken from the shiboleth response.
+     */
     @Configuration
     @Order(1)
     public static class SecuredSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -52,14 +59,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             http.antMatcher("/megasecure/**").httpBasic().disable()
                     .authorizeRequests().and()
                     .addFilterAfter(shibbolethFilter(), RequestHeaderAuthenticationFilter.class).authorizeRequests()
-                .antMatchers("/secure/**").authenticated()
-            .and().csrf().disable();
+                    .antMatchers("/secure/**").authenticated()
+                    .and().csrf().disable();
         }
 
         @Bean(name = "shibbolethFilter")
         public RequestHeaderAuthenticationFilter shibbolethFilter() {
             RequestHeaderAuthenticationFilter requestHeaderAuthenticationFilter = new RequestHeaderAuthenticationFilter();
-            requestHeaderAuthenticationFilter.setPrincipalRequestHeader("AJP_SHIB_USER");
+            requestHeaderAuthenticationFilter.setPrincipalRequestHeader("SHIB_USER");
             requestHeaderAuthenticationFilter.setAuthenticationManager(authenticationManager());
             return requestHeaderAuthenticationFilter;
         }

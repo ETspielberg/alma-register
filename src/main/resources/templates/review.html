@@ -1,21 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="general :: generalHead"/>
+<html lang="en" layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{review.heading}"></title>
+</head>
 <body>
-
-<div class="jumbotron">
-    <div class="tile">
-        <h1 th:text="#{review}"></h1>
-    </div>
-</div>
-
-<div class="container">
-    <div class="ui-g">
-        <div class="ui-g-12 ui-md-10 ui-md-offset-1">
-            <div class="tile">
-                <h3>Ihre Daten</h3>
+<div class="container-background bg-colored bg-gray" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 th:text="#{review.heading}"></h1>
                 <form th:action="@{/secure/confirmation}" th:object="${almaUser}"></form>
-                <p>Folgende Daten werden zur Erstellung Ihres Accounts übertragen. Bitte prüfen Sie diese und bestätigen die Korrektheit.</p>
+                <p th:text="#{review.description}"></p>
                 <div>
                     <input id="firstname" type="text" size="30" class="form-control" th:field="*{almaUser.firstName}">
                     <label for="firstname">  Vorname</label>
