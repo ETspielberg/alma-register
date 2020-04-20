@@ -31,4 +31,9 @@ public class FeignConfiguration {
         apiKeyAuth.setApiKey(almaUserApiKey);
         return apiKeyAuth;
     }
+
+    @Bean
+    feign.Logger.Level feignLoggerLevel() {
+        return feign.Logger.Level.FULL;
+    }
 }

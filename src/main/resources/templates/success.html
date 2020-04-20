@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{success.heading}"></title>
+</head>
+<body>
+<div class="container-background bg-colored bg-gray" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 th:text="#{success.heading}"></h1>
+                <p th:utext="#{success.description}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

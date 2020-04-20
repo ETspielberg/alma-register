@@ -56,7 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/megasecure/**").httpBasic().disable()
+            http.antMatcher("/secure/**").httpBasic().disable()
                     .authorizeRequests().and()
                     .addFilterAfter(shibbolethFilter(), RequestHeaderAuthenticationFilter.class).authorizeRequests()
                     .antMatchers("/secure/**").authenticated()

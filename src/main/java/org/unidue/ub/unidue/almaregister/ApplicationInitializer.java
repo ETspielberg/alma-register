@@ -25,9 +25,6 @@ public class ApplicationInitializer {
     @Value("${alma.register.datadir:#{systemProperties['user.home']}/.almaregister/}")
     private String localTemplateFolder;
 
-    @Value("classpath:templates/")
-    private String generalTemplateFolder;
-
     private final static Logger log = LoggerFactory.getLogger(ApplicationInitializer.class);
 
     private final PagePreparator pagePreparator;
@@ -45,15 +42,16 @@ public class ApplicationInitializer {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
             try {
                 Resource[] resources = resolver.getResources("classpath*:templates/*.html");
-                log.debug("found " + resources.length + " pages to copy to local folder");
+                log.info("found " + resources.length + " pages to copy to local folder");
                 for (Resource resource : resources) {
                     File input = resource.getFile();
                     String filename = input.getName();
 
                     File output = new File(localTemplateFolder + filename);
-                    log.debug("copying file " + filename + " from path " + input.getPath() + " to " + output.getPath());
+                    log.info("copying file " + filename + " from path " + input.getPath() + " to " + output.getPath());
                     try {
                         Files.copy(input.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        log.info("copied file " + filename);
                     } catch (FileAlreadyExistsException faee) {
                         log.info("file " + filename + " already exists in local template folder");
                     }

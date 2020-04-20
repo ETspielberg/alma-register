@@ -1,12 +1,10 @@
 package org.unidue.ub.unidue.almaregister.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.unidue.ub.unidue.almaregister.client.AlmaUserApiClient;
-import org.unidue.ub.unidue.almaregister.model.AlmaUser;
-import org.unidue.ub.unidue.almaregister.model.ContactInfo;
-import org.unidue.ub.unidue.almaregister.model.Email;
-import org.unidue.ub.unidue.almaregister.model.UserAccountType;
+import org.unidue.ub.unidue.almaregister.model.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
@@ -18,9 +16,7 @@ public class AlmaUserService {
 
     private final HttpServletRequest httpServletRequest;
 
-    @Value("${alma.source.institution.id}")
-    private String almaInstitutionId;
-
+    private final static Logger log = LoggerFactory.getLogger(AlmaUserService.class);
 
     AlmaUserService(AlmaUserApiClient almaUserApiClient,
                     HttpServletRequest httpServletRequest) {
@@ -29,32 +25,44 @@ public class AlmaUserService {
     }
 
     public AlmaUser generateAlmaUserFromShibbolethData() throws MissingShibbolethDataException {
-        String id = (String) this.httpServletRequest.getAttribute("persistent-id");
-        String email = (String) this.httpServletRequest.getAttribute("mail");
-        String givenName = (String) this.httpServletRequest.getAttribute("givenName");
-        String displayName = (String) this.httpServletRequest.getAttribute("sn");
-        String type = (String) this.httpServletRequest.getAttribute("affiliation");
+        String id = (String) this.httpServletRequest.getHeader("persistent-id");
+        String email = (String) this.httpServletRequest.getHeader("mail");
+        String givenName = (String) this.httpServletRequest.getHeader("givenName");
+        String displayName = (String) this.httpServletRequest.getHeader("sn");
+        String type = (String) this.httpServletRequest.getHeader("affiliation");
+        if (type == null)
+            throw new MissingShibbolethDataException("no type given");
+        log.debug(type);
         AlmaUser almaUser = new AlmaUser();
         almaUser.setFirstName(givenName);
         almaUser.setFullName(displayName);
         almaUser.setPrimaryId(id);
+        almaUser.setExternalId(id);
         Email emailData = new Email();
+        EmailEmailType emailEmailType = new EmailEmailType();
+        if (type.contains("staff")) {
+            emailEmailType.setValue("work");
+            emailEmailType.setDesc("Work Mail");
+        } else {
+            emailEmailType.setValue("private");
+            emailEmailType.setDesc("Private Mail");
+        }
+        emailData.addEmailTypeItem(emailEmailType);
         emailData.setEmailAddress(email);
         ContactInfo contactInfo = new ContactInfo();
         contactInfo.setEmail(Collections.singletonList(emailData));
         almaUser.setContactInfo(contactInfo);
         UserAccountType userAccountType = new UserAccountType();
-        if (type == null)
-            throw new MissingShibbolethDataException("no type given");
+
         if (type.contains("student"))
-            userAccountType.setValue("student");
+            userAccountType.setValue("EXTERNAL");
         else if (type.contains("staff"))
-            userAccountType.setValue("staff");
+            userAccountType.setValue("EXTERNAL");
         almaUser.setAccountType(userAccountType);
         return almaUser;
     }
 
     public AlmaUser createAlmaUser(AlmaUser almaUser) {
-        return this.almaUserApiClient.postAlmawsV1Users(almaUser, "false", "", almaInstitutionId, almaUser.getPrimaryId());
+        return this.almaUserApiClient.postAlmawsV1Users("application/json", almaUser);
     }
 }

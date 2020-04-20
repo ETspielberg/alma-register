@@ -4,6 +4,7 @@ import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.unidue.ub.unidue.almaregister.model.AlmaUser;
@@ -22,8 +23,8 @@ public interface AlmaUserApiClient {
      * @param sourceUserId The ID of the user in the source institution. Optional. (optional, default to &quot;&quot;)
      * @return Object
      */
-    @RequestMapping(method= RequestMethod.POST, value="/almaws/v1/users?social_authentication={social_authentication}&send_pin_number_letter={send_pin_number_letter}&source_institution_code={source_institution_code}&source_user_id={source_user_id}")
-    @Headers({"Content-Type: application/json", "Accept: application/json"})
-    AlmaUser postAlmawsV1Users(AlmaUser body, @PathVariable("social_authentication") String socialAuthentication, @PathVariable("send_pin_number_letter") String sendPinNumberLetter, @PathVariable("source_institution_code") String sourceInstitutionCode, @PathVariable("source_user_id") String sourceUserId);
+    // @RequestMapping(method= RequestMethod.POST, value="/almaws/v1/users?social_authentication={social_authentication}&send_pin_number_letter={send_pin_number_letter}&source_institution_code={source_institution_code}&source_user_id={source_user_id}")
+    @RequestMapping(method= RequestMethod.POST, value="/almaws/v1/users")
+    AlmaUser postAlmawsV1Users(@RequestHeader("Accept") String accept, AlmaUser body);
 
 }

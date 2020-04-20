@@ -15,3 +15,12 @@ alma:
   source:
     institution:
       id: exampleId
+logging:
+  level:
+    org:
+      unidue:
+        ub:
+          unidue:
+            almaregister:
+              client:
+                AlmaUserApiClient: DEBUG

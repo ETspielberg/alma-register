@@ -32,7 +32,7 @@ public class ThymeleafConfiguration {
         FileTemplateResolver localResolver = new FileTemplateResolver();
         localResolver.setPrefix(localTemplateFolder);
         localResolver.setSuffix(".html");
-        localResolver.setTemplateMode("HTML5");
+        localResolver.setTemplateMode("HTML");
         localResolver.setOrder(1);
         localResolver.setOrder(this.springTemplateEngine.getTemplateResolvers().size());
         localResolver.setCacheable(false);

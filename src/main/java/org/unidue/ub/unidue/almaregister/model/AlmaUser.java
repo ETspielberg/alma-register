@@ -13,6 +13,7 @@
 
 package org.unidue.ub.unidue.almaregister.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -23,8 +24,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -157,15 +158,15 @@ public class AlmaUser implements Serializable {
 
   public static final String JSON_PROPERTY_BIRTH_DATE = "birth_date";
   @XmlElement(name = "birth_date")
-  private LocalDate birthDate;
+  private Date birthDate;
 
   public static final String JSON_PROPERTY_EXPIRY_DATE = "expiry_date";
   @XmlElement(name = "expiry_date")
-  private LocalDate expiryDate;
+  private Date expiryDate;
 
   public static final String JSON_PROPERTY_PURGE_DATE = "purge_date";
   @XmlElement(name = "purge_date")
-  private LocalDate purgeDate;
+  private Date purgeDate;
 
   public static final String JSON_PROPERTY_ACCOUNT_TYPE = "account_type";
   @XmlElement(name = "account_type")
@@ -188,8 +189,9 @@ public class AlmaUser implements Serializable {
   private UserStatus status;
 
   public static final String JSON_PROPERTY_STATUS_DATE = "status_date";
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'Z'")
   @XmlElement(name = "status_date")
-  private LocalDate statusDate;
+  private Date statusDate;
 
   public static final String JSON_PROPERTY_REQUESTS = "requests";
   @XmlElement(name = "requests")
@@ -746,7 +748,7 @@ public class AlmaUser implements Serializable {
   }
 
 
-  public AlmaUser birthDate(LocalDate birthDate) {
+  public AlmaUser birthDate(Date birthDate) {
     
     this.birthDate = birthDate;
     return this;
@@ -762,17 +764,17 @@ public class AlmaUser implements Serializable {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   @JacksonXmlProperty(localName = "birth_date")
 
-  public LocalDate getBirthDate() {
+  public Date getBirthDate() {
     return birthDate;
   }
 
 
-  public void setBirthDate(LocalDate birthDate) {
+  public void setBirthDate(Date birthDate) {
     this.birthDate = birthDate;
   }
 
 
-  public AlmaUser expiryDate(LocalDate expiryDate) {
+  public AlmaUser expiryDate(Date expiryDate) {
     
     this.expiryDate = expiryDate;
     return this;
@@ -788,17 +790,17 @@ public class AlmaUser implements Serializable {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   @JacksonXmlProperty(localName = "expiry_date")
 
-  public LocalDate getExpiryDate() {
+  public Date getExpiryDate() {
     return expiryDate;
   }
 
 
-  public void setExpiryDate(LocalDate expiryDate) {
+  public void setExpiryDate(Date expiryDate) {
     this.expiryDate = expiryDate;
   }
 
 
-  public AlmaUser purgeDate(LocalDate purgeDate) {
+  public AlmaUser purgeDate(Date purgeDate) {
     
     this.purgeDate = purgeDate;
     return this;
@@ -814,12 +816,12 @@ public class AlmaUser implements Serializable {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   @JacksonXmlProperty(localName = "purge_date")
 
-  public LocalDate getPurgeDate() {
+  public Date getPurgeDate() {
     return purgeDate;
   }
 
 
-  public void setPurgeDate(LocalDate purgeDate) {
+  public void setPurgeDate(Date purgeDate) {
     this.purgeDate = purgeDate;
   }
 
@@ -954,7 +956,7 @@ public class AlmaUser implements Serializable {
   }
 
 
-  public AlmaUser statusDate(LocalDate statusDate) {
+  public AlmaUser statusDate(Date statusDate) {
     
     this.statusDate = statusDate;
     return this;
@@ -970,12 +972,12 @@ public class AlmaUser implements Serializable {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   @JacksonXmlProperty(localName = "status_date")
 
-  public LocalDate getStatusDate() {
+  public Date getStatusDate() {
     return statusDate;
   }
 
 
-  public void setStatusDate(LocalDate statusDate) {
+  public void setStatusDate(Date statusDate) {
     this.statusDate = statusDate;
   }
 

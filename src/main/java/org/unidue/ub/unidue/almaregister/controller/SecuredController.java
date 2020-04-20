@@ -33,6 +33,13 @@ public class SecuredController {
         return "review";
     }
 
+    @PostMapping("/reviewUser")
+    @ResponseBody
+    public AlmaUser getUserObject() throws MissingShibbolethDataException {
+        AlmaUser almaUser = this.almaUserService.generateAlmaUserFromShibbolethData();
+        return almaUser;
+    }
+
 
     @PostMapping("/create")
     public String confirmCreation(ModelAndView modelAndView, @RequestBody AlmaUser almaUser) {
