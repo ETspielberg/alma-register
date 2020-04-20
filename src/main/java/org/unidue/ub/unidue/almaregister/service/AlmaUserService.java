@@ -3,8 +3,8 @@ package org.unidue.ub.unidue.almaregister.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.unidue.ub.alma.shared.user.*;
 import org.unidue.ub.unidue.almaregister.client.AlmaUserApiClient;
-import org.unidue.ub.unidue.almaregister.model.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
