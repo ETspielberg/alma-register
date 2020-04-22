@@ -41,7 +41,7 @@ public class SecuredController {
     }
 
 
-    @PostMapping("/create")
+    @PostMapping("/confirm")
     public String confirmCreation(ModelAndView modelAndView, @RequestBody AlmaUserRequest almaUserRequest) {
         AlmaUser almaUser = this.almaUserService.generateFromAlmaUserRequest(almaUserRequest);
         almaUser = this.almaUserService.createAlmaUser(almaUser);

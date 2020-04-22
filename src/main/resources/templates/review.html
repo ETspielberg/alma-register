@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col">
                 <h1 th:text="#{review.heading}"></h1>
-                <form th:action="@{/secure/create}" th:object="${almaUser}"></form>
+                <form th:action="@{/secure/confirm}" th:object="${almaUser}" method="post"></form>
                 <p th:text="#{review.description}"></p>
                 <div>
                     <input id="firstname" type="text" size="30" class="form-control" th:field="*{almaUser.firstName}">
@@ -19,15 +19,13 @@
                     <input id="fullName" type="text" size="30" class="form-control" th:field="*{almaUser.surname}">
                     <label for="fullName"> Nachname </label>
                 </div>
-                <input id="primaryId" type="text" size="30" class="form-control" th:field="*{almaUser.internalId}"
-                       hidden>
                 <div>
                     <input id="email" type="text" size="30" class="form-control" th:field="*{almaUser.email}">
-                    <label for="email"><p>Ich habe die <a
-                            href="https://www.uni-due.de/ub/dsgvo_katalog.php">Datenschutzhinweise</a> zur Kenntnis
-                        genommen und
-                        bin damit einverstanden.<strong>*</strong></p></label>
+                    <label for="email">Bitte geben Sie eine E-Mail-Adresse an, unter der Sie alle wichtigen Informationen erhalten möchten. </p></label>
                 </div>
+                <input id="affiliation" type="text" size="30" class="form-control" th:field="*{almaUser.affiliation}"  hidden>
+                <input id="primaryId" type="text" size="30" class="form-control" th:field="*{almaUser.internalId}" hidden>
+                <input id="preferredEmail" type="text" size="30" class="form-control" th:field="*{almaUser.preferredEmail}" hidden>
                 <input type="submit" class="btn btn-primary" value="Die Daten sind korrekt"/>
                 </form>
             </div>
