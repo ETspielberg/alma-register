@@ -43,6 +43,7 @@ public class AlmaRegisterApplication {
         ajpConnector.setAllowTrace(false);
         ajpConnector.setAttribute("tomcatAuthentication", false);
         ajpConnector.setAttribute("connectionTimeout", 20000);
+        ajpConnector.setAttribute("allowedRequestAttributesPattern", "^SHIB_.*");
         ajpConnector.setScheme("http");
         ajpConnector.setAttribute("packetSize", 65536);
         ((AbstractAjpProtocol) ajpConnector.getProtocolHandler()).setSecret(ajpSecret);
