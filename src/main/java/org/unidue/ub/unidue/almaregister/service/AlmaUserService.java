@@ -26,11 +26,11 @@ public class AlmaUserService {
     }
 
     public AlmaUserRequest generateAlmaUserRequestFromShibbolethData() throws MissingShibbolethDataException {
-        String id = (String) this.httpServletRequest.getHeader("AJP_persistent-id").split("!")[2];
-        String email = (String) this.httpServletRequest.getHeader("AJP_mail");
-        String givenName = (String) this.httpServletRequest.getHeader("AJP_givenName");
-        String surname = (String) this.httpServletRequest.getHeader("AJP_sn");
-        String type = (String) this.httpServletRequest.getHeader("AJP_affiliation");
+        String id = ((String) this.httpServletRequest.getAttribute("SHIB_persistent-id")).split("!")[2];
+        String email = (String) this.httpServletRequest.getAttribute("SHIB_mail");
+        String givenName = (String) this.httpServletRequest.getAttribute("SHIB_givenName");
+        String surname = (String) this.httpServletRequest.getAttribute("SHIB_sn");
+        String type = (String) this.httpServletRequest.getAttribute("SHIB_affiliation");
         if (type == null)
             throw new MissingShibbolethDataException("no type given");
         return new AlmaUserRequest()

@@ -36,7 +36,7 @@ public class ShibbolethUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String scopedAffiliation = this.httpServletRequest.getHeader(" AJP_affiliation");
+        String scopedAffiliation = (String) this.httpServletRequest.getAttribute(" SHIB_affiliation");
         Set<GrantedAuthority> grantedAuthoritySet = new HashSet<>();
         if (scopedAffiliation != null)
                 grantedAuthoritySet.add(new SimpleGrantedAuthority("ROLE_" + scopedAffiliation.substring(0, scopedAffiliation.indexOf("@")).toUpperCase()));

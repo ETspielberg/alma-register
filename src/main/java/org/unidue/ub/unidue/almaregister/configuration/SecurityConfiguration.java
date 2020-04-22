@@ -56,7 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/megasecure/**").httpBasic().disable()
+            http.antMatcher("/secure/**").httpBasic().disable()
                     .authorizeRequests().and()
                     .addFilterAfter(shibbolethFilter(), RequestHeaderAuthenticationFilter.class).authorizeRequests()
                     .antMatchers("/secure/**").authenticated()
@@ -66,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Bean(name = "shibbolethFilter")
         public RequestHeaderAuthenticationFilter shibbolethFilter() {
             RequestHeaderAuthenticationFilter requestHeaderAuthenticationFilter = new RequestHeaderAuthenticationFilter();
-            requestHeaderAuthenticationFilter.setPrincipalRequestHeader("AJP_Shib-Session-ID");
+            requestHeaderAuthenticationFilter.setPrincipalRequestHeader("Shib-Session-ID");
             requestHeaderAuthenticationFilter.setAuthenticationManager(authenticationManager());
             return requestHeaderAuthenticationFilter;
         }
