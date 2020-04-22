@@ -1,7 +1,6 @@
 package org.unidue.ub.unidue.almaregister.controller;
 
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Controller;
@@ -9,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.unidue.ub.alma.shared.user.AlmaUser;
+import org.unidue.ub.unidue.almaregister.model.AlmaUserRequest;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 import org.unidue.ub.unidue.almaregister.service.MissingShibbolethDataException;
 
@@ -28,23 +28,24 @@ public class SecuredController {
 
     @PostMapping("/review")
     public String getReviewPage(Model model) throws MissingShibbolethDataException {
-        AlmaUser almaUser = this.almaUserService.generateAlmaUserFromShibbolethData();
-        model.addAttribute("almaUser", almaUser);
+        AlmaUserRequest almaUserRequest = this.almaUserService.generateAlmaUserRequestFromShibbolethData();
+        model.addAttribute("almaUser", almaUserRequest);
         return "review";
     }
 
     @PostMapping("/reviewUser")
     @ResponseBody
     public AlmaUser getUserObject() throws MissingShibbolethDataException {
-        AlmaUser almaUser = this.almaUserService.generateAlmaUserFromShibbolethData();
-        return almaUser;
+        AlmaUserRequest almaUserRequest = this.almaUserService.generateAlmaUserRequestFromShibbolethData();
+        return this.almaUserService.generateFromAlmaUserRequest(almaUserRequest);
     }
 
 
     @PostMapping("/create")
-    public String confirmCreation(ModelAndView modelAndView, @RequestBody AlmaUser almaUser) {
-        AlmaUser almaUserCreated = this.almaUserService.createAlmaUser(almaUser);
-        modelAndView.addObject("userCreated", almaUserCreated);
+    public String confirmCreation(ModelAndView modelAndView, @RequestBody AlmaUserRequest almaUserRequest) {
+        AlmaUser almaUser = this.almaUserService.generateFromAlmaUserRequest(almaUserRequest);
+        almaUser = this.almaUserService.createAlmaUser(almaUser);
+        modelAndView.addObject("userCreated", almaUser);
         return "success";
     }
 

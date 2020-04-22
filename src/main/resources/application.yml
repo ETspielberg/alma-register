@@ -24,3 +24,7 @@ logging:
             almaregister:
               client:
                 AlmaUserApiClient: DEBUG
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: DEBUG
