@@ -34,7 +34,7 @@ public class SecuredController {
     }
 
     @PostMapping("/review")
-    public String confirmCreation(ModelAndView modelAndView, @RequestBody AlmaUserRequest almaUserRequest) {
+    public String confirmCreation(ModelAndView modelAndView, @ModelAttribute AlmaUserRequest almaUserRequest) {
         AlmaUser almaUser = this.almaUserService.generateFromAlmaUserRequest(almaUserRequest);
         almaUser = this.almaUserService.createAlmaUser(almaUser);
         modelAndView.addObject("userCreated", almaUser);
