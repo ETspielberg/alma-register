@@ -2,17 +2,17 @@ package org.unidue.ub.unidue.almaregister.model;
 
 public class AlmaUserRequest {
 
-    private String email = "";
+    public String email = "";
 
-    private String preferredEmail = "";
+    public String preferredEmail = "";
 
-    private String internalId = "";
+    public String internalId = "";
 
-    private String affiliation = "";
+    public String affiliation = "";
 
-    private String firstName = "";
+    public String firstName = "";
 
-    private String surname = "";
+    public String surname = "";
 
     public AlmaUserRequest() {
     }
