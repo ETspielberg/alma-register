@@ -9,24 +9,30 @@
         <div class="row">
             <div class="col">
                 <h1 th:text="#{review.heading}"></h1>
-                <form th:action="@{/secure/review}" th:object="${almaUser}" method="post"></form>
-                <p th:text="#{review.description}"></p>
-                <div>
-                    <input id="firstname" type="text" size="30" class="form-control" th:field="*{almaUser.firstName}">
-                    <label for="firstname"> Vorname</label>
-                </div>
-                <div>
-                    <input id="fullName" type="text" size="30" class="form-control" th:field="*{almaUser.surname}">
-                    <label for="fullName"> Nachname </label>
-                </div>
-                <div>
-                    <input id="email" type="text" size="30" class="form-control" th:field="*{almaUser.email}">
-                    <label for="email">Bitte geben Sie eine E-Mail-Adresse an, unter der Sie alle wichtigen Informationen erhalten möchten. </p></label>
-                </div>
-                <input id="affiliation" type="text" size="30" class="form-control" th:field="*{almaUser.affiliation}"  hidden>
-                <input id="primaryId" type="text" size="30" class="form-control" th:field="*{almaUser.internalId}" hidden>
-                <input id="preferredEmail" type="text" size="30" class="form-control" th:field="*{almaUser.preferredEmail}" hidden>
-                <input type="submit" class="btn btn-primary" value="Die Daten sind korrekt"/>
+                <form th:action="@{/secure/review}" th:object="${almaUser}" method="post">
+                    <p th:text="#{review.description}"></p>
+                    <div>
+                        <input id="firstname" type="text" size="30" class="form-control"
+                               th:field="*{firstName}">
+                        <label for="firstname"> Vorname</label>
+                    </div>
+                    <div>
+                        <input id="fullName" type="text" size="30" class="form-control" th:field="*{surname}">
+                        <label for="fullName"> Nachname </label>
+                    </div>
+                    <div>
+                        <input id="email" type="text" size="30" class="form-control" th:field="*{email}">
+                        <label for="email">Bitte geben Sie eine E-Mail-Adresse an, unter der Sie alle wichtigen
+                            Informationen erhalten möchten. </p></label>
+                    </div>
+                    <input id="affiliation" type="text" size="30" class="form-control"
+                           th:field="*{affiliation}"
+                           hidden>
+                    <input id="primaryId" type="text" size="30" class="form-control" th:field="*{internalId}"
+                           hidden>
+                    <input id="preferredEmail" type="text" size="30" class="form-control"
+                           th:field="*{preferredEmail}" hidden>
+                    <input type="submit" class="btn btn-primary" value="Die Daten sind korrekt"/>
                 </form>
             </div>
         </div>
