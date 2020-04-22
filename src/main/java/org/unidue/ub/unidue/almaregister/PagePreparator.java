@@ -57,7 +57,8 @@ public class PagePreparator {
         Elements elements = doc.select(tag + "[" + attribute + "]");
         for (Element src : elements) {
             String path = src.attr(attribute);
-            src.attr(attribute,masterTemplateHost + path);
+            if (path.startsWith("/"))
+                src.attr(attribute,masterTemplateHost + path);
         }
     }
 }

@@ -26,22 +26,14 @@ public class SecuredController {
         this.almaUserService = almaUserService;
     }
 
-    @PostMapping("/review")
+    @GetMapping("/review")
     public String getReviewPage(Model model) throws MissingShibbolethDataException {
         AlmaUserRequest almaUserRequest = this.almaUserService.generateAlmaUserRequestFromShibbolethData();
         model.addAttribute("almaUser", almaUserRequest);
         return "review";
     }
 
-    @PostMapping("/reviewUser")
-    @ResponseBody
-    public AlmaUser getUserObject() throws MissingShibbolethDataException {
-        AlmaUserRequest almaUserRequest = this.almaUserService.generateAlmaUserRequestFromShibbolethData();
-        return this.almaUserService.generateFromAlmaUserRequest(almaUserRequest);
-    }
-
-
-    @PostMapping("/confirm")
+    @PostMapping("/review")
     public String confirmCreation(ModelAndView modelAndView, @RequestBody AlmaUserRequest almaUserRequest) {
         AlmaUser almaUser = this.almaUserService.generateFromAlmaUserRequest(almaUserRequest);
         almaUser = this.almaUserService.createAlmaUser(almaUser);
