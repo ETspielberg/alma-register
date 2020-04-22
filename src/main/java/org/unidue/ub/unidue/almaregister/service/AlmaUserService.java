@@ -26,7 +26,7 @@ public class AlmaUserService {
     }
 
     public AlmaUserRequest generateAlmaUserRequestFromShibbolethData() throws MissingShibbolethDataException {
-        String id = (String) this.httpServletRequest.getHeader("AJP_persistent-id");
+        String id = (String) this.httpServletRequest.getHeader("AJP_persistent-id").split("!")[2];
         String email = (String) this.httpServletRequest.getHeader("AJP_mail");
         String givenName = (String) this.httpServletRequest.getHeader("AJP_givenName");
         String surname = (String) this.httpServletRequest.getHeader("AJP_sn");
