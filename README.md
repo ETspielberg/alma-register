@@ -1,0 +1,1 @@
+= Alma Registration via Shibboleth =
