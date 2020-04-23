@@ -1,1 +1,1 @@
-= Alma Registration via Shibboleth =
+.h1 Alma Registration via Shibboleth
