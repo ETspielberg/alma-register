@@ -1,1 +1,1 @@
-.h1 Alma Registration via Shibboleth
+Alma Registration via Shibboleth
