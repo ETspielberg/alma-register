@@ -19,6 +19,6 @@ public interface AlmaUserApiClient {
      */
     // @RequestMapping(method= RequestMethod.POST, value="/almaws/v1/users?social_authentication={social_authentication}&send_pin_number_letter={send_pin_number_letter}&source_institution_code={source_institution_code}&source_user_id={source_user_id}")
     @RequestMapping(method= RequestMethod.POST, value="/almaws/v1/users")
-    AlmaUser postAlmawsV1Users(@RequestHeader("Accept") String accept, AlmaUser body);
+    AlmaUser postUsers(@RequestHeader("Accept") String accept, AlmaUser body);
 
 }

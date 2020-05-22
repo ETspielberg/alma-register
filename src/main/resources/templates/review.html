@@ -11,20 +11,36 @@
                 <h1 th:text="#{review.heading}"></h1>
                 <form th:action="@{/secure/review}" th:object="${almaUser}" method="post">
                     <p th:text="#{review.description}"></p>
-                    <div>
-                        <input id="firstname" type="text" size="30" class="form-control"
-                               th:field="*{firstName}">
-                        <label for="firstname"> Vorname</label>
-                    </div>
-                    <div>
-                        <input id="fullName" type="text" size="30" class="form-control" th:field="*{surname}">
-                        <label for="fullName"> Nachname </label>
-                    </div>
-                    <div>
-                        <input id="email" type="text" size="30" class="form-control" th:field="*{email}">
-                        <label for="email">Bitte geben Sie eine E-Mail-Adresse an, unter der Sie alle wichtigen
-                            Informationen erhalten möchten. </p></label>
-                    </div>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>
+                                Vorname
+                            </th>
+                            <td th:text="*{firstName}"></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <td th:text="*{surname}"></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                E-Mail
+                            </th>
+                            <td th:text="*{email}"></td>
+                        </tr>
+                        <div class="field fieldOption">
+                            <div>
+                                <input th:value="*{isTermsAccepted}" type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
+                                <label th:utext="#{index.terms.label}" for="termsAndConditions">  </label>
+                            </div>
+                            <div>
+                                <input th:value="*{isPrivacyAccepted}" type="checkbox" name="privacy" id="privacy" required />
+                                <label th:utext="#{index.privacy.label}" for="privacy"></label>
+                            </div>
+                        </div>
+                    </table>
                     <input id="affiliation" type="text" size="30" class="form-control"
                            th:field="*{affiliation}"
                            hidden>

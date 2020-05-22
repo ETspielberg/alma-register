@@ -1,92 +1,44 @@
 package org.unidue.ub.unidue.almaregister.model;
 
+import org.unidue.ub.alma.shared.user.AlmaUser;
+
 public class AlmaUserRequest {
 
-    public String email = "";
+    public AlmaUser almaUser;
 
-    public String preferredEmail = "";
+    public boolean isPrivacyAccepted = false;
 
-    public String internalId = "";
-
-    public String affiliation = "";
-
-    public String firstName = "";
-
-    public String surname = "";
+    public boolean isTermsAccepted = false;
 
     public AlmaUserRequest() {
     }
 
-    public AlmaUserRequest withEmail(String email) {
-        this.email = email;
+    public AlmaUserRequest withAlmaUser(AlmaUser almaUser) {
+        this.almaUser = almaUser;
         return this;
     }
 
-    public AlmaUserRequest withInternalId(String internalId) {
-        this.internalId = internalId;
-        return this;
+    public boolean isPrivacyAccepted() {
+        return isPrivacyAccepted;
     }
 
-    public AlmaUserRequest withFirstName(String firstName) {
-        this.firstName = firstName;
-        return this;
+    public void setPrivacyAccepted(boolean privacyAccepted) {
+        isPrivacyAccepted = privacyAccepted;
     }
 
-    public AlmaUserRequest withSurname(String surname) {
-        this.surname = surname;
-        return this;
+    public boolean isTermsAccepted() {
+        return isTermsAccepted;
     }
 
-    public AlmaUserRequest withAffiliation(String affiliation) {
-        this.affiliation = affiliation;
-        return this;
+    public void setTermsAccepted(boolean termsAccepted) {
+        isTermsAccepted = termsAccepted;
     }
 
-    public String getEmail() {
-        return email;
+    public AlmaUser getAlmaUser() {
+        return almaUser;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getInternalId() {
-        return internalId;
-    }
-
-    public void setInternalId(String internalId) {
-        this.internalId = internalId;
-    }
-
-    public String getAffiliation() {
-        return affiliation;
-    }
-
-    public void setAffiliation(String affiliation) {
-        this.affiliation = affiliation;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPreferredEmail() {
-        return preferredEmail;
-    }
-
-    public void setPreferredEmail(String preferredEmail) {
-        this.preferredEmail = preferredEmail;
+    public void setAlmaUser(AlmaUser almaUser) {
+        this.almaUser = almaUser;
     }
 }

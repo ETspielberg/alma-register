@@ -12,19 +12,6 @@
                     <form th:action="@{/secure/review}" method="get">
                         <p th:utext="#{index.description}"></p>
                         <br/>
-                        <fieldset class="section">
-                            <legend th:text="#{index.checkboxes.label}">Nutzungsbedingungen</legend>
-                            <div class="field fieldOption">
-                                <div>
-                                    <input type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
-                                    <label th:utext="#{index.terms.label}" for="termsAndConditions">  </label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="privacy" id="privacy" required />
-                                    <label th:utext="#{index.privacy.label}" for="privacy"></label>
-                                </div>
-                            </div>
-                        </fieldset>
                         <input type="submit" class="btn btn-primary" th:value="#{index.submit.value}" value="Registrieren"/>
                     </form>
             </div>

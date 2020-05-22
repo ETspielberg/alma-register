@@ -8,6 +8,11 @@ spring:
     password: password
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+  batch:
+    job.enabled: false
+    initialize-schema: always
 alma:
   api:
     user:
@@ -15,6 +20,8 @@ alma:
   source:
     institution:
       id: exampleId
+  redirect:
+    url: https://sandbox02-eu.alma.exlibrisgroup.com/mng/login?institute=HBZ_MEMBER1_INST&auth=local
 logging:
   level:
     org:
@@ -24,7 +31,3 @@ logging:
             almaregister:
               client:
                 AlmaUserApiClient: DEBUG
-      springframework:
-        web:
-          filter:
-            CommonsRequestLoggingFilter: DEBUG

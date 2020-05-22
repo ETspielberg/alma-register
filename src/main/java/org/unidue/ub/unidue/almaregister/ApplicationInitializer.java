@@ -5,19 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class ApplicationInitializer {
@@ -60,6 +54,5 @@ public class ApplicationInitializer {
                 log.error("could not copy files", e);
             }
             this.pagePreparator.collectMasterTemplate();
-
     }
 }
