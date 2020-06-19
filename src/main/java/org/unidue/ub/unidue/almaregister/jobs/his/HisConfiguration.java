@@ -15,10 +15,10 @@ import org.unidue.ub.unidue.almaregister.repository.HisExportRepository;
 @EnableBatchProcessing
 public class HisConfiguration {
 
-    @Value("${his.data.username}")
+    @Value("${his.data.username:anonymous}")
     private String username;
 
-    @Value("${his.data.password}")
+    @Value("${his.data.password:password}")
     private String password;
 
     public final JobBuilderFactory jobBuilderFactory;

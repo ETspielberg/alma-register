@@ -34,7 +34,7 @@ public class JobLauncherController {
     @Value("${libintel.data.dir}")
     private String dataDir;
 
-    @Value("${his.data.url}")
+    @Value("${his.data.url:localhost/files/his}")
     private String targetUrl;
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
