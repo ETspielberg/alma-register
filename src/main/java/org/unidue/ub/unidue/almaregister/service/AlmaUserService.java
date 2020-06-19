@@ -83,11 +83,12 @@ public class AlmaUserService {
         return new AlmaUserRequest().withAlmaUser(almaUser);
     }
 
-    public boolean createAlmaUser(AlmaUser almaUser) {
+    public boolean createAlmaUser(AlmaUser almaUser, boolean pinNotification) {
         try {
-            this.almaUserApiClient.postUsers("application/json", almaUser);
+            this.almaUserApiClient.postUsers("application/json", almaUser, pinNotification);
             return true;
         } catch (Exception e) {
+            log.warn("could not create user", e);
             return false;
         }
     }

@@ -10,8 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
-import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.unidue.almaregister.model.AlmaUserRequest;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 import org.unidue.ub.unidue.almaregister.service.MissingHisDataException;
@@ -45,17 +43,17 @@ public class SecuredController {
     public String confirmCreation(@ModelAttribute AlmaUserRequest almaUserRequest, BindingResult result, SessionStatus status) {
         boolean error = false;
         if(!almaUserRequest.isPrivacyAccepted){
-            result.rejectValue("isPrivacyAccepted", "error.isPrivacyAccepted");
+            result.rejectValue("privacyAccepted", "error.privacyAccepted");
             error = true;
         }
         if(!almaUserRequest.isTermsAccepted){
-            result.rejectValue("isTermsAccepted", "error.isTermsAccepted");
+            result.rejectValue("termsAccepted", "error.termsAccepted");
             error = true;
         }
         if(error) {
             return "review";
         }
-        boolean success = this.almaUserService.createAlmaUser(almaUserRequest.almaUser);
+        boolean success = this.almaUserService.createAlmaUser(almaUserRequest.almaUser, false);
         if (success)
             return "redirect: " + redirectUrl;
         else

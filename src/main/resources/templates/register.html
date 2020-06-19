@@ -9,75 +9,119 @@
         <div class="row">
             <div class="col">
                 <h1 th:text="#{register.heading}"></h1>
-                <form th:action="@{/secure/review}" th:object="${registrationRequest}" method="post">
-                    <p th:text="#{review.description}"></p>
+                <form th:action="@{register}" th:object="${registrationRequest}" method="post">
+                    <p th:text="#{register.description}"></p>
                     <table class="table table-striped">
                         <tr>
                             <th>
-                                Titel
+                                <label for="title-input" th:text="#{title}"></label>
                             </th>
-                            <td th:text="*{title}"></td>
+                            <td>
+                                <select id="title-input" th:field="*{title}">
+                                    <option th:value="'none'" th:text="#{title.none}"></option>
+                                    <option th:value="'dr'" th:text="#{title.dr}"></option>
+                                    <option th:value="'prof'" th:text="#{title.prof}"></option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <th>
-                                Vorname
+                                <label for="firstName-input" th:text="#{first.name}"></label>
                             </th>
-                            <td th:text="*{firstName}"></td>
+                            <td>
+                                <input id="firstName-input" type="text" size="30" autofocus class="form-control"
+                                       th:field="*{firstName}" th:placeholder="#{first.name}">
+                            </td>
                         </tr>
                         <tr>
                             <th>
-                                Nachname
+                                <label for="lastName-input" th:text="#{last.name}"></label>
                             </th>
-                            <td th:text="*{lastName}"></td>
+                            <td>
+                                <input id="lastName-input" type="text" size="30" autofocus class="form-control"
+                                       th:field="*{lastName}" th:placeholder="#{last.name}">
+                            </td>
                         </tr>
                         <tr>
                             <th>
-                                Status
+                                <label for="userStatus-input" th:text="#{user.status}"></label>
                             </th>
-                            <td th:text="*{userStatus}"></td>
+                            <td>
+                                <select id="userStatus-input" th:field="*{userStatus}">
+                                    <option th:value="'UNDRGRD'" th:text="#{pupil}"></option>
+                                    <option th:value="'STAFF'" th:text="#{coworker}"></option>
+                                    <option th:value="'GUEST'" th:text="#{other}"></option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <th>
-                                Campus
+                                <label for="campus-input" th:text="#{campus}"></label>
                             </th>
-                            <td th:text="*{campus}"></td>
+                            <td>
+                                <select id="campus-input" th:field="*{campus}">
+                                    <option th:value="'essen'" th:text="#{essen}"></option>
+                                    <option th:value="'duisburg'" th:text="#{duisburg}"></option>
+                                    <option th:value="'klinikum'" th:text="#{klinikum}"></option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <th>
-                                Straße Hausnr.
+                                <label for="road-input" th:text="#{road}"></label>
                             </th>
-                            <td th:text="*{road}"></td>
+                            <td>
+                                <input id="road-input" type="text" size="30" autofocus class="form-control"
+                                       th:field="*{road}" th:placeholder="#{road}">
+                            </td>
                         </tr>
                         <tr>
                             <th>
-                                PLZ
+                                <label for="plz-input" th:text="#{plz}"></label>
                             </th>
-                            <td th:text="*{plz}"></td>
+                            <td>
+                                <input id="plz-input" type="text" size="30" autofocus class="form-control"
+                                       th:field="*{plz}" th:placeholder="#{plz}">
+                            </td>
                         </tr>
                         <tr>
                             <th>
-                                Stadt
+                                <label for="city-input" th:text="#{city}"></label>
                             </th>
-                            <td th:text="*{city}"></td>
+                            <td>
+                                <input id="city-input" type="text" size="30" autofocus class="form-control"
+                                       th:field="*{city}" th:placeholder="#{city}">
+                            </td>
                         </tr>
                         <tr>
                             <th>
-                                E-Mail-Adresse
+                                <label for="birthdate-input" th:text="#{birth.date}"></label>
                             </th>
-                            <td th:text="*{email}"></td>
+                            <td>
+                                <input id="birthdate-input" type="date" th:field="*{birthDate}">
+                            </td>
                         </tr>
-                        <div class="field fieldOption">
-                            <div>
-                                <input th:value="*{isTermsAccepted}" type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
-                                <label th:utext="#{index.terms.label}" for="termsAndConditions">  </label>
-                            </div>
-                            <div>
-                                <input th:value="*{isPrivacyAccepted}" type="checkbox" name="privacy" id="privacy" required />
-                                <label th:utext="#{index.privacy.label}" for="privacy"></label>
-                            </div>
-                        </div>
+                        <tr>
+                            <th>
+                                <label for="email-input" th:text="#{email}"></label>
+                            </th>
+                            <td>
+                                <input id="email-input" type="email" size="30" autofocus class="form-control"
+                                       th:field="*{email}" th:placeholder="#{email}">
+                            </td>
+                        </tr>
                     </table>
-                    <input type="submit" class="btn btn-primary" value="Die Daten sind korrekt"/>
+                    <div class="field fieldOption">
+                        <div>
+                            <input th:value="*{termsAccepted}" th:field="*{termsAccepted}" type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
+                            <label th:utext="#{index.terms.label}" for="termsAndConditions">  </label>
+                        </div>
+                        <div>
+                            <input th:value="*{privacyAccepted}" th:field="*{privacyAccepted}" type="checkbox" name="privacy" id="privacy" required />
+                            <label th:utext="#{index.privacy.label}" for="privacy"></label>
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-primary" th:value="#{register.register}"/>
                 </form>
             </div>
         </div>

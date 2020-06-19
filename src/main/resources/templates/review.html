@@ -32,11 +32,11 @@
                         </tr>
                         <div class="field fieldOption">
                             <div>
-                                <input th:value="*{isTermsAccepted}" type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
+                                <input th:value="*{isTermsAccepted}" th:field="*{isTermsAccepted}" type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
                                 <label th:utext="#{index.terms.label}" for="termsAndConditions">  </label>
                             </div>
                             <div>
-                                <input th:value="*{isPrivacyAccepted}" type="checkbox" name="privacy" id="privacy" required />
+                                <input th:value="*{isPrivacyAccepted}" th:field="*{isPrivacyAccepted}" type="checkbox" name="privacy" id="privacy" required />
                                 <label th:utext="#{index.privacy.label}" for="privacy"></label>
                             </div>
                         </div>

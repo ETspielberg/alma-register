@@ -9,11 +9,15 @@
         <div class="row">
             <div class="col">
                     <h1 th:text="#{index.heading}"></h1>
+                <p th:utext="#{index.description}"></p>
                     <form th:action="@{/secure/review}" method="get">
-                        <p th:utext="#{index.description}"></p>
                         <br/>
-                        <input type="submit" class="btn btn-primary" th:value="#{index.submit.value}" value="Registrieren"/>
+                        <input type="submit" class="btn btn-primary" th:value="#{index.register.member}" />
                     </form>
+                <form th:action="@{/register}" method="get">
+                    <br/>
+                    <input type="submit" class="btn btn-primary" th:value="#{index.register.extern}"/>
+                </form>
             </div>
         </div>
     </div>

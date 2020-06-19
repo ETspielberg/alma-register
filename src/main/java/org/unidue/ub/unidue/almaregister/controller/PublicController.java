@@ -1,5 +1,7 @@
 package org.unidue.ub.unidue.almaregister.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,10 +16,12 @@ import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 @Controller
 public class PublicController {
 
-    @Value("${alma.redirect.url}")
+    @Value("${alma.redirect.url:www.uni-due.de/ub}")
     private String redirectUrl;
 
     private final AlmaUserService almaUserService;
+
+    private final Logger log = LoggerFactory.getLogger(PublicController.class);
 
     PublicController(AlmaUserService almaUserService) {
         this.almaUserService = almaUserService;
@@ -42,17 +46,22 @@ public class PublicController {
     @PostMapping("/register")
     public String registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, SessionStatus status) {
         boolean error = false;
-        if(!registrationRequest.isPrivacyAccepted){
-            result.rejectValue("isPrivacyAccepted", "error.isPrivacyAccepted");
+        log.info(registrationRequest.firstName + " " + registrationRequest.lastName);
+        log.info("Privacy: " + registrationRequest.privacyAccepted);
+        log.info("Terms: " + registrationRequest.termsAccepted);
+        if(!registrationRequest.privacyAccepted){
+            result.rejectValue("privacyAccepted", "error.privacyAccepted");
+            log.warn("error.privacyAccepted");
             error = true;
         }
-        if(!registrationRequest.isTermsAccepted){
-            result.rejectValue("isTermsAccepted", "error.isTermsAccepted");
+        if(!registrationRequest.termsAccepted){
+            result.rejectValue("termsAccepted", "error.termsAccepted");
+            log.warn("error.termsAccepted");
             error = true;
         }
-        if(error) {
-            return "review";
-        }boolean success = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser());
+        if(error)
+            return "register";
+        boolean success = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(), true);
         if (success)
             return "redirect: " + redirectUrl;
         else

@@ -21,7 +21,7 @@ alma:
     institution:
       id: exampleId
   redirect:
-    url: https://sandbox02-eu.alma.exlibrisgroup.com/mng/login?institute=HBZ_MEMBER1_INST&auth=local
+    url: www.uni-due.de/ub
 logging:
   level:
     org:
