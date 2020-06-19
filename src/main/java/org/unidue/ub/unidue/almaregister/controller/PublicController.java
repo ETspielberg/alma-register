@@ -38,6 +38,11 @@ public class PublicController {
         return "actions";
     }
 
+    @GetMapping("/success")
+    public String getSuccessPage() {
+        return "success";
+    }
+
     @GetMapping("/register")
     public String getRegisterPage(Model model) {
         model.addAttribute("registrationRequest", new RegistrationRequest());
@@ -64,7 +69,8 @@ public class PublicController {
             return new RedirectView("register");
         boolean success = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(), true);
         if (success)
-            return new RedirectView("https://" + redirectUrl);
+            //return new RedirectView("https://" + redirectUrl);
+            return new RedirectView("success");
         else
             return new RedirectView("error");
     }

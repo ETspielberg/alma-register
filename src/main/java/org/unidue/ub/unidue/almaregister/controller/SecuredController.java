@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.unidue.almaregister.model.AlmaUserRequest;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 import org.unidue.ub.unidue.almaregister.service.MissingHisDataException;
@@ -40,7 +41,7 @@ public class SecuredController {
     }
 
     @PostMapping("/review")
-    public String confirmCreation(@ModelAttribute AlmaUserRequest almaUserRequest, BindingResult result, SessionStatus status) {
+    public RedirectView confirmCreation(@ModelAttribute AlmaUserRequest almaUserRequest, BindingResult result, SessionStatus status) {
         boolean error = false;
         if(!almaUserRequest.isPrivacyAccepted){
             result.rejectValue("privacyAccepted", "error.privacyAccepted");
@@ -51,13 +52,14 @@ public class SecuredController {
             error = true;
         }
         if(error) {
-            return "review";
+            return  new RedirectView("review");
         }
         boolean success = this.almaUserService.createAlmaUser(almaUserRequest.almaUser, false);
         if (success)
-            return "redirect: " + redirectUrl;
+            //return new RedirectView("redirect: https://" + redirectUrl);
+            return new RedirectView("success");
         else
-            return "error";
+            return new RedirectView("error");
     }
 
     @GetMapping(value = "/activeuser", produces=MediaType.APPLICATION_JSON_VALUE )
