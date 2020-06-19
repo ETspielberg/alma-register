@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{register.heading}"></title>
+</head>
+<body>
+<div class="container-background bg-colored bg-gray" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 th:text="#{register.heading}"></h1>
+                <form th:action="@{/secure/review}" th:object="${registrationRequest}" method="post">
+                    <p th:text="#{review.description}"></p>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>
+                                Titel
+                            </th>
+                            <td th:text="*{title}"></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Vorname
+                            </th>
+                            <td th:text="*{firstName}"></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Nachname
+                            </th>
+                            <td th:text="*{lastName}"></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Status
+                            </th>
+                            <td th:text="*{userStatus}"></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Campus
+                            </th>
+                            <td th:text="*{campus}"></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Straße Hausnr.
+                            </th>
+                            <td th:text="*{road}"></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                PLZ
+                            </th>
+                            <td th:text="*{plz}"></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Stadt
+                            </th>
+                            <td th:text="*{city}"></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                E-Mail-Adresse
+                            </th>
+                            <td th:text="*{email}"></td>
+                        </tr>
+                        <div class="field fieldOption">
+                            <div>
+                                <input th:value="*{isTermsAccepted}" type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
+                                <label th:utext="#{index.terms.label}" for="termsAndConditions">  </label>
+                            </div>
+                            <div>
+                                <input th:value="*{isPrivacyAccepted}" type="checkbox" name="privacy" id="privacy" required />
+                                <label th:utext="#{index.privacy.label}" for="privacy"></label>
+                            </div>
+                        </div>
+                    </table>
+                    <input type="submit" class="btn btn-primary" value="Die Daten sind korrekt"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
