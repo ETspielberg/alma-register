@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 
@@ -44,7 +45,7 @@ public class PublicController {
     }
 
     @PostMapping("/register")
-    public String registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, SessionStatus status) {
+    public RedirectView registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, SessionStatus status) {
         boolean error = false;
         log.info(registrationRequest.firstName + " " + registrationRequest.lastName);
         log.info("Privacy: " + registrationRequest.privacyAccepted);
@@ -60,12 +61,12 @@ public class PublicController {
             error = true;
         }
         if(error)
-            return "register";
+            return new RedirectView("register");
         boolean success = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(), true);
         if (success)
-            return "redirect: " + redirectUrl;
+            return new RedirectView("https://" + redirectUrl);
         else
-            return "error";
+            return new RedirectView("error");
     }
 
 }
