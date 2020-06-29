@@ -41,55 +41,78 @@ public class AlmaUserService {
     public AlmaUserRequest generateAlmaUserRequestFromShibbolethData() throws MissingShibbolethDataException, MissingHisDataException {
         AlmaUser almaUser = new AlmaUser();
         try {
+            // try to read the shibboleth id
             String id = ((String) this.httpServletRequest.getAttribute("SHIB_persistent-id")).split("!")[2];
             log.debug("trying to create alma account for user with id " + id);
         } catch (Exception e) {
+            // if no shibboleth id is found throw a MissingShibbolethDataException
             log.error("failed to create account", e);
             throw new MissingShibbolethDataException("no shibboleth attributes in request");
         }
+
+        // set the values as obtained by the shibboleth attributes
         almaUser.setFirstName((String) this.httpServletRequest.getAttribute("SHIB_givenName"));
         almaUser.setLastName((String) this.httpServletRequest.getAttribute("SHIB_sn"));
         String type = (String) this.httpServletRequest.getAttribute("SHIB_affiliation");
         String zimId = (String) this.httpServletRequest.getAttribute("uid");
+
+        // create email data
         Email emailData = new Email();
         EmailEmailType emailEmailType = new EmailEmailType();
         emailData.addEmailTypeItem(emailEmailType);
         emailData.setEmailAddress((String) this.httpServletRequest.getAttribute("SHIB_mail"));
 
+        // if no data can be obtained from the shibboleth response
         if (type == null)
             throw new MissingShibbolethDataException("no type given");
         if (type.contains("student")) {
+            // if the user is a student collect the data from the student system to fill in further user information
             log.debug("setting attributes for student");
             List<HisExport> hisExportList = this.hisExportRepository.findAllByZimKennung(zimId);
-            if (hisExportList.size() == 0)
+            if (hisExportList == null || hisExportList.size() == 0)
                 throw new MissingHisDataException("no HIS data for student with ZIM-ID " + zimId);
             HisExport hisExport = hisExportList.get(0);
             almaUser.setPrimaryId(hisExport.getBibkz());
             almaUser.setExternalId(zimId);
+
+            // set email properties to private as students account
             emailEmailType.setValue("private");
             emailEmailType.setDesc("Private Mail");
         } else {
+            // if the user is no student, data are only taken from the shibboleth resposne
             log.debug("setting attributes for staff member");
             almaUser.setPrimaryId(zimId);
             almaUser.setExternalId(zimId);
+
+            // set email properties to work as obtained from shibboleth data
             emailEmailType.setValue("work");
             emailEmailType.setDesc("Work Mail");
         }
+
+        // create the contact information and add them to the alma user
         ContactInfo contactInfo = new ContactInfo();
         contactInfo.setEmail(Collections.singletonList(emailData));
         almaUser.setContactInfo(contactInfo);
+
+        // set the account type
         UserAccountType userAccountType = new UserAccountType();
         userAccountType.setValue("EXTERNAL");
+
         return new AlmaUserRequest().withAlmaUser(almaUser);
     }
 
-    public boolean createAlmaUser(AlmaUser almaUser, boolean pinNotification) {
+    /**
+     * calls the Alma API to create a user account
+     * @param almaUser the AlmaUser to be created
+     * @param pinNotification whether a notification E-Mail about the new pin shall be send
+     * @throws AlmaConnectionException thrown, ich the connection to the Alma API cannot be established
+     */
+    public void createAlmaUser(AlmaUser almaUser, boolean pinNotification) throws AlmaConnectionException {
         try {
             this.almaUserApiClient.postUsers("application/json", almaUser, pinNotification);
-            return true;
         } catch (Exception e) {
             log.warn("could not create user", e);
-            return false;
+            throw new AlmaConnectionException("could not create user");
         }
     }
 }

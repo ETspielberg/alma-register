@@ -9,9 +9,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
+import org.unidue.ub.unidue.almaregister.service.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 
 @Controller
@@ -50,7 +50,7 @@ public class PublicController {
     }
 
     @PostMapping("/register")
-    public RedirectView registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, SessionStatus status) {
+    public RedirectView registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result) {
         boolean error = false;
         log.info(registrationRequest.firstName + " " + registrationRequest.lastName);
         log.info("Privacy: " + registrationRequest.privacyAccepted);
@@ -67,12 +67,11 @@ public class PublicController {
         }
         if(error)
             return new RedirectView("register");
-        boolean success = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(), true);
-        if (success)
-            //return new RedirectView("https://" + redirectUrl);
+        try {
+            this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(), true);
             return new RedirectView("success");
-        else
-            return new RedirectView("error");
+        } catch (Exception e) {
+            throw new AlmaConnectionException("could not create user");
+        }
     }
-
 }

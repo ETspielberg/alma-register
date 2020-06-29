@@ -2,6 +2,10 @@ package org.unidue.ub.unidue.almaregister.model;
 
 import org.unidue.ub.alma.shared.user.AlmaUser;
 
+/**
+ * Container object holding the Alma user to be created together with the information about the acceptance of the
+ * privacy and terms
+ */
 public class AlmaUserRequest {
 
     public AlmaUser almaUser;

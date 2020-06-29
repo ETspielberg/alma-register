@@ -12,6 +12,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.unidue.almaregister.model.AlmaUserRequest;
+import org.unidue.ub.unidue.almaregister.service.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 import org.unidue.ub.unidue.almaregister.service.MissingHisDataException;
 import org.unidue.ub.unidue.almaregister.service.MissingShibbolethDataException;
@@ -41,7 +42,7 @@ public class SecuredController {
     }
 
     @PostMapping("/review")
-    public RedirectView confirmCreation(@ModelAttribute AlmaUserRequest almaUserRequest, BindingResult result, SessionStatus status) {
+    public RedirectView confirmCreation(@ModelAttribute AlmaUserRequest almaUserRequest, BindingResult result, SessionStatus status) throws AlmaConnectionException {
         boolean error = false;
         if(!almaUserRequest.isPrivacyAccepted){
             result.rejectValue("privacyAccepted", "error.privacyAccepted");
@@ -54,12 +55,9 @@ public class SecuredController {
         if(error) {
             return  new RedirectView("review");
         }
-        boolean success = this.almaUserService.createAlmaUser(almaUserRequest.almaUser, false);
-        if (success)
-            //return new RedirectView("redirect: https://" + redirectUrl);
-            return new RedirectView("success");
-        else
-            return new RedirectView("error");
+        this.almaUserService.createAlmaUser(almaUserRequest.almaUser, false);
+        //return new RedirectView("redirect: https://" + redirectUrl);
+        return new RedirectView("success");
     }
 
     @GetMapping(value = "/activeuser", produces=MediaType.APPLICATION_JSON_VALUE )
@@ -76,8 +74,8 @@ public class SecuredController {
         }
     }
 
-    @ExceptionHandler({MissingShibbolethDataException.class, MissingHisDataException.class})
-    public ModelAndView handleException(MissingShibbolethDataException ex)
+    @ExceptionHandler({MissingShibbolethDataException.class, MissingHisDataException.class, AlmaConnectionException.class})
+    public ModelAndView handleException(Exception ex)
     {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("error");
