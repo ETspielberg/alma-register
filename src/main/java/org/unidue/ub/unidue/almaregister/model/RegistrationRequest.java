@@ -213,6 +213,7 @@ public class RegistrationRequest {
                     .addEmailTypeItem(new EmailEmailType().value("work"))
                     .preferred(true);
             contactInfo.addEmailItem(emailAddress)
+                    .addAddressItem(null)
                     .addEmailItem(emailAddress);
             almaUser.status(new UserStatus().value("ACTIVE"))
                     .accountType(new UserAccountType().value("EXTERNAL"))
