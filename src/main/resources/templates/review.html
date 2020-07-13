@@ -16,19 +16,19 @@
                             <th>
                                 Vorname
                             </th>
-                            <td th:text="*{firstName}"></td>
+                            <td th:text="*{almaUser.getFirstName()}"></td>
                         </tr>
                         <tr>
                             <th>
                                 Name
                             </th>
-                            <td th:text="*{surname}"></td>
+                            <td th:text="*{almaUser.getLastName()}"></td>
                         </tr>
                         <tr>
                             <th>
                                 E-Mail
                             </th>
-                            <td th:text="*{email}"></td>
+                            <td th:text="*{almaUser.getContactInfo().getEmail().get(0).getEmailAddress()}"></td>
                         </tr>
                         <div class="field fieldOption">
                             <div>
@@ -42,12 +42,12 @@
                         </div>
                     </table>
                     <input id="affiliation" type="text" size="30" class="form-control"
-                           th:field="*{affiliation}"
+                           th:field="*{almaUser.getContactInfo().getAddress().get(0).getAddressNote()}"
                            hidden>
-                    <input id="primaryId" type="text" size="30" class="form-control" th:field="*{internalId}"
+                    <input id="primaryId" type="text" size="30" class="form-control" th:field="*{almaUser.getPrimaryId()}"
                            hidden>
                     <input id="preferredEmail" type="text" size="30" class="form-control"
-                           th:field="*{preferredEmail}" hidden>
+                           th:field="*{almaUser.getContactInfo().getEmail().get(0).getEmailAddress()}" hidden>
                     <input type="submit" class="btn btn-primary" value="Die Daten sind korrekt"/>
                 </form>
             </div>
