@@ -47,7 +47,7 @@ public class AlmaUserService {
         registrationRequest.firstName = ((String) this.httpServletRequest.getAttribute("SHIB_givenName"));
         registrationRequest.lastName = ((String) this.httpServletRequest.getAttribute("SHIB_sn"));
         String type = (String) this.httpServletRequest.getAttribute("SHIB_affiliation");
-        String zimId = (String) this.httpServletRequest.getAttribute("uid");
+        String zimId = (String) this.httpServletRequest.getAttribute("SHIB_uid");
 
         registrationRequest.email = (String) this.httpServletRequest.getAttribute("SHIB_mail");
 
@@ -67,13 +67,13 @@ public class AlmaUserService {
         } else if (type.contains("staff")){
             log.debug("setting attributes for staff member");
             registrationRequest.userStatus = "STAFF";
-            // if the user is no student, data are only taken from the shibboleth resposne
+            // if the user is no student, data are only taken from the shibboleth response
             registrationRequest.primaryId = zimId;
             registrationRequest.externalId = zimId;
         } else {
             log.debug("setting attributes for external user");
             registrationRequest.userStatus = "GUEST";
-            // if the user is no student, data are only taken from the shibboleth resposne
+            // if the user is no student, data are only taken from the shibboleth response
             registrationRequest.primaryId = zimId;
             registrationRequest.externalId = zimId;
         }
