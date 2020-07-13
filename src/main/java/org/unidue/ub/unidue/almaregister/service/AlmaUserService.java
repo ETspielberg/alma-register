@@ -5,12 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.unidue.ub.alma.shared.user.*;
 import org.unidue.ub.unidue.almaregister.client.AlmaUserApiClient;
-import org.unidue.ub.unidue.almaregister.model.AlmaUserRequest;
 import org.unidue.ub.unidue.almaregister.model.HisExport;
+import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 import org.unidue.ub.unidue.almaregister.repository.HisExportRepository;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -32,14 +31,8 @@ public class AlmaUserService {
         this.hisExportRepository = hisExportRepository;
     }
 
-    /**
-     * creates a Alma user request from the shibboleth attributes and the stored information of the HIS system
-     * @return an Alma user request
-     * @throws MissingShibbolethDataException thrown if the necessary Shibboleth attributes are not present in the request
-     * qthrows MissingHisDataException thrown if no data can be found in HIS export for a given ZIM ID
-     */
-    public AlmaUserRequest generateAlmaUserRequestFromShibbolethData() throws MissingShibbolethDataException, MissingHisDataException {
-        AlmaUser almaUser = new AlmaUser();
+    public RegistrationRequest generateRegistrationRequest() throws MissingShibbolethDataException, MissingHisDataException {
+        RegistrationRequest registrationRequest = new RegistrationRequest();
         try {
             // try to read the shibboleth id
             String id = ((String) this.httpServletRequest.getAttribute("SHIB_persistent-id")).split("!")[2];
@@ -51,55 +44,42 @@ public class AlmaUserService {
         }
 
         // set the values as obtained by the shibboleth attributes
-        almaUser.setFirstName((String) this.httpServletRequest.getAttribute("SHIB_givenName"));
-        almaUser.setLastName((String) this.httpServletRequest.getAttribute("SHIB_sn"));
+        registrationRequest.firstName = ((String) this.httpServletRequest.getAttribute("SHIB_givenName"));
+        registrationRequest.lastName = ((String) this.httpServletRequest.getAttribute("SHIB_sn"));
         String type = (String) this.httpServletRequest.getAttribute("SHIB_affiliation");
         String zimId = (String) this.httpServletRequest.getAttribute("uid");
 
-        // create email data
-        Email emailData = new Email();
-        EmailEmailType emailEmailType = new EmailEmailType();
-        emailData.addEmailTypeItem(emailEmailType);
-        emailData.setEmailAddress((String) this.httpServletRequest.getAttribute("SHIB_mail"));
+        registrationRequest.email = (String) this.httpServletRequest.getAttribute("SHIB_mail");
 
         // if no data can be obtained from the shibboleth response
         if (type == null)
             throw new MissingShibbolethDataException("no type given");
         if (type.contains("student")) {
+            registrationRequest.userStatus = "UNDRGRD";
             // if the user is a student collect the data from the student system to fill in further user information
             log.debug("setting attributes for student");
             List<HisExport> hisExportList = this.hisExportRepository.findAllByZimKennung(zimId);
             if (hisExportList == null || hisExportList.size() == 0)
                 throw new MissingHisDataException("no HIS data for student with ZIM-ID " + zimId);
             HisExport hisExport = hisExportList.get(0);
-            almaUser.setPrimaryId(hisExport.getBibkz());
-            almaUser.setExternalId(zimId);
-
-            // set email properties to private as students account
-            emailEmailType.setValue("private");
-            emailEmailType.setDesc("Private Mail");
-        } else {
-            // if the user is no student, data are only taken from the shibboleth resposne
+            registrationRequest.primaryId = hisExport.getBibkz();
+            registrationRequest.externalId = zimId;
+        } else if (type.contains("staff")){
             log.debug("setting attributes for staff member");
-            almaUser.setPrimaryId(zimId);
-            almaUser.setExternalId(zimId);
-
-            // set email properties to work as obtained from shibboleth data
-            emailEmailType.setValue("work");
-            emailEmailType.setDesc("Work Mail");
+            registrationRequest.userStatus = "STAFF";
+            // if the user is no student, data are only taken from the shibboleth resposne
+            registrationRequest.primaryId = zimId;
+            registrationRequest.externalId = zimId;
+        } else {
+            log.debug("setting attributes for external user");
+            registrationRequest.userStatus = "GUEST";
+            // if the user is no student, data are only taken from the shibboleth resposne
+            registrationRequest.primaryId = zimId;
+            registrationRequest.externalId = zimId;
         }
-
-        // create the contact information and add them to the alma user
-        ContactInfo contactInfo = new ContactInfo();
-        contactInfo.setEmail(Collections.singletonList(emailData));
-        almaUser.setContactInfo(contactInfo);
-
-        // set the account type
-        UserAccountType userAccountType = new UserAccountType();
-        userAccountType.setValue("EXTERNAL");
-
-        return new AlmaUserRequest().withAlmaUser(almaUser);
+        return registrationRequest;
     }
+
 
     /**
      * calls the Alma API to create a user account

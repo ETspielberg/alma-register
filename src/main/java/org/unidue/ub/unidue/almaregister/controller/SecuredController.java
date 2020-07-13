@@ -8,10 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-import org.unidue.ub.unidue.almaregister.model.AlmaUserRequest;
+import org.unidue.ub.alma.shared.user.AlmaUser;
+import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 import org.unidue.ub.unidue.almaregister.service.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 import org.unidue.ub.unidue.almaregister.service.MissingHisDataException;
@@ -36,26 +36,27 @@ public class SecuredController {
 
     @GetMapping("/review")
     public String getReviewPage(Model model) throws MissingShibbolethDataException {
-        AlmaUserRequest almaUserRequest = this.almaUserService.generateAlmaUserRequestFromShibbolethData();
-        model.addAttribute("almaUser", almaUserRequest);
+        RegistrationRequest registrationRequest = this.almaUserService.generateRegistrationRequest();
+        model.addAttribute("registrationRequest", registrationRequest);
         return "review";
     }
 
     @PostMapping("/review")
-    public RedirectView confirmCreation(@ModelAttribute AlmaUserRequest almaUserRequest, BindingResult result, SessionStatus status) throws AlmaConnectionException {
+    public RedirectView confirmCreation(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result) throws AlmaConnectionException {
         boolean error = false;
-        if(!almaUserRequest.isPrivacyAccepted){
+        if(!registrationRequest.privacyAccepted){
             result.rejectValue("privacyAccepted", "error.privacyAccepted");
             error = true;
         }
-        if(!almaUserRequest.isTermsAccepted){
+        if(!registrationRequest.termsAccepted){
             result.rejectValue("termsAccepted", "error.termsAccepted");
             error = true;
         }
         if(error) {
             return  new RedirectView("review");
         }
-        this.almaUserService.createAlmaUser(almaUserRequest.almaUser, false);
+        AlmaUser almaUser = registrationRequest.getAlmaUser();
+        this.almaUserService.createAlmaUser(almaUser, false);
         //return new RedirectView("redirect: https://" + redirectUrl);
         return new RedirectView("success");
     }

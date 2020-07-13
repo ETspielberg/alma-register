@@ -9,45 +9,42 @@
         <div class="row">
             <div class="col">
                 <h1 th:text="#{review.heading}"></h1>
-                <form th:action="@{/secure/review}" th:object="${almaUser}" method="post">
+                <form th:action="@{/secure/review}" th:object="${registrationRequest}" method="post">
                     <p th:text="#{review.description}"></p>
                     <table class="table table-striped">
                         <tr>
                             <th>
                                 Vorname
                             </th>
-                            <td th:text="*{almaUser.getFirstName()}"></td>
+                            <td th:text="*{firstName}"></td>
                         </tr>
                         <tr>
                             <th>
                                 Name
                             </th>
-                            <td th:text="*{almaUser.getLastName()}"></td>
+                            <td th:text="*{lastName}"></td>
                         </tr>
                         <tr>
                             <th>
                                 E-Mail
                             </th>
-                            <td th:text="*{almaUser.getContactInfo().getEmail().get(0).getEmailAddress()}"></td>
+                            <td th:text="*{email}"></td>
                         </tr>
                         <div class="field fieldOption">
                             <div>
-                                <input th:value="*{isTermsAccepted}" th:field="*{isTermsAccepted}" type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
+                                <input th:value="*{termsAccepted}" th:field="*{termsAccepted}" type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
                                 <label th:utext="#{index.terms.label}" for="termsAndConditions">  </label>
                             </div>
                             <div>
-                                <input th:value="*{isPrivacyAccepted}" th:field="*{isPrivacyAccepted}" type="checkbox" name="privacy" id="privacy" required />
+                                <input th:value="*{privacyAccepted}" th:field="*{privacyAccepted}" type="checkbox" name="privacy" id="privacy" required />
                                 <label th:utext="#{index.privacy.label}" for="privacy"></label>
                             </div>
                         </div>
                     </table>
-                    <input id="affiliation" type="text" size="30" class="form-control"
-                           th:field="*{almaUser.getContactInfo().getAddress().get(0).getAddressNote()}"
-                           hidden>
-                    <input id="primaryId" type="text" size="30" class="form-control" th:field="*{almaUser.getPrimaryId()}"
+                    <input id="primaryId" type="text" size="30" class="form-control" th:field="*{primaryId}"
                            hidden>
                     <input id="preferredEmail" type="text" size="30" class="form-control"
-                           th:field="*{almaUser.getContactInfo().getEmail().get(0).getEmailAddress()}" hidden>
+                           th:field="*{email}" hidden>
                     <input type="submit" class="btn btn-primary" value="Die Daten sind korrekt"/>
                 </form>
             </div>

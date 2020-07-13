@@ -18,6 +18,7 @@ import org.unidue.ub.unidue.almaregister.service.ShibbolethUserDetailsService;
 import java.util.ArrayList;
 import java.util.List;
 
+@Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     /**
