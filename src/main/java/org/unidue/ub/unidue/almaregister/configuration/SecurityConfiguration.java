@@ -25,7 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * Security configuration which allows general access to all files except
      */
     @Configuration
-    @Order(1000)
+    @Order(2)
     public static class PublicSecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
