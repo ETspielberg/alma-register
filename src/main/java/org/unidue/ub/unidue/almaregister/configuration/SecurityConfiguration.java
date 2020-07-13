@@ -25,6 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * Security configuration which allows general access to all files except
      */
     @Configuration
+    @Order(1000)
     public static class PublicSecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -36,7 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     /**
      * Security configuration for the access to the shibboleth protected endpoint. The order ensures that in case of
-     * shibboleth allowed access this config is evaluated first. The user details are taken from the shiboleth response.
+     * shibboleth allowed access this config is evaluated first. The user details are taken from the shibboleth response.
      */
     @Configuration
     @Order(1)
