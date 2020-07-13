@@ -180,38 +180,45 @@ public class RegistrationRequest {
     }
 
     public AlmaUser getAlmaUser() {
-        Address postalAddress = new Address()
-                .city(city)
-                .postalCode(plz)
-                .preferred(true)
-                .line1(road)
-                .addAddressTypeItem(new AddressAddressType().value("home"));
-        Email emailAddress = new Email()
-                .emailAddress(email)
-                .addEmailTypeItem(new EmailEmailType().value("personal"))
-                .preferred(true);
-        ContactInfo contactInfo = new ContactInfo()
-                .addEmailItem(emailAddress)
-                .addAddressItem(postalAddress);
         AlmaUser almaUser = new AlmaUser()
                 .lastName(lastName)
                 .firstName(firstName)
-                .userGroup(new UserUserGroup().value(userStatus))
+                .userGroup(new UserUserGroup().value(userStatus));
                 //.userTitle(new UserUserTitle().value(title))
                 //.password(password)
-                .birthDate(birthDate)
-                .pinNumber(pinFormat.format(birthDate))
                 //.campusCode(new UserCampusCode().value(campus))
-                .contactInfo(contactInfo);
+        Email emailAddress = new Email();
+        ContactInfo contactInfo = new ContactInfo();
         if (primaryId.isEmpty()) {
+            Address postalAddress = new Address()
+                    .city(city)
+                    .postalCode(plz)
+                    .preferred(true)
+                    .line1(road)
+                    .addAddressTypeItem(new AddressAddressType().value("home"));
+            emailAddress
+                    .emailAddress(email)
+                    .addEmailTypeItem(new EmailEmailType().value("personal"))
+                    .preferred(true);
+            contactInfo.addEmailItem(emailAddress)
+                    .addAddressItem(postalAddress)
+                    .addEmailItem(emailAddress);
             almaUser.status(new UserStatus().value("INACTIVE"))
+                    .birthDate(birthDate)
+                    .pinNumber(pinFormat.format(birthDate))
                     .accountType(new UserAccountType().value("INTERNAL"));
         } else {
+            emailAddress
+                    .emailAddress(email)
+                    .addEmailTypeItem(new EmailEmailType().value("work"))
+                    .preferred(true);
+            contactInfo.addEmailItem(emailAddress)
+                    .addEmailItem(emailAddress);
             almaUser.status(new UserStatus().value("ACTIVE"))
                     .accountType(new UserAccountType().value("EXTERNAL"))
                     .primaryId(primaryId)
                     .externalId(externalId);
         }
-        return almaUser;
+        return almaUser.contactInfo(contactInfo);
     }
 }
