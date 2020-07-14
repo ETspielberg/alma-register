@@ -41,8 +41,10 @@
                             </div>
                         </div>
                     </table>
-                    <input id="primaryId" type="text" size="30" class="form-control" th:field="*{primaryId}" th:value="*{primaryId}"
-                           hidden>
+                    <input id="primaryId" type="text" th:field="*{primaryId}" th:value="*{primaryId}" readonly="readonly">
+                    <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}" readonly="readonly">
+
+                    <input id="externalId" type="text" th:field="*{externalId}" th:value="*{externalId}" hidden>
                     <input id="preferredEmail" type="text" size="30" class="form-control"
                            th:field="*{email}" hidden>
                     <input type="submit" class="btn btn-primary" value="Die Daten sind korrekt"/>
