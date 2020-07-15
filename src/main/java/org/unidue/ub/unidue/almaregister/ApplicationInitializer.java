@@ -35,7 +35,7 @@ public class ApplicationInitializer {
             directory.mkdirs();
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
             try {
-                Resource[] resources = resolver.getResources("classpath*:templates/*.html");
+                Resource[] resources = resolver.getResources("/templates/*.html");
                 log.info("found " + resources.length + " pages to copy to local folder");
                 for (Resource resource : resources) {
                     File input = resource.getFile();
