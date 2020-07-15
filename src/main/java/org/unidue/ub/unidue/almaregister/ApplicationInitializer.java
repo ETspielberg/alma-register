@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -38,13 +39,13 @@ public class ApplicationInitializer {
                 Resource[] resources = resolver.getResources("/templates/*.html");
                 log.info("found " + resources.length + " pages to copy to local folder");
                 for (Resource resource : resources) {
-                    File input = resource.getFile();
-                    String filename = input.getName();
+                    InputStream input = resource.getInputStream();
+                    String filename = resource.getFilename();
 
                     File output = new File(localTemplateFolder + filename);
-                    log.info("copying file " + filename + " from path " + input.getPath() + " to " + output.getPath());
+                    log.info("copying file " + filename + " from path " + "xx" + " to " + output.getPath());
                     try {
-                        Files.copy(input.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        Files.copy(input, output.toPath(), StandardCopyOption.REPLACE_EXISTING);
                         log.info("copied file " + filename);
                     } catch (FileAlreadyExistsException faee) {
                         log.info("file " + filename + " already exists in local template folder");
