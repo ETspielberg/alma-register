@@ -30,6 +30,12 @@ public class SecuredController {
     @Value("${alma.redirect.url}")
     private String redirectUrl;
 
+    @GetMapping("/success")
+    public String getSuccessPage(Model model) {
+        model.addAttribute("redirectUrl", redirectUrl);
+        return "success";
+    }
+
     SecuredController(AlmaUserService almaUserService) {
         this.almaUserService = almaUserService;
     }

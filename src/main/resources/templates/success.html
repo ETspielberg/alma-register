@@ -12,6 +12,9 @@
                 <p th:utext="#{success.description}"></p>
             </div>
         </div>
+        <div th:if="${redirectUrl}" class="row">
+            <a th:href="${redirectUrl}"><button class="btn btn-primary" th:text="#{success.to.primo}"></button></a>
+        </div>
     </div>
 </div>
 </body>
