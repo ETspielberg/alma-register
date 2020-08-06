@@ -210,10 +210,10 @@ public class RegistrationRequest {
         } else {
             emailAddress
                     .emailAddress(email)
-                    .addEmailTypeItem(new EmailEmailType().value("work"))
+                    .addEmailTypeItem(new EmailEmailType().value("personal"))
                     .preferred(true);
             contactInfo.addEmailItem(emailAddress)
-                    .addAddressItem(null);
+                    .setAddress(null);
             almaUser.status(new UserStatus().value("ACTIVE"))
                     .accountType(new UserAccountType().value("EXTERNAL"))
                     .externalId(externalId);
