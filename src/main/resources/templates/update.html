@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{review.heading}"></title>
+</head>
+<body>
+<div class="container-background bg-colored bg-gray" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 th:text="#{review.heading}"></h1>
+                <form th:action="@{/secure/review}" th:object="${registrationRequest}" method="post">
+                    <p th:text="#{review.description}"></p>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>
+                                Vorname
+                            </th>
+                            <td th:text="*{firstName}"></td>
+                            <input id="firstName" type="text" th:field="*{firstName}" th:value="*{firstName}" readonly="readonly" hidden>
+                        </tr>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <td th:text="*{lastName}"></td>
+                            <input id="lastName" type="text" th:field="*{lastName}" th:value="*{lastName}" readonly="readonly" hidden>
+                        </tr>
+                        <tr>
+                            <th>
+                                E-Mail
+                            </th>
+                            <td th:text="*{email}"></td>
+                            <input id="email" type="email" th:field="*{email}" th:value="*{email}" readonly="readonly" hidden>
+                        </tr>
+                        <tr>
+                            <th>
+                                ZIM-ID
+                            </th>
+                            <td th:text="*{primaryId}"></td>
+                            <input id="primaryId" type="text" th:field="*{primaryId}" th:value="*{primaryId}" readonly="readonly" hidden>
+                        </tr>
+                        <tr>
+                            <th>
+                                Benutzerstatus
+                            </th>
+                            <td th:text="*{userStatus}"></td>
+                            <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}" readonly="readonly" hidden>
+                        </tr>
+
+                        <div class="field fieldOption">
+                            <div>
+                                <input th:value="*{termsAccepted}" th:field="*{termsAccepted}" type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
+                                <label th:utext="#{index.terms.label}" for="termsAndConditions">  </label>
+                            </div>
+                            <div>
+                                <input th:value="*{privacyAccepted}" th:field="*{privacyAccepted}" type="checkbox" name="privacy" id="privacy" required />
+                                <label th:utext="#{index.privacy.label}" for="privacy"></label>
+                            </div>
+                        </div>
+                    </table>
+                    <input id="externalId" type="text" th:field="*{externalId}" th:value="*{externalId}" hidden>
+                    <input type="submit" class="btn btn-primary" value="Die Daten sind korrekt"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

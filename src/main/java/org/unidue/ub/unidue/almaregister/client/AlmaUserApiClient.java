@@ -2,10 +2,7 @@ package org.unidue.ub.unidue.almaregister.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.unidue.ub.alma.shared.user.AlmaUser;
 
 @FeignClient(name="almaUser", url="https://api-eu.hosted.exlibrisgroup.com", configuration=FeignConfiguration.class)
@@ -22,4 +19,6 @@ public interface AlmaUserApiClient {
     @RequestMapping(method= RequestMethod.POST, value="/almaws/v1/users")
     AlmaUser postUsers(@RequestHeader("Accept") String accept, AlmaUser body, @RequestParam("send_pin_number_letter") boolean sendPinLetter);
 
+    @RequestMapping(method= RequestMethod.GET, value="/almaws/v1/users/{identifier}")
+    AlmaUser getUser(@PathVariable String identifier, @RequestHeader("Accept") String accept);
 }

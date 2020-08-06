@@ -55,7 +55,7 @@ public class AlmaUserService {
         if (type == null)
             throw new MissingShibbolethDataException("no type given");
         if (type.contains("student")) {
-            registrationRequest.userStatus = "UNDRGRD";
+            registrationRequest.userStatus = "student";
             // if the user is a student collect the data from the student system to fill in further user information
             log.debug("setting attributes for student");
             List<HisExport> hisExportList = this.hisExportRepository.findAllByZimKennung(zimId);
@@ -65,12 +65,12 @@ public class AlmaUserService {
             registrationRequest.primaryId = hisExport.getBibkz();
         } else if (type.contains("staff")){
             log.debug("setting attributes for staff member");
-            registrationRequest.userStatus = "STAFF";
+            registrationRequest.userStatus = "staff";
             // if the user is no student, data are only taken from the shibboleth response
             registrationRequest.primaryId = zimId;
         } else {
             log.debug("setting attributes for external user");
-            registrationRequest.userStatus = "GUEST";
+            registrationRequest.userStatus = "student";
             // if the user is no student, data are only taken from the shibboleth response
             registrationRequest.primaryId = zimId;
         }
@@ -91,5 +91,9 @@ public class AlmaUserService {
             log.warn("could not create user", e);
             throw new AlmaConnectionException("could not create user");
         }
+    }
+
+    public AlmaUser checkExistingUser(String identifier) {
+        return this.almaUserApiClient.getUser(identifier, "application/json");
     }
 }

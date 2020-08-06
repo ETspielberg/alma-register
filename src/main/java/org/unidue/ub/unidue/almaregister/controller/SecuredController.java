@@ -37,8 +37,14 @@ public class SecuredController {
     @GetMapping("/review")
     public String getReviewPage(Model model) throws MissingShibbolethDataException {
         RegistrationRequest registrationRequest = this.almaUserService.generateRegistrationRequest();
-        model.addAttribute("registrationRequest", registrationRequest);
-        return "review";
+        AlmaUser almaUser = this.almaUserService.checkExistingUser(registrationRequest.primaryId);
+        if (almaUser == null) {
+            model.addAttribute("registrationRequest", registrationRequest);
+            return "review";
+        } else {
+            model.addAttribute("almaUser", almaUser);
+            return "update";
+        }
     }
 
     @PostMapping("/review")
