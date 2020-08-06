@@ -71,7 +71,7 @@ public class AlmaUserService {
             registrationRequest.primaryId = zimId;
         } else {
             log.debug("setting attributes for external user");
-            registrationRequest.userStatus = "student";
+            registrationRequest.userStatus = "extern";
             // if the user is no student, data are only taken from the shibboleth response
             registrationRequest.primaryId = zimId;
         }

@@ -183,6 +183,11 @@ public class RegistrationRequest {
                 almaUser.setUserGroup(new UserUserGroup().value("01"));
                 break;
             }
+            case "extern": {
+                almaUser.setUserGroup(new UserUserGroup().value("22"));
+                break;
+            }
+
             default:{
                 almaUser.setUserGroup(new UserUserGroup().value("22"));
             }
