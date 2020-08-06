@@ -13,8 +13,6 @@ public class RegistrationRequest {
 
     public String userStatus = "";
 
-    public String campus = "";
-
     public String title = "";
 
     public String firstName = "";
@@ -59,13 +57,6 @@ public class RegistrationRequest {
         this.userStatus = userStatus;
     }
 
-    public String getCampus() {
-        return campus;
-    }
-
-    public void setCampus(String campus) {
-        this.campus = campus;
-    }
 
     public String getTitle() {
         return title;
@@ -182,11 +173,21 @@ public class RegistrationRequest {
     public AlmaUser getAlmaUser() {
         AlmaUser almaUser = new AlmaUser()
                 .lastName(lastName)
-                .firstName(firstName)
-                .userGroup(new UserUserGroup().value(userStatus));
-                //.userTitle(new UserUserTitle().value(title))
-                //.password(password)
-                //.campusCode(new UserCampusCode().value(campus))
+                .firstName(firstName);
+        switch (userStatus) {
+            case "staff": {
+                almaUser.setUserGroup(new UserUserGroup().value("06"));
+                break;
+            }
+            case "student": {
+                almaUser.setUserGroup(new UserUserGroup().value("01"));
+                break;
+            }
+            default:{
+                almaUser.setUserGroup(new UserUserGroup().value("22"));
+            }
+
+        }
         Email emailAddress = new Email();
         ContactInfo contactInfo = new ContactInfo();
         if (primaryId.isEmpty()) {
@@ -201,8 +202,7 @@ public class RegistrationRequest {
                     .addEmailTypeItem(new EmailEmailType().value("personal"))
                     .preferred(true);
             contactInfo.addEmailItem(emailAddress)
-                    .addAddressItem(postalAddress)
-                    .addEmailItem(emailAddress);
+                    .addAddressItem(postalAddress);
             almaUser.status(new UserStatus().value("INACTIVE"))
                     .birthDate(birthDate)
                     .pinNumber(pinFormat.format(birthDate))
@@ -213,12 +213,13 @@ public class RegistrationRequest {
                     .addEmailTypeItem(new EmailEmailType().value("work"))
                     .preferred(true);
             contactInfo.addEmailItem(emailAddress)
-                    .addAddressItem(null)
-                    .addEmailItem(emailAddress);
+                    .addAddressItem(null);
             almaUser.status(new UserStatus().value("ACTIVE"))
                     .accountType(new UserAccountType().value("EXTERNAL"))
-                    .primaryId(primaryId)
                     .externalId(externalId);
+            UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("03");
+            UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(primaryId).segmentType("internal");
+            almaUser.addUserIdentifierItem(userIdentifier);
         }
         return almaUser.contactInfo(contactInfo);
     }
