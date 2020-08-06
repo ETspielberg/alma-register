@@ -1,5 +1,6 @@
 package org.unidue.ub.unidue.almaregister.service;
 
+import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -94,6 +95,10 @@ public class AlmaUserService {
     }
 
     public AlmaUser checkExistingUser(String identifier) {
-        return this.almaUserApiClient.getUser(identifier, "application/json");
+        try {
+            return this.almaUserApiClient.getUser(identifier, "application/json");
+        } catch (FeignException fe) {
+            return null;
+        }
     }
 }
