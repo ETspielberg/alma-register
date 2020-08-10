@@ -8,6 +8,9 @@ import org.thymeleaf.templateresolver.FileTemplateResolver;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * configuration for the thymeleaf template processor
+ */
 @Configuration
 public class ThymeleafConfiguration {
 

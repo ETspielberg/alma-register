@@ -43,6 +43,8 @@ public class AlmaRegisterApplication {
         ajpConnector.setAllowTrace(false);
         ajpConnector.setAttribute("tomcatAuthentication", false);
         ajpConnector.setAttribute("connectionTimeout", 20000);
+        // important: allow all Attributes to be passed through with the prefix SHIB_. This correpsonds to the given
+        // prefix AJP_SHIB_ in the Shibboleth configuration, where AJP_ is stripped off when passed to the AJP connector
         ajpConnector.setAttribute("allowedRequestAttributesPattern", "^SHIB_.*");
         ajpConnector.setScheme("http");
         ajpConnector.setAttribute("packetSize", 65536);

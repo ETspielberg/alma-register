@@ -7,6 +7,9 @@ import org.unidue.ub.alma.shared.user.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * A POJO holding all the necessary information to create an AlmaUser request.
+ */
 public class RegistrationRequest {
 
     private final static SimpleDateFormat pinFormat = new SimpleDateFormat("ddMM");
@@ -170,6 +173,10 @@ public class RegistrationRequest {
         this.externalId = externalId;
     }
 
+    /**
+     * creates an AlmaUser object to be submitted to Alma Users API from the supplied personal data.
+     * @return an AlmaUser object
+     */
     public AlmaUser getAlmaUser() {
         AlmaUser almaUser = new AlmaUser()
                 .lastName(lastName)

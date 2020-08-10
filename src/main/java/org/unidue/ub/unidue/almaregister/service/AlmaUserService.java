@@ -24,6 +24,12 @@ public class AlmaUserService {
 
     private final static Logger log = LoggerFactory.getLogger(AlmaUserService.class);
 
+    /**
+     * constructor based autowiring of alma user api client, the servlet request and the hstudents data repository
+     * @param almaUserApiClient the Feign client to the Alma User API
+     * @param httpServletRequest the current request object
+     * @param hisExportRepository the repository holding the students data
+     */
     AlmaUserService(AlmaUserApiClient almaUserApiClient,
                     HttpServletRequest httpServletRequest,
                     HisExportRepository hisExportRepository) {
@@ -32,6 +38,13 @@ public class AlmaUserService {
         this.hisExportRepository = hisExportRepository;
     }
 
+    /**
+     * takes the Shibboleth attributes persistent-id, givenName, sn, affiliation, uid and mail and generates a
+     * corresponding alma user registration request object.
+     * @return an Alma user registration request object from which an Alma User object can be generated
+     * @throws MissingShibbolethDataException thrown if the necessary Shibboleth attributes are not present.
+     * @throws MissingHisDataException thrown if the data from the students information system are not present.
+     */
     public RegistrationRequest generateRegistrationRequest() throws MissingShibbolethDataException, MissingHisDataException {
         RegistrationRequest registrationRequest = new RegistrationRequest();
         try {
@@ -94,6 +107,11 @@ public class AlmaUserService {
         }
     }
 
+    /**
+     * checks, whether a user with the given uid exists in Alma
+     * @param identifier the uid to be checked
+     * @return a AlmaUser object, if the uid was found in Alma, null otherwise.
+     */
     public AlmaUser checkExistingUser(String identifier) {
         try {
             return this.almaUserApiClient.getUser(identifier, "application/json");

@@ -14,6 +14,10 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * initializes the application. the contained base-templates are copied to the template folder and the master template
+ * is collected.
+ */
 @Component
 public class ApplicationInitializer {
 
@@ -24,13 +28,17 @@ public class ApplicationInitializer {
 
     private final PagePreparator pagePreparator;
 
+    /**
+     * constructor based autowiring of the page preparator bean
+     * @param pagePreparator The page preparator responsible for constructing a themed page template.
+     */
     ApplicationInitializer(PagePreparator pagePreparator) {
         this.pagePreparator = pagePreparator;
     }
 
     @PostConstruct
     private void init() {
-        log.info("AppInitializator initialization template locations");
+        log.info("AppInitializer initializes template locations");
         File directory = new File(localTemplateFolder);
         if (! directory.exists())
             directory.mkdirs();

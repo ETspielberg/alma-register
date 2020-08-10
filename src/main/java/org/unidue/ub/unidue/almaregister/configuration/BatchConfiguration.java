@@ -10,9 +10,16 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
+/**
+ * configuration for the batch jobs to be processed
+ */
 @Configuration
 public class BatchConfiguration {
 
+    /**
+     * task executor to be used to run the batch jobs
+     * @return the task executor to be used
+     */
     @Bean
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -22,11 +29,21 @@ public class BatchConfiguration {
         return executor;
     }
 
+    /**
+     * the transaction manager to be used to store the
+     * @return the platform transaction manager
+     */
     @Bean(name = "transactionManager")
     public PlatformTransactionManager transactionManager() {
         return new ResourcelessTransactionManager();
     }
 
+    /**
+     * Teh repository holding the information about running jobs
+     * @param transactionManager  the transaction manager bean
+     * @return the repository managing the running jobs
+     * @throws Exception
+     */
     @Bean
     public JobRepository jobRepository(PlatformTransactionManager transactionManager) throws Exception {
         MapJobRepositoryFactoryBean mapJobRepositoryFactoryBean = new MapJobRepositoryFactoryBean(transactionManager);
@@ -34,6 +51,11 @@ public class BatchConfiguration {
         return mapJobRepositoryFactoryBean.getObject();
     }
 
+    /**
+     * The job launcher bean controlling the jobs
+     * @param jobRepository the job repository bean
+     * @return a simple job launcher bean
+     */
     @Bean
     public SimpleJobLauncher jobLauncher(JobRepository jobRepository) {
         SimpleJobLauncher simpleJobLauncher = new SimpleJobLauncher();

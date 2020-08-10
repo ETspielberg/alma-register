@@ -22,6 +22,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Main controller for scheduled jobs to be executed regularly
+ */
 @Controller
 @EnableScheduling
 public class JobLauncherController {
@@ -30,7 +33,7 @@ public class JobLauncherController {
 
     private final Job hisJob;
 
-    @Value("${libintel.data.dir}")
+    @Value("${alma.register.datadir:#{systemProperties['user.home']}/.almaregister/}")
     private String dataDir;
 
     @Value("${his.data.url:localhost/files/his}")
@@ -40,12 +43,25 @@ public class JobLauncherController {
 
     private final HisExportRepository hisExportRepository;
 
+    /**
+     * constructor based autowiring
+     * @param jobLauncher the launcher for the jobs to be run
+     * @param hisJob the job collecting the students data from the web address
+     * @param hisExportRepository the repository to store the collected student data
+     */
     JobLauncherController(JobLauncher jobLauncher, Job hisJob, HisExportRepository hisExportRepository) {
         this.jobLauncher = jobLauncher;
         this.hisJob = hisJob;
         this.hisExportRepository = hisExportRepository;
     }
 
+    /**
+     * the job collecting the students from the web address and storing it into the database
+     * @throws JobParametersInvalidException thrown if invalid paramters are provided
+     * @throws JobExecutionAlreadyRunningException thrown if the job is already running
+     * @throws JobRestartException thrown if the job restart interferes
+     * @throws JobInstanceAlreadyCompleteException thrown if the job is already completed
+     */
     @Scheduled(cron = "0 55 23 * * ?")
     public void runHisImport() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
@@ -60,6 +76,14 @@ public class JobLauncherController {
         jobLauncher.run(hisJob, jobParameters);
     }
 
+    /**
+     * the job collecting the students data for a given date from the web address and storing it into the database
+     * @param date the date to retrieve the data for
+     * @throws JobParametersInvalidException thrown if invalid paramters are provided
+     * @throws JobExecutionAlreadyRunningException thrown if the job is already running
+     * @throws JobRestartException thrown if the job restart interferes
+     * @throws JobInstanceAlreadyCompleteException thrown if the job is already completed
+     */
     @Secured("ROLE_ADMIN")
     @PostMapping("secure/importData")
     public void runHisImportForDate(@RequestParam String date) throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
@@ -74,6 +98,11 @@ public class JobLauncherController {
         jobLauncher.run(hisJob, jobParameters);
     }
 
+    /**
+     * retreive the students data for a given zim identifier
+     * @param zimKennung the zim identifier
+     * @return a list of students data
+     */
     @Secured("ROLE_ADMIN")
     @GetMapping("secure/test/{zimKennung}")
     public ResponseEntity<List<HisExport>> getForZimKennung(@PathVariable String zimKennung) {

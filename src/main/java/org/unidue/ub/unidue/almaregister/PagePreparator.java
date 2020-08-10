@@ -22,12 +22,15 @@ public class PagePreparator {
     @Value("${alma.register.master.template:https://www.uni-due.de}")
     private String masterTemplateHost;
 
-    @Value("${alma.register.master.template:/ub}")
+    @Value("${alma.register.master.template.path:/ub}")
     private String masterTemplatePath;
 
     @Value("${alma.register.datadir:#{systemProperties['user.home']}/.almaregister/}")
     private String localTemplateFolder;
 
+    /**
+     * collects the template file from the given web page, cleans it and stores it as master template for the thymeleaf template engine
+     */
     @Scheduled(cron = "0 0 2 * * *")
     //@Scheduled(fixedRate = 5000)
     public void collectMasterTemplate() {
