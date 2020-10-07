@@ -29,8 +29,8 @@
                                 <label for="firstName-input" th:text="#{first.name}"></label>
                             </th>
                             <td>
-                                <input id="firstName-input" type="text" size="30" autofocus class="form-control"
-                                       th:field="*{firstName}" th:placeholder="#{first.name}">
+                                <input id="firstName-input" type="text" size="30" class="form-control" autofocus
+                                       required th:field="*{firstName}" th:placeholder="#{first.name}">
                             </td>
                         </tr>
                         <tr>
@@ -38,7 +38,7 @@
                                 <label for="lastName-input" th:text="#{last.name}"></label>
                             </th>
                             <td>
-                                <input id="lastName-input" type="text" size="30" autofocus class="form-control"
+                                <input id="lastName-input" type="text" size="30" class="form-control" required
                                        th:field="*{lastName}" th:placeholder="#{last.name}">
                             </td>
                         </tr>
@@ -59,7 +59,7 @@
                                 <label for="road-input" th:text="#{road}"></label>
                             </th>
                             <td>
-                                <input id="road-input" type="text" size="30" autofocus class="form-control"
+                                <input id="road-input" type="text" size="30" class="form-control" required
                                        th:field="*{road}" th:placeholder="#{road}">
                             </td>
                         </tr>
@@ -68,7 +68,7 @@
                                 <label for="plz-input" th:text="#{plz}"></label>
                             </th>
                             <td>
-                                <input id="plz-input" type="text" size="30" autofocus class="form-control"
+                                <input id="plz-input" type="text" size="30" class="form-control" required
                                        th:field="*{plz}" th:placeholder="#{plz}">
                             </td>
                         </tr>
@@ -77,7 +77,7 @@
                                 <label for="city-input" th:text="#{city}"></label>
                             </th>
                             <td>
-                                <input id="city-input" type="text" size="30" autofocus class="form-control"
+                                <input id="city-input" type="text" size="30" class="form-control" required
                                        th:field="*{city}" th:placeholder="#{city}">
                             </td>
                         </tr>
@@ -86,7 +86,7 @@
                                 <label for="birthdate-input" th:text="#{birth.date}"></label>
                             </th>
                             <td>
-                                <input id="birthdate-input" type="date" th:field="*{birthDate}">
+                                <input id="birthdate-input" type="date" th:field="*{birthDate}" required>
                             </td>
                         </tr>
                         <tr>
@@ -94,7 +94,7 @@
                                 <label for="email-input" th:text="#{email}"></label>
                             </th>
                             <td>
-                                <input id="email-input" type="email" size="30" autofocus class="form-control"
+                                <input id="email-input" type="email" required size="30" class="form-control" required
                                        th:field="*{email}" th:placeholder="#{email}">
                             </td>
                         </tr>
