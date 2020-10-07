@@ -62,8 +62,8 @@ public class SecuredController {
             model.addAttribute("registrationRequest", registrationRequest);
             return "review";
         } else {
-            model.addAttribute("almaUser", almaUser);
-            return "update";
+            model.addAttribute("redirectUrl", redirectUrl);
+            return "alreadyExists";
         }
     }
 

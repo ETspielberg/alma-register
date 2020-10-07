@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{already.exists.heading}"></title>
+</head>
+<body>
+<div class="container-background bg-colored bg-gray" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 th:text="#{already.exists.heading}"></h1>
+                <p th:utext="#{already.exists.description}"></p>
+            </div>
+        </div>
+        <div th:if="${redirectUrl}" class="row">
+            <div class="col">
+                <a th:href="${redirectUrl}">
+                    <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
+                </a>
+                <p><span th:text="#{success.shibboleth.login.necessary}"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
