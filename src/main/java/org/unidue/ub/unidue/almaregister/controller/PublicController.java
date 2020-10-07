@@ -41,7 +41,7 @@ public class PublicController {
      *
      * @return the index page
      */
-    @GetMapping("/index")
+    @GetMapping({"/", "/index"})
     public String getIndexPage() {
         return "index";
     }
