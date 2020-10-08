@@ -62,7 +62,8 @@ public class PublicController {
      * @return the public success page
      */
     @GetMapping("/success")
-    public String getSuccessPage() {
+    public String getSuccessPage(Model model) {
+        model.addAttribute("redirectUrl", redirectUrl);
         return "success";
     }
 
