@@ -205,6 +205,7 @@ public class RegistrationRequest {
         Email emailAddress = new Email();
         ContactInfo contactInfo = new ContactInfo();
         ZoneId defaultZoneId = ZoneId.systemDefault();
+        Date birthday = Date.from(birthDate.atStartOfDay(defaultZoneId).toInstant());
         if (primaryId.isEmpty()) {
             Address postalAddress = new Address()
                     .city(city)
@@ -219,8 +220,8 @@ public class RegistrationRequest {
             contactInfo.addEmailItem(emailAddress)
                     .addAddressItem(postalAddress);
             almaUser.status(new UserStatus().value("INACTIVE"))
-                    .birthDate(Date.from(birthDate.atStartOfDay(defaultZoneId).toInstant()))
-                    .pinNumber(pinFormat.format(birthDate))
+                    .birthDate(birthday)
+                    .pinNumber(pinFormat.format(birthday))
                     .accountType(new UserAccountType().value("INTERNAL"));
         } else {
             emailAddress
