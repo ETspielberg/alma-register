@@ -177,6 +177,7 @@ public class RegistrationRequest {
 
     /**
      * creates an AlmaUser object to be submitted to Alma Users API from the supplied personal data.
+     *
      * @return an AlmaUser object
      */
     public AlmaUser getAlmaUser() {
@@ -197,15 +198,13 @@ public class RegistrationRequest {
                 break;
             }
 
-            default:{
+            default: {
                 almaUser.setUserGroup(new UserUserGroup().value("22"));
             }
 
         }
         Email emailAddress = new Email();
         ContactInfo contactInfo = new ContactInfo();
-        ZoneId defaultZoneId = ZoneId.systemDefault();
-        Date birthday = Date.from(birthDate.plusDays(1).atStartOfDay().atZone(defaultZoneId).toInstant());
         if (primaryId.isEmpty()) {
             Address postalAddress = new Address()
                     .city(city)
@@ -219,10 +218,14 @@ public class RegistrationRequest {
                     .preferred(true);
             contactInfo.addEmailItem(emailAddress)
                     .addAddressItem(postalAddress);
+
+            Date birthday = dateFromLocalDate(birthDate);
+            Date expiryDate = dateFromLocalDate(LocalDate.now().plusYears(1).plusWeeks(1));
             almaUser.status(new UserStatus().value("INACTIVE"))
                     .birthDate(birthday)
                     .pinNumber(pinFormat.format(birthday))
-                    .accountType(new UserAccountType().value("INTERNAL"));
+                    .accountType(new UserAccountType().value("INTERNAL"))
+                    .setExpiryDate(expiryDate);
         } else {
             emailAddress
                     .emailAddress(email)
@@ -238,5 +241,10 @@ public class RegistrationRequest {
             almaUser.addUserIdentifierItem(userIdentifier);
         }
         return almaUser.contactInfo(contactInfo);
+    }
+
+    private Date dateFromLocalDate(LocalDate localDate) {
+        ZoneId defaultZoneId = ZoneId.of("GMT");
+        return Date.from(localDate.atStartOfDay().atZone(defaultZoneId).toInstant());
     }
 }
