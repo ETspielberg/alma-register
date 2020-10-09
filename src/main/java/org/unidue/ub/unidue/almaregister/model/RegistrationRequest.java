@@ -5,6 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.unidue.ub.alma.shared.user.*;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 /**
@@ -31,7 +33,7 @@ public class RegistrationRequest {
     public String email = "";
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    public Date birthDate = new Date();
+    public LocalDate birthDate = LocalDate.now();
 
     public String password = "";
 
@@ -117,11 +119,11 @@ public class RegistrationRequest {
         this.email = email;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -202,6 +204,7 @@ public class RegistrationRequest {
         }
         Email emailAddress = new Email();
         ContactInfo contactInfo = new ContactInfo();
+        ZoneId defaultZoneId = ZoneId.systemDefault();
         if (primaryId.isEmpty()) {
             Address postalAddress = new Address()
                     .city(city)
@@ -216,7 +219,7 @@ public class RegistrationRequest {
             contactInfo.addEmailItem(emailAddress)
                     .addAddressItem(postalAddress);
             almaUser.status(new UserStatus().value("INACTIVE"))
-                    .birthDate(birthDate)
+                    .birthDate(Date.from(birthDate.atStartOfDay(defaultZoneId).toInstant()))
                     .pinNumber(pinFormat.format(birthDate))
                     .accountType(new UserAccountType().value("INTERNAL"));
         } else {
