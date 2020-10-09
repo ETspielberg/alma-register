@@ -6,6 +6,7 @@ import org.unidue.ub.alma.shared.user.*;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -33,7 +34,7 @@ public class RegistrationRequest {
     public String email = "";
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    public LocalDate birthDate = LocalDate.now();
+    public LocalDateTime birthDate = LocalDateTime.now();
 
     public String password = "";
 
@@ -119,11 +120,11 @@ public class RegistrationRequest {
         this.email = email;
     }
 
-    public LocalDate getBirthDate() {
+    public LocalDateTime getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(LocalDateTime birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -205,7 +206,7 @@ public class RegistrationRequest {
         Email emailAddress = new Email();
         ContactInfo contactInfo = new ContactInfo();
         ZoneId defaultZoneId = ZoneId.systemDefault();
-        Date birthday = Date.from(birthDate.atStartOfDay(defaultZoneId).toInstant());
+        Date birthday = Date.from(birthDate.withHour(23).atZone(defaultZoneId).toInstant());
         if (primaryId.isEmpty()) {
             Address postalAddress = new Address()
                     .city(city)
