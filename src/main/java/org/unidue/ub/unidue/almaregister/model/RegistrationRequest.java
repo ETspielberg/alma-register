@@ -198,6 +198,11 @@ public class RegistrationRequest {
                 break;
             }
 
+            case "UNDRGRD": {
+                almaUser.setUserGroup(new UserUserGroup().value("20"));
+                break;
+            }
+
             default: {
                 almaUser.setUserGroup(new UserUserGroup().value("22"));
             }

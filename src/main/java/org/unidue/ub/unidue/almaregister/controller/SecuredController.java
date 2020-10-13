@@ -30,7 +30,7 @@ public class SecuredController {
 
     private final AlmaUserService almaUserService;
 
-    @Value("${alma.redirect.url:www.uni-due.de/ub}")
+    @Value("${alma.redirect.url:https://www.uni-due.de/ub}")
     private String redirectUrl;
 
     @GetMapping("/success")

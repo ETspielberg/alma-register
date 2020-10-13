@@ -20,7 +20,7 @@ import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 @Controller
 public class PublicController {
 
-    @Value("${alma.redirect.url:www.uni-due.de/ub}")
+    @Value("${alma.redirect.url:https://www.uni-due.de/ub}")
     private String redirectUrl;
 
     private final AlmaUserService almaUserService;

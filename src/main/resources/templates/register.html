@@ -9,103 +9,107 @@
         <div class="row">
             <div class="col">
                 <h1 th:text="#{register.heading}"></h1>
-                <form th:action="@{register}" th:object="${registrationRequest}" method="post">
+                <form th:action="@{register}" th:object="${registrationRequest}" method="post" autocomplete="on">
                     <p th:text="#{register.description}"></p>
-                    <table class="table table-striped">
-                        <tr>
-                            <th>
-                                <label for="title-input" th:text="#{title}"></label>
-                            </th>
-                            <td>
-                                <select id="title-input" th:field="*{title}">
-                                    <option th:value="'none'" th:text="#{title.none}"></option>
-                                    <option th:value="'dr'" th:text="#{title.dr}"></option>
-                                    <option th:value="'prof'" th:text="#{title.prof}"></option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="firstName-input" th:text="#{first.name}"></label>
-                            </th>
-                            <td>
-                                <input id="firstName-input" type="text" size="30" class="form-control" autofocus
-                                       required th:field="*{firstName}" th:placeholder="#{first.name}">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="lastName-input" th:text="#{last.name}"></label>
-                            </th>
-                            <td>
-                                <input id="lastName-input" type="text" size="30" class="form-control" required
-                                       th:field="*{lastName}" th:placeholder="#{last.name}">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="userStatus-input" th:text="#{user.status}"></label>
-                            </th>
-                            <td>
-                                <select id="userStatus-input" th:field="*{userStatus}">
-                                    <option th:value="'UNDRGRD'" th:text="#{pupil}"></option>
-                                    <option th:value="'STAFF'" th:text="#{coworker}"></option>
-                                    <option th:value="'GUEST'" th:text="#{other}"></option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="road-input" th:text="#{road}"></label>
-                            </th>
-                            <td>
-                                <input id="road-input" type="text" size="30" class="form-control" required
-                                       th:field="*{road}" th:placeholder="#{road}">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="plz-input" th:text="#{plz}"></label>
-                            </th>
-                            <td>
-                                <input id="plz-input" type="text" size="30" class="form-control" required
-                                       th:field="*{plz}" th:placeholder="#{plz}">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="city-input" th:text="#{city}"></label>
-                            </th>
-                            <td>
-                                <input id="city-input" type="text" size="30" class="form-control" required
-                                       th:field="*{city}" th:placeholder="#{city}">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="birthdate-input" th:text="#{birth.date}"></label>
-                            </th>
-                            <td>
-                                <input id="birthdate-input" type="date" th:field="*{birthDate}" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="email-input" th:text="#{email}"></label>
-                            </th>
-                            <td>
-                                <input id="email-input" type="email" size="30" class="form-control" required
-                                       th:field="*{email}" th:placeholder="#{email}">
-                            </td>
-                        </tr>
-                    </table>
+                    <fieldset>
+                        <table class="table table-striped">
+                            <tr>
+                                <th>
+                                    <label for="title-input" th:text="#{title}"></label>
+                                </th>
+                                <td>
+                                    <select id="title-input" th:field="*{title}">
+                                        <option th:value="'none'" th:text="#{title.none}"></option>
+                                        <option th:value="'dr'" th:text="#{title.dr}"></option>
+                                        <option th:value="'prof'" th:text="#{title.prof}"></option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="firstName-input" th:text="#{first.name}"></label>
+                                </th>
+                                <td>
+                                    <input id="firstName-input" type="text" size="30" class="form-control" autofocus
+                                           required th:field="*{firstName}" th:placeholder="#{first.name}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="lastName-input" th:text="#{last.name}"></label>
+                                </th>
+                                <td>
+                                    <input id="lastName-input" type="text" size="30" class="form-control" required
+                                           th:field="*{lastName}" th:placeholder="#{last.name}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="userStatus-input" th:text="#{user.status}"></label>
+                                </th>
+                                <td>
+                                    <select id="userStatus-input" th:field="*{userStatus}">
+                                        <option th:value="'UNDRGRD'" th:text="#{pupil}"></option>
+                                        <option th:value="'STAFF'" th:text="#{coworker}"></option>
+                                        <option th:value="'GUEST'" th:text="#{other}"></option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="road-input" th:text="#{road}"></label>
+                                </th>
+                                <td>
+                                    <input id="road-input" type="text" size="30" class="form-control" required
+                                           th:field="*{road}" th:placeholder="#{road}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="plz-input" th:text="#{plz}"></label>
+                                </th>
+                                <td>
+                                    <input id="plz-input" type="text" size="30" class="form-control" required
+                                           th:field="*{plz}" th:placeholder="#{plz}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="city-input" th:text="#{city}"></label>
+                                </th>
+                                <td>
+                                    <input id="city-input" type="text" size="30" class="form-control" required
+                                           th:field="*{city}" th:placeholder="#{city}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="birthdate-input" th:text="#{birth.date}"></label>
+                                </th>
+                                <td>
+                                    <input id="birthdate-input" type="date" th:field="*{birthDate}" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="email-input" th:text="#{email}"></label>
+                                </th>
+                                <td>
+                                    <input id="email-input" type="email" size="30" class="form-control" required
+                                           th:field="*{email}" th:placeholder="#{email}">
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
                     <div class="field fieldOption">
                         <div>
-                            <input th:value="*{termsAccepted}" th:field="*{termsAccepted}" type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
-                            <label th:utext="#{index.terms.label}" for="termsAndConditions">  </label>
+                            <input th:value="*{termsAccepted}" th:field="*{termsAccepted}" type="checkbox"
+                                   name="termsAndConditions" id="termsAndConditions" required/>
+                            <label th:utext="#{index.terms.label}" for="termsAndConditions"> </label>
                         </div>
                         <div>
-                            <input th:value="*{privacyAccepted}" th:field="*{privacyAccepted}" type="checkbox" name="privacy" id="privacy" required />
+                            <input th:value="*{privacyAccepted}" th:field="*{privacyAccepted}" type="checkbox"
+                                   name="privacy" id="privacy" required/>
                             <label th:utext="#{index.privacy.label}" for="privacy"></label>
                         </div>
                     </div>
