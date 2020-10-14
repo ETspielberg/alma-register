@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Herzlich Willkommen an der Universitätsbibliothek Duisburg-Essen</title>
+    <title th:text="#{confirmation.email.title}">Herzlich Willkommen an der Universitätsbibliothek Duisburg-Essen</title>
     <style>
         table, th, td {
             text-align: left;
@@ -23,18 +23,17 @@
     </style>
 </head>
 <body>
-<h1 class="title">
+<h1 class="title" th:text="#{confirmation.email.title}">
     Herzlich Willkommen an der Universitätsbibliothek Duisburg-Essen
 </h1>
-<p class="text">Sehr geehrte*r <span th:text="${name}"></span></p>
-     <p>Wir freuen uns, dass Sie sich an der Universitätsbibliothek Duisburg-Essen angemeldet haben.</p>
-<p> Ihre Nutzerkennung lautet <span th:text="${primaryId}"></span></p>
+<p class="text"><span th:text="#{confirmation.email.salutation}">Sehr geehrte*r</span> <span th:text="${title}"></span> <span th:text="${name}"></span></p>
+<p th:text="#{confirmation.email.welcome.long}">Wir freuen uns, dass Sie sich an der Universitätsbibliothek Duisburg-Essen angemeldet haben.</p>
+<p><span th:text="#{confirmation.email.primaryid}">Ihre Nutzerkennung lautet </span><span th:text="${primaryId}"></span></p>
 <p> Sie erhalten in einer separaten Mail einen vierstelligen PIN, mit dem Sie sich in unserem Katalog <a href="https://hbz-ubdue.primo.exlibrisgroup.com/discovery/search?vid=49HBZ_UDE:49HBZ_UDE_default_view">Primo</a> anmelden können. </p>
-<p> Bitte beachten Sie: Bevor Sie etwas entleihen können, müssen Sie Ihren Account erst freischalten lassen. Dazu legen Sie bitte an einer unserer Ausleihtheken Ihren Personalausweis vor.<span th:if="${isMinor}"> Außerdem benötigen Sie eine unterschriebene Einverständniserklärung Ihres Erziehungsberechtigten und eine Kopie dessen/deren Personalausweises.</span> Sollten Sie keinen Personalausweis besitzen, legen Sie bitte Ihren Reisepass und eine amtliche Meldebescheinigung vor.</p>
+<p th:text="#{confirmation.email.documents}"> Bitte beachten Sie: Bevor Sie etwas entleihen können, müssen Sie Ihren Account erst freischalten lassen. Dazu legen Sie bitte an einer unserer Ausleihtheken Ihren Personalausweis vor. Sollten Sie keinen Personalausweis besitzen, legen Sie bitte Ihren Reisepass und eine amtliche Meldebescheinigung vor.</p>
+<p th:if="${isMinor}"><span th:text="confirmation.email.documents.minor"> Außerdem benötigen Sie eine unterschriebene Einverständniserklärung Ihres Erziehungsberechtigten und eine Kopie dessen/deren Personalausweises.</span></p>
 
-<p>Mit fruendlichen Grüßen,</p>
-<p>Ihre Universitätsbibliothek Duisburg-Essen</p>
-
-
+<p th:text="#{confirmation.email.greeting}">Mit freundlichen Grüßen,</p>
+<p th:text="#{confirmation.email.signature}">Ihre Universitätsbibliothek Duisburg-Essen</p>
 </body>
 </html>

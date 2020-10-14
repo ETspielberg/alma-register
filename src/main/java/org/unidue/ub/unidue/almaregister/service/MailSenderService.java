@@ -3,6 +3,7 @@ package org.unidue.ub.unidue.almaregister.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -24,7 +25,9 @@ public class MailSenderService {
 
     private final JavaMailSender emailSender;
 
-    private TemplateEngine templateEngine;
+    private final TemplateEngine templateEngine;
+
+    private final MessageSource messageSource;
 
     private static final Logger log = LoggerFactory.getLogger(MailSenderService.class);
 
@@ -32,10 +35,12 @@ public class MailSenderService {
     MailSenderService(
             // error on unknown bean for emailSender can be ignored, emailSender bean is created from configuration properties
             JavaMailSender emailSender,
-            TemplateEngine templateEngine
+            TemplateEngine templateEngine,
+            MessageSource messageSource
     ) {
         this.emailSender = emailSender;
         this.templateEngine = templateEngine;
+        this.messageSource = messageSource;
     }
 
     public void sendNotificationMail(AlmaUser almaUser) {
@@ -63,6 +68,7 @@ public class MailSenderService {
         boolean isMinor = diff < 18;
         context.setVariable("isMinor", isMinor);
         context.setVariable("primaryId", almaUser.getPrimaryId());
+        context.setVariable("title", almaUser.getUserTitle().getValue());
         return templateEngine.process("registrationSuccessMailTemplate", context);
     }
 
