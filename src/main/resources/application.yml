@@ -13,6 +13,16 @@ spring:
   batch:
     job.enabled: false
     initialize-schema: always
+  mail:
+    host: mailout.uni-duisburg-essen.de
+    port: 587
+    defaultEncoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 alma:
   api:
     user:
@@ -22,6 +32,9 @@ alma:
       id: exampleId
   redirect:
     url: www.uni-due.de/ub
+  register:
+    email:
+      from: information.ub@uni-due.de
 logging:
   level:
     org:

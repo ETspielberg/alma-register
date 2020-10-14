@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
+import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 import org.unidue.ub.unidue.almaregister.service.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
+import org.unidue.ub.unidue.almaregister.service.MailSenderService;
 
 /**
  * the main controller for the unprotected web pages (creation of Alma User for external users)
@@ -25,6 +27,8 @@ public class PublicController {
 
     private final AlmaUserService almaUserService;
 
+    private final MailSenderService mailSenderService;
+
     private final Logger log = LoggerFactory.getLogger(PublicController.class);
 
     /**
@@ -32,8 +36,9 @@ public class PublicController {
      *
      * @param almaUserService saves AlmaUser objects to Alma
      */
-    PublicController(AlmaUserService almaUserService) {
+    PublicController(AlmaUserService almaUserService, MailSenderService mailSenderService) {
         this.almaUserService = almaUserService;
+        this.mailSenderService = mailSenderService;
     }
 
     /**
@@ -105,7 +110,10 @@ public class PublicController {
         if (error)
             return new RedirectView("register");
         try {
-            this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(), true);
+            AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(), true);
+            log.info(String.format("User %s %s sucessfully registered with new id %s",
+                    almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
+            mailSenderService.sendNotificationMail(almaUser);
             return new RedirectView("success");
         } catch (Exception e) {
             throw new AlmaConnectionException("could not create user");

@@ -98,9 +98,9 @@ public class AlmaUserService {
      * @param pinNotification whether a notification E-Mail about the new pin shall be send
      * @throws AlmaConnectionException thrown, ich the connection to the Alma API cannot be established
      */
-    public void createAlmaUser(AlmaUser almaUser, boolean pinNotification) throws AlmaConnectionException {
+    public AlmaUser createAlmaUser(AlmaUser almaUser, boolean pinNotification) throws AlmaConnectionException {
         try {
-            this.almaUserApiClient.postUsers("application/json", almaUser, pinNotification);
+            return this.almaUserApiClient.postUsers("application/json", almaUser, pinNotification);
         } catch (Exception e) {
             log.warn("could not create user", e);
             throw new AlmaConnectionException("could not create user");
