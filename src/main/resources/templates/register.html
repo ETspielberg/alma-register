@@ -15,6 +15,18 @@
                         <table class="table table-striped">
                             <tr>
                                 <th>
+                                    <label for="gender-input" th:text="#{gender}"></label>
+                                </th>
+                                <td>
+                                    <select id="gender-input" th:field="*{gender}">
+                                        <option th:value="'FEMALE'" th:text="#{female}"></option>
+                                        <option th:value="'MALE'" th:text="#{male}"></option>
+                                        <option th:value="'OTHER'" th:text="#{other}"></option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
                                     <label for="title-input" th:text="#{title}"></label>
                                 </th>
                                 <td>
@@ -97,6 +109,15 @@
                                 <td>
                                     <input id="email-input" type="email" size="30" class="form-control" required
                                            th:field="*{email}" th:placeholder="#{email}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="password-input" th:text="#{password}"></label>
+                                </th>
+                                <td>
+                                    <input id="password-input" type="password" size="30" class="form-control" required
+                                           th:field="*{password}" th:placeholder="#{password}">
                                 </td>
                             </tr>
                         </table>

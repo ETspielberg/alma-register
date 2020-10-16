@@ -18,6 +18,8 @@ public class RegistrationRequest {
 
     public String userStatus = "";
 
+    public String gender = "";
+
     public String title = "";
 
     public String firstName = "";
@@ -62,6 +64,13 @@ public class RegistrationRequest {
         this.userStatus = userStatus;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public String getTitle() {
         return title;
@@ -226,8 +235,10 @@ public class RegistrationRequest {
 
             Date birthday = dateFromLocalDate(birthDate);
             Date expiryDate = dateFromLocalDate(LocalDate.now().plusYears(1).plusWeeks(1));
-            almaUser.status(new UserStatus().value("INACTIVE"))
+            almaUser.status(new UserStatus().value("ACTIVE"))
+                    .gender(new UserGender().value(gender))
                     .birthDate(birthday)
+                    .password(password)
                     .pinNumber(pinFormat.format(birthday))
                     .accountType(new UserAccountType().value("INTERNAL"))
                     .setExpiryDate(expiryDate);
