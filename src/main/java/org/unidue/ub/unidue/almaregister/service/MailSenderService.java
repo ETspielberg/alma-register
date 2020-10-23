@@ -59,7 +59,8 @@ public class MailSenderService {
 
     private String buildMailBody(AlmaUser almaUser) {
         Context context = new Context();
-        context.setVariable("name", almaUser.getFirstName() + " " + almaUser.getLastName());
+        context.setVariable("lastname", almaUser.getLastName());
+        context.setVariable("firstname", almaUser.getFirstName());
         LocalDate birthdate = almaUser.getBirthDate().toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();

@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class RegistrationRequest {
 
-    private final static SimpleDateFormat pinFormat = new SimpleDateFormat("ddMM");
+    private final static SimpleDateFormat pinFormat = new SimpleDateFormat("ddMMyyyy");
 
     public String userStatus = "";
 
@@ -235,7 +235,7 @@ public class RegistrationRequest {
 
             Date birthday = dateFromLocalDate(birthDate);
             Date expiryDate = dateFromLocalDate(LocalDate.now().plusYears(1).plusWeeks(1));
-            almaUser.status(new UserStatus().value("ACTIVE"))
+            almaUser.status(new UserStatus().value("INACTIVE"))
                     .gender(new UserGender().value(gender))
                     .birthDate(birthday)
                     .password(password)
