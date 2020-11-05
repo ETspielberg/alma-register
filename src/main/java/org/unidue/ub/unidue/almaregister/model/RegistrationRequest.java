@@ -235,8 +235,11 @@ public class RegistrationRequest {
 
             Date birthday = dateFromLocalDate(birthDate);
             Date expiryDate = dateFromLocalDate(LocalDate.now().plusYears(1).plusWeeks(1));
+            UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("01");
+            UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("INACTIVE").value("NEU-" + new Date().toString()).segmentType("internal");
             almaUser.status(new UserStatus().value("INACTIVE"))
                     .gender(new UserGender().value(gender))
+                    .addUserIdentifierItem(userIdentifier)
                     .birthDate(birthday)
                     .password(password)
                     .pinNumber(pinFormat.format(birthday))

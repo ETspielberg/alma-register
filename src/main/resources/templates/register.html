@@ -2,6 +2,8 @@
 <html lang="en" layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="#{register.heading}"></title>
+    <script th:src="@{/js/pwstrength.js}"></script>
+
 </head>
 <body>
 <div class="container-background bg-colored bg-gray" layout:fragment="content">
@@ -120,6 +122,15 @@
                                            th:field="*{password}" th:placeholder="#{password}">
                                 </td>
                             </tr>
+                            <tr>
+                                <th>
+                                    <label for="password-repeat" th:text="#{password}"></label>
+                                </th>
+                                <td>
+                                    <input id="password-repeat" type="password" size="30" class="form-control" required
+                                           th:placeholder="#{password}">
+                                </td>
+                            </tr>
                         </table>
                     </fieldset>
                     <div class="field fieldOption">
@@ -140,5 +151,17 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        "use strict";
+        var options = {
+            minChar: 8,
+            bootstrap3:true,
+        };
+        $(':password').pwstrength(options);
+    });
+</script>
+
 </body>
 </html>

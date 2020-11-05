@@ -27,18 +27,18 @@
 <h1 class="title" th:text="#{confirmation.email.title}">
     Herzlich Willkommen an der Universitätsbibliothek Duisburg-Essen
 </h1>
-<div class="text">
-    <p th:case="MALE">
+<div class="text" th:switch="${gender}">
+    <p th:case="Male">
         <span th:text="#{confirmation.email.salutation.male}">Sehr geehrter Herr</span> <span
-        th:text="${title}"></span> <span th:text="${lastname}"></span>
+        th:text="${title}"></span> <span th:text="${lastname}"></span>,
     </p>
-    <p th:case="FEMALE">
+    <p th:case="Female">
         <span th:text="#{confirmation.email.salutation.female}">Sehr geehrte Frau</span> <span
-            th:text="${title}"></span> <span th:text="${lastname}"></span>
+            th:text="${title}"></span> <span th:text="${lastname}"></span>,
     </p>
-    <p th:case="OTHER">
+    <p th:case="Other">
         <span th:text="#{confirmation.email.salutation.other}">Sehr geehrte*r </span> <span
-            th:text="${title}"></span> <span th:text="${firstname}"></span> <span th:text="${lastname}"></span>
+            th:text="${title}"></span> <span th:text="${firstname}"></span> <span th:text="${lastname}"></span>,
     </p>
 </div>
 <p th:text="#{confirmation.email.welcome.long}">Wir freuen uns, dass Sie sich an der Universitätsbibliothek

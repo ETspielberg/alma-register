@@ -69,6 +69,8 @@ public class MailSenderService {
         boolean isMinor = diff < 18;
         context.setVariable("isMinor", isMinor);
         context.setVariable("primaryId", almaUser.getPrimaryId());
+        context.setVariable("gender", almaUser.getGender().getDesc());
+        log.info(almaUser.getGender().getDesc());
         context.setVariable("title", almaUser.getUserTitle().getValue());
         return templateEngine.process("registrationSuccessMailTemplate", context);
     }
