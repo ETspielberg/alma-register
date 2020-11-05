@@ -236,7 +236,8 @@ public class RegistrationRequest {
             Date birthday = dateFromLocalDate(birthDate);
             Date expiryDate = dateFromLocalDate(LocalDate.now().plusYears(1).plusWeeks(1));
             UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("01");
-            UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("INACTIVE").value("NEU-" + new Date().toString()).segmentType("internal");
+            int random = (int) (Math.random() * 1000000);
+            UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("INACTIVE").value("NEU-" + random).segmentType("internal");
             almaUser.status(new UserStatus().value("INACTIVE"))
                     .gender(new UserGender().value(gender))
                     .addUserIdentifierItem(userIdentifier)
