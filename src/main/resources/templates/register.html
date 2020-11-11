@@ -2,7 +2,10 @@
 <html lang="en" layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="#{register.heading}"></title>
-    <script th:src="@{/js/pwstrength.js}"></script>
+    <script th:src="@{webjars/jquery/3.4.0/jquery.min.js}"></script>
+    <script th:src="@{webjars/popper.js/1.14.3/popper.min.js}"></script>
+    <script th:src="@{webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/query.password-validation.js}"></script>
 
 </head>
 <body>
@@ -20,7 +23,8 @@
                                     <label for="gender-input" th:text="#{gender}"></label>
                                 </th>
                                 <td>
-                                    <select id="gender-input" th:field="*{gender}">
+                                    <select id="gender-input" th:field="*{gender}" required>
+                                        <option value="" th:text="#{choose}"> Bitte auswählen </option>
                                         <option th:value="'FEMALE'" th:text="#{female}"></option>
                                         <option th:value="'MALE'" th:text="#{male}"></option>
                                         <option th:value="'OTHER'" th:text="#{other}"></option>
@@ -62,7 +66,8 @@
                                     <label for="userStatus-input" th:text="#{user.status}"></label>
                                 </th>
                                 <td>
-                                    <select id="userStatus-input" th:field="*{userStatus}">
+                                    <select id="userStatus-input" th:field="*{userStatus}" required>
+                                        <option value="" th:text="#{choose}"> Bitte auswählen </option>
                                         <option th:value="'UNDRGRD'" th:text="#{pupil}"></option>
                                         <option th:value="'STAFF'" th:text="#{coworker}"></option>
                                         <option th:value="'GUEST'" th:text="#{other}"></option>
@@ -132,6 +137,9 @@
                                 </td>
                             </tr>
                         </table>
+                        <p>
+                            Das Passwort muss mindestens 8 Zeichen lang sein. Es darf zudem nicht häufig verwendete Passwörter enthalten.
+                        </p>
                     </fieldset>
                     <div class="field fieldOption">
                         <div>
@@ -144,24 +152,29 @@
                                    name="privacy" id="privacy" required/>
                             <label th:utext="#{index.privacy.label}" for="privacy"></label>
                         </div>
+                        <label id="errors"/>
                     </div>
                     <input type="submit" class="btn btn-primary" th:value="#{register.register}"/>
                 </form>
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $("#password-input").passwordValidation({"confirmField": "#password-repeat"}, function(element, valid, match, failedCases) {
+
+                $("#errors").html("<pre>" + failedCases.join("\n") + "</pre>");
+
+                if(valid) $(element).css("border","2px solid green");
+                if(!valid) $(element).css("border","2px solid red");
+                if(valid && match) $("#password-repeat").css("border","2px solid green");
+                if(!valid || !match) $("#password-repeat").css("border","2px solid red");
+            });
+        });
+    </script>
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        "use strict";
-        var options = {
-            minChar: 8,
-            bootstrap3:true,
-        };
-        $(':password').pwstrength(options);
-    });
-</script>
+
 
 </body>
 </html>
