@@ -211,7 +211,10 @@ public class RegistrationRequest {
                 almaUser.setUserGroup(new UserUserGroup().value("20"));
                 break;
             }
-
+            case "other": {
+                almaUser.setUserGroup(null);
+                break;
+            }
             default: {
                 almaUser.setUserGroup(new UserUserGroup().value("22"));
             }
@@ -234,7 +237,12 @@ public class RegistrationRequest {
                     .addAddressItem(postalAddress);
 
             Date birthday = dateFromLocalDate(birthDate);
-            Date expiryDate = dateFromLocalDate(LocalDate.now().plusYears(1).plusWeeks(1));
+            Date expiryDate;
+            if ("other".equals(userStatus)) {
+                expiryDate = dateFromLocalDate(LocalDate.now());
+            } else {
+                expiryDate = dateFromLocalDate(LocalDate.now().plusYears(1).plusWeeks(1));
+            }
             UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("01");
             int random = (int) (Math.random() * 1000000);
             UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("INACTIVE").value("NEU-" + random).segmentType("internal");

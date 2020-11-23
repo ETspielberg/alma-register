@@ -2,11 +2,12 @@
 <html lang="en" layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="#{register.heading}"></title>
-    <script th:src="@{webjars/jquery/3.4.0/jquery.min.js}"></script>
-    <script th:src="@{webjars/popper.js/1.14.3/popper.min.js}"></script>
-    <script th:src="@{webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
-    <script th:src="@{/js/query.password-validation.js}"></script>
 
+    <!--<script th:src="@{webjars/jquery/3.4.0/jquery.min.js}"></script>
+    <script th:src="@{webjars/popper.js/1.14.3/popper.min.js}"></script>
+    <script th:src="@{webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>-->
+    <script src="https://www.uni-due.de/portal/4/js/complete.js?20201109123532"></script>
+    <script th:src="@{/js/query.password-validation.js}"></script>
 </head>
 <body>
 <div class="container-background bg-colored bg-gray" layout:fragment="content">
@@ -70,7 +71,7 @@
                                         <option value="" th:text="#{choose}"> Bitte auswählen </option>
                                         <option th:value="'UNDRGRD'" th:text="#{pupil}"></option>
                                         <option th:value="'STAFF'" th:text="#{coworker}"></option>
-                                        <option th:value="'GUEST'" th:text="#{other}"></option>
+                                        <option th:value="'other'" th:text="#{other}"></option>
                                     </select>
                                 </td>
                             </tr>
