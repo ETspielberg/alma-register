@@ -1,47 +1,21 @@
-body {
-  margin: 0;
-  background-size: cover;
-  background-attachment: fixed;
+/* Add a green text color and a checkmark when the requirements are right */
+.ui-password-valid {
+  color: green;
 }
 
-.tile {
-  background-color: #dfe4f2;
-  float: left;
-  opacity: 0.9;
-  color: #1a171b;
-  border-radius: 25px;
-  height: 100%;
-  width: 100%;
-  padding: 15px;
-  vertical-align: middle;
-  text-align:left;
+.ui-password-valid:before {
   position: relative;
-
+  left: -35px;
+  content: "\2714";
 }
 
-.button-link {
-  position: absolute;
-  bottom: 0px;
-}
-.tile-top {
-  border-radius: 25px 25px 0px 0px
+/* Add a red text color and an "x" icon when the requirements are wrong */
+.ui-password-invalid {
+  color: red;
 }
 
-.tile-bottom {
-  border-radius: 0px 0px 25px 25px
-}
-
-.jumbotron {
-  background-color: transparent;
-  color: #ffffff;
-}
-
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: #dfe4f2;
-  color: white;
-  text-align: center;
+.ui-password-invalid:before {
+  position: relative;
+  left: -35px;
+  content: "\292B";
 }

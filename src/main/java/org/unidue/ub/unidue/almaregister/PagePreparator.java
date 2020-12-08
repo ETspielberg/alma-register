@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class PagePreparator {
@@ -25,6 +27,9 @@ public class PagePreparator {
     @Value("${alma.register.master.template.path:/ub}")
     private String masterTemplatePath;
 
+    @Value("${alma.register.master.template.path.en:/ub/en/eindex.php}")
+    private String masterTemplatePathEn;
+
     @Value("${alma.register.datadir:#{systemProperties['user.home']}/.almaregister/}")
     private String localTemplateFolder;
 
@@ -34,34 +39,59 @@ public class PagePreparator {
     @Scheduled(cron = "0 0 2 * * *")
     //@Scheduled(fixedRate = 5000)
     public void collectMasterTemplate() {
-        try {
-            Document doc = Jsoup.connect(masterTemplateHost + masterTemplatePath).get();
-            Elements html = doc.select("html");
-            html.attr("xmlns:th", "http://www.thymeleaf.org");
-            Elements content = doc.select("#content__standard__main");
-            doc.select("script[type='text/x-mathjax-config']").remove();
-            content.attr("layout:fragment", "content");
-            content.html("");
-            setAbsolutePaths(doc, "img", "src");
-            setAbsolutePaths(doc, "link", "href");
-            setAbsolutePaths(doc, "a", "href");
-            setAbsolutePaths(doc, "script", "src");
-            setAbsolutePaths(doc, "meta", "content");
-            File f = new File(localTemplateFolder,"layout.html");
-            FileUtils.writeStringToFile(f, doc.outerHtml(), "UTF-8");
-            log.info("updated web template");
-        } catch (IOException ioe) {
-            log.warn("could not update page.", ioe);
-        }
+        List<String> languages = Arrays.asList("en", "de");
+        for (String language : languages) {
+            try {
+                String fragment = "layout:fragment";
+                Document doc;
+                String templateFile;
+                switch (language) {
+                    case "en": {
+                        doc = Jsoup.connect(masterTemplateHost + masterTemplatePathEn).get();
+                        fragment = "layout:fragment";
+                        templateFile = "layout_en.html";
+                        break;
+                    }
+                    default: {
+                        doc = Jsoup.connect(masterTemplateHost + masterTemplatePath).get();
 
+                        templateFile = "layout_de.html";
+                    }
+                }
+                Elements html = doc.select("html");
+                html.attr("xmlns:th", "http://www.thymeleaf.org");
+                Elements content = doc.select("#content__standard__main");
+                doc.select("script[type='text/x-mathjax-config']").remove();
+                content.attr(fragment, "content");
+                content.html("");
+                setAbsolutePaths(doc, "img", "src");
+                setAbsolutePaths(doc, "link", "href");
+                setAbsolutePaths(doc, "a", "href");
+                setAbsolutePaths(doc, "script", "src");
+                setAbsolutePaths(doc, "meta", "content");
+                File f = new File(localTemplateFolder, templateFile);
+                FileUtils.writeStringToFile(f, doc.outerHtml(), "UTF-8");
+                log.info("updated web template for " + language);
+            } catch (IOException ioe) {
+                log.warn("could not update page for " + language, ioe);
+            }
+        }
     }
 
     private void setAbsolutePaths(Document doc, String tag, String attribute) {
         Elements elements = doc.select(tag + "[" + attribute + "]");
         for (Element src : elements) {
             String path = src.attr(attribute);
+            if ("/ub/en/eindex.php".equals(path)) {
+                src.attr("th:href", "|/${module}?lang=en|");
+                src.removeAttr("href");
+            }
+            if ("/ub/index.php".equals(path)) {
+                src.attr("th:href", "|/${module}?lang=de|");
+                src.removeAttr("href");
+            }
             if (path.startsWith("/"))
-                src.attr(attribute,masterTemplateHost + path);
+                src.attr(attribute, masterTemplateHost + path);
         }
     }
 }

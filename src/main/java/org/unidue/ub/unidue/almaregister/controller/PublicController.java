@@ -47,7 +47,8 @@ public class PublicController {
      * @return the index page
      */
     @GetMapping({"/", "/index"})
-    public String getIndexPage() {
+    public String getIndexPage(Model model) {
+        model.addAttribute("module", "index");
         return "index";
     }
 
@@ -57,7 +58,8 @@ public class PublicController {
      * @return the actions page
      */
     @GetMapping("/actions")
-    public String getActionsPage() {
+    public String getActionsPage(Model model) {
+        model.addAttribute("module", "actions");
         return "actions";
     }
 
@@ -69,6 +71,7 @@ public class PublicController {
     @GetMapping("/success")
     public String getSuccessPage(Model model) {
         model.addAttribute("redirectUrl", redirectUrl);
+        model.addAttribute("module", "success");
         return "success";
     }
 
@@ -80,6 +83,7 @@ public class PublicController {
      */
     @GetMapping("/register")
     public String getRegisterPage(Model model) {
+        model.addAttribute("module", "register");
         model.addAttribute("registrationRequest", new RegistrationRequest());
         return "register";
     }

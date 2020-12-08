@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" layout:decorate="~{|layout_${#locale}|}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="#{actions.heading}"></title>
 </head>

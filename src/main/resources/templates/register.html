@@ -1,13 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" layout:decorate="~{layout}" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" layout:decorate="~{|layout_${#locale}|}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="#{register.heading}"></title>
-
-    <!--<script th:src="@{webjars/jquery/3.4.0/jquery.min.js}"></script>
-    <script th:src="@{webjars/popper.js/1.14.3/popper.min.js}"></script>
-    <script th:src="@{webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>-->
-    <script src="https://www.uni-due.de/portal/4/js/complete.js?20201109123532"></script>
-    <script th:src="@{/js/query.password-validation.js}"></script>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div class="container-background bg-colored bg-gray" layout:fragment="content">
@@ -138,9 +133,15 @@
                                 </td>
                             </tr>
                         </table>
-                        <p>
-                            Das Passwort muss mindestens 8 Zeichen lang sein. Es darf zudem nicht häufig verwendete Passwörter enthalten.
-                        </p>
+                        <div style="padding-left: 35px;" id="message">
+                            <h3  th:text="#{password.must.have}">Password must contain the following:</h3>
+                            <p id="letter" class="ui-password-invalid" th:text="#{password.letter}">A <b>lowercase</b> letter</p>
+                            <p id="capital" class="ui-password-invalid" th:text="#{password.capital}">A <b>capital (uppercase)</b> letter</p>
+                            <p id="number" class="ui-password-invalid" th:text="#{password.number}">A <b>number</b></p>
+                            <p id="length" class="ui-password-invalid" th:text="#{password.length}">Minimum <b>8 characters</b></p>
+                            <p id="repeat" class="ui-password-invalid" th:text="#{password.match}">Passwords match</b></p>
+                        </div>
+
                     </fieldset>
                     <div class="field fieldOption">
                         <div>
@@ -155,23 +156,95 @@
                         </div>
                         <label id="errors"/>
                     </div>
-                    <input type="submit" class="btn btn-primary" th:value="#{register.register}"/>
+                    <input id="submit" disabled="true" type="submit" class="btn btn-primary" th:value="#{register.register}"/>
                 </form>
             </div>
         </div>
     </div>
+    <!--/* from https://www.w3schools.com/howto/howto_js_password_validation.asp */-->
     <script>
-        $(document).ready(function() {
-            $("#password-input").passwordValidation({"confirmField": "#password-repeat"}, function(element, valid, match, failedCases) {
+        var passwordInput = document.getElementById("password-input");
+        var passwordRepeat = document.getElementById("password-repeat");
+        var repeat = document.getElementById("repeat");
+        var letter = document.getElementById("letter");
+        var capital = document.getElementById("capital");
+        var number = document.getElementById("number");
+        var length = document.getElementById("length");
+        var submit = document.getElementById("submit");
+        var repeat_bool = false;
+        var letter_bool = false;
+        var capital_bool = false;
+        var length_bool = false;
+        var number_bool = false;
+        var total_bool = false;
 
-                $("#errors").html("<pre>" + failedCases.join("\n") + "</pre>");
+        // When the user starts to type something inside the password field
+        passwordInput.onkeyup = function() {
+            // Validate lowercase letters
+            var lowerCaseLetters = /[a-z]/g;
+            letter_bool = passwordInput.value.match(lowerCaseLetters)
+            if(letter_bool) {
+                letter.classList.remove("ui-password-invalid");
+                letter.classList.add("ui-password-valid");
+            } else {
+                letter.classList.remove("ui-password-valid");
+                letter.classList.add("ui-password-invalid");
+            }
 
-                if(valid) $(element).css("border","2px solid green");
-                if(!valid) $(element).css("border","2px solid red");
-                if(valid && match) $("#password-repeat").css("border","2px solid green");
-                if(!valid || !match) $("#password-repeat").css("border","2px solid red");
-            });
-        });
+            // Validate capital letters
+            var upperCaseLetters = /[A-Z]/g;
+            capital_bool = passwordInput.value.match(upperCaseLetters)
+            if(capital_bool) {
+                capital.classList.remove("ui-password-invalid");
+                capital.classList.add("ui-password-valid");
+            } else {
+                capital.classList.remove("ui-password-valid");
+                capital.classList.add("ui-password-invalid");
+            }
+
+            // Validate numbers
+            var numbers = /[0-9]/g;
+            number_bool = passwordInput.value.match(numbers)
+            if(number_bool) {
+                number.classList.remove("ui-password-invalid");
+                number.classList.add("ui-password-valid");
+            } else {
+                number.classList.remove("ui-password-valid");
+                number.classList.add("ui-password-invalid");
+            }
+
+            // Validate length
+            length_bool = passwordInput.value.length >= 8
+            if(length_bool) {
+                length.classList.remove("ui-password-invalid");
+                length.classList.add("ui-password-valid");
+            } else {
+                length.classList.remove("ui-password-valid");
+                length.classList.add("ui-password-invalid");
+            }
+            total_bool = letter_bool && capital_bool && number_bool && length_bool && repeat_bool;
+            if (total_bool) {
+                submit.disabled = false;
+            } else {
+                submit.disabled = true;
+            }
+        }
+        passwordRepeat.onkeyup = function() {
+            repeat_bool = passwordInput.value === passwordRepeat.value
+            if (repeat_bool) {
+                repeat.classList.remove("ui-password-invalid");
+                repeat.classList.add("ui-password-valid");
+            } else {
+                repeat.classList.remove("ui-password-valid");
+                repeat.classList.add("ui-password-invalid");
+            }
+            total_bool = letter_bool && capital_bool && number_bool && length_bool && repeat_bool;
+            if (total_bool) {
+                submit.disabled = false;
+            } else {
+                submit.disabled = true;
+            }
+        }
     </script>
 </div>
 
