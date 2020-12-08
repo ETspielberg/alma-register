@@ -43,14 +43,17 @@ public class MailSenderService {
         this.messageSource = messageSource;
     }
 
-    public void sendNotificationMail(AlmaUser almaUser) {
+    public void sendNotificationMail(AlmaUser almaUser, String language) {
         String email = almaUser.getContactInfo().getEmail().get(0).getEmailAddress();
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom(registerEmailFrom);
             messageHelper.setTo(email);
             String text = buildMailBody(almaUser);
-            messageHelper.setSubject("Herzlich willkommen an der Universitätsbibliothek Duisburg-Essen");
+            if ("en".equals(language))
+                messageHelper.setSubject("Welcome to the library of the University of Duisburg-Essen");
+            else
+                messageHelper.setSubject("Herzlich willkommen an der Universitätsbibliothek Duisburg-Essen");
             messageHelper.setText(text, true);
         };
         emailSender.send(messagePreparator);

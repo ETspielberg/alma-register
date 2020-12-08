@@ -16,6 +16,8 @@ import org.unidue.ub.unidue.almaregister.service.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 import org.unidue.ub.unidue.almaregister.service.MailSenderService;
 
+import java.util.Locale;
+
 /**
  * the main controller for the unprotected web pages (creation of Alma User for external users)
  */
@@ -96,7 +98,7 @@ public class PublicController {
      * @return the registration page with errors, if the terms or the privacy was not accepted, otherwise a redirect to the success page
      */
     @PostMapping("/register")
-    public RedirectView registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result) {
+    public RedirectView registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, Locale locale) {
         boolean error = false;
         log.info(registrationRequest.firstName + " " + registrationRequest.lastName);
         log.info("Privacy: " + registrationRequest.privacyAccepted);
@@ -117,7 +119,7 @@ public class PublicController {
             AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(), true);
             log.info(String.format("User %s %s sucessfully registered with new id %s",
                     almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
-            mailSenderService.sendNotificationMail(almaUser);
+            mailSenderService.sendNotificationMail(almaUser, locale.getLanguage());
             return new RedirectView("success");
         } catch (Exception e) {
             throw new AlmaConnectionException("could not create user");
