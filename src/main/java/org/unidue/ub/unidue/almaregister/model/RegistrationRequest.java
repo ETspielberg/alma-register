@@ -193,33 +193,10 @@ public class RegistrationRequest {
         AlmaUser almaUser = new AlmaUser()
                 .lastName(lastName)
                 .firstName(firstName);
-        switch (userStatus) {
-            case "staff": {
-                almaUser.setUserGroup(new UserUserGroup().value("06"));
-                break;
-            }
-            case "student": {
-                almaUser.setUserGroup(new UserUserGroup().value("01"));
-                break;
-            }
-            case "extern": {
-                almaUser.setUserGroup(new UserUserGroup().value("22"));
-                break;
-            }
-
-            case "UNDRGRD": {
-                almaUser.setUserGroup(new UserUserGroup().value("20"));
-                break;
-            }
-            case "other": {
-                almaUser.setUserGroup(null);
-                break;
-            }
-            default: {
-                almaUser.setUserGroup(new UserUserGroup().value("22"));
-            }
-
-        }
+        if ("other".equals(userStatus))
+            almaUser.setUserGroup(null);
+        else
+            almaUser.setUserGroup(new UserUserGroup().value(userStatus));
         Email emailAddress = new Email();
         ContactInfo contactInfo = new ContactInfo();
         if (primaryId.isEmpty()) {
