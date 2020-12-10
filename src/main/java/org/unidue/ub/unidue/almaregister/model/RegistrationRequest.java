@@ -35,7 +35,7 @@ public class RegistrationRequest {
     public String email = "";
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    public LocalDate birthDate = LocalDate.now();
+    public LocalDate birthDate;
 
     public String password = "";
 
