@@ -40,6 +40,10 @@
         <span th:text="#{confirmation.email.salutation.other}">Sehr geehrte*r </span> <span
             th:text="${title}"></span> <span th:text="${firstname}"></span> <span th:text="${lastname}"></span>,
     </p>
+    <p th:case="None">
+        <span th:text="#{confirmation.email.salutation.other}">Sehr geehrte*r </span> <span
+            th:text="${title}"></span> <span th:text="${firstname}"></span> <span th:text="${lastname}"></span>,
+    </p>
 </div>
 <p th:text="#{confirmation.email.welcome.long}">Wir freuen uns, dass Sie sich an der Universitätsbibliothek
     Duisburg-Essen angemeldet haben.</p>
