@@ -19,6 +19,7 @@ import org.unidue.ub.unidue.almaregister.service.MissingShibbolethDataException;
 
 import java.security.Principal;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -75,7 +76,7 @@ public class SecuredController {
      * @throws AlmaConnectionException thrown if no connection to the alma Users API could be established
      */
     @PostMapping("/review")
-    public RedirectView confirmCreation(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result) throws AlmaConnectionException {
+    public RedirectView confirmCreation(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, Locale locale) throws AlmaConnectionException {
         boolean error = false;
         if (!registrationRequest.privacyAccepted) {
             result.rejectValue("privacyAccepted", "error.privacyAccepted");
@@ -88,7 +89,7 @@ public class SecuredController {
         if (error) {
             return new RedirectView("review");
         }
-        AlmaUser almaUser = registrationRequest.getAlmaUser();
+        AlmaUser almaUser = registrationRequest.getAlmaUser(locale.getLanguage());
         this.almaUserService.createAlmaUser(almaUser, false);
         //return new RedirectView("redirect: https://" + redirectUrl);
         return new RedirectView("success");

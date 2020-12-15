@@ -189,10 +189,11 @@ public class RegistrationRequest {
      *
      * @return an AlmaUser object
      */
-    public AlmaUser getAlmaUser() {
+    public AlmaUser getAlmaUser(String language) {
         AlmaUser almaUser = new AlmaUser()
                 .lastName(lastName)
-                .firstName(firstName);
+                .firstName(firstName)
+                .preferredLanguage(new UserPreferredLanguage().value(language));
         if ("other".equals(userStatus))
             almaUser.setUserGroup(null);
         else
