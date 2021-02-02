@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.unidue.ub.alma.shared.user.AlmaUser;
 
-@FeignClient(name="almaUser", url="https://api-eu.hosted.exlibrisgroup.com", configuration=FeignConfiguration.class)
+@FeignClient(name="almaUser", url="https://api-eu.hosted.exlibrisgroup.com/almaws/v1", configuration=FeignConfiguration.class)
 @Service
 public interface AlmaUserApiClient {
 
@@ -16,9 +16,13 @@ public interface AlmaUserApiClient {
      * @return Object
      */
     // @RequestMapping(method= RequestMethod.POST, value="/almaws/v1/users?social_authentication={social_authentication}&send_pin_number_letter={send_pin_number_letter}&source_institution_code={source_institution_code}&source_user_id={source_user_id}")
-    @RequestMapping(method= RequestMethod.POST, value="/almaws/v1/users")
+    @RequestMapping(method= RequestMethod.POST, value="/users")
     AlmaUser postUsers(@RequestHeader("Accept") String accept, AlmaUser body, @RequestParam("send_pin_number_letter") boolean sendPinLetter);
 
-    @RequestMapping(method= RequestMethod.GET, value="/almaws/v1/users/{identifier}")
+    @RequestMapping(method= RequestMethod.GET, value="/users/{identifier}")
     AlmaUser getUser(@PathVariable String identifier, @RequestHeader("Accept") String accept);
+
+
+    @RequestMapping(method= RequestMethod.PUT, value="/users/{identifier}")
+    AlmaUser updateUser(@PathVariable String identifier, @RequestBody AlmaUser user);
 }

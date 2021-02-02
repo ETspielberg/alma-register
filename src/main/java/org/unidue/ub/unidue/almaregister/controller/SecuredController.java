@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.alma.shared.user.AlmaUser;
+import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 import org.unidue.ub.unidue.almaregister.service.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
@@ -31,6 +32,8 @@ public class SecuredController {
 
     private final AlmaUserService almaUserService;
 
+    private final AddressWebServiceClient addressWebServiceClient;
+
     @Value("${alma.redirect.url:https://www.uni-due.de/ub}")
     private String redirectUrl;
 
@@ -45,8 +48,10 @@ public class SecuredController {
      *
      * @param almaUserService the Alma user service, responsible for retrieving the registration request object from the Shibboleth request attributes and to submit the corresponding AlmaUser object to the Alma Users API
      */
-    SecuredController(AlmaUserService almaUserService) {
+    SecuredController(AlmaUserService almaUserService,
+                      AddressWebServiceClient addressWebServiceClient) {
         this.almaUserService = almaUserService;
+        this.addressWebServiceClient = addressWebServiceClient;
     }
 
     /**
