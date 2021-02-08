@@ -1,6 +1,5 @@
 package org.unidue.ub.unidue.almaregister.client;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +8,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.unidue.ub.unidue.almaregister.model.OverdueReport;
-import org.unidue.ub.unidue.almaregister.model.Results;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -28,16 +26,17 @@ public class AlmaAnalyticsReportClient {
 
     private final Logger log = LoggerFactory.getLogger(AlmaAnalyticsReportClient.class);
 
+    private final static String almaAnalyticsBaseUrl = "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/analytics/reports";
+
     @Value("${alma.api.user.key}")
     private String almaUserApiKey;
 
     public OverdueReport[] getReport() throws IOException {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/analytics/reports?path=/shared/Universität+Duisburg-Essen+49HBZ_UDE/Reports/Benutzer+nach+3.+Mahnung&apikey=" + almaUserApiKey;
+        String url = almaAnalyticsBaseUrl + "?path=/shared/Universität+Duisburg-Essen+49HBZ_UDE/Reports/Benutzer+nach+3.+Mahnung&apikey=" + almaUserApiKey;
         String response = restTemplate.getForObject(url, String.class);
         File xslFile = new ClassPathResource("/xsl/OverdueReport.xsl").getFile();
         String transformed = transformXmlDocument(response, xslFile);
-        log.info(transformed);
         XmlMapper xmlMapper = new XmlMapper();
         xmlMapper.enable(ACCEPT_EMPTY_STRING_AS_NULL_OBJECT,ACCEPT_SINGLE_VALUE_AS_ARRAY )
                 .disable(FAIL_ON_UNKNOWN_PROPERTIES, FAIL_ON_IGNORED_PROPERTIES);

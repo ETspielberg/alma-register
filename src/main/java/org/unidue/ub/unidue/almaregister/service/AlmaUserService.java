@@ -151,14 +151,18 @@ public class AlmaUserService {
     }
 
     @Async("threadPoolTaskExecutor")
-    @Scheduled(cron = "0 0 2 * * *")
-    public void updateUserAdresses() throws IOException {
+    @Scheduled(cron = "0 0 7 * * *")
+    public void updateUserAdresses() {
         Set<String> primaryIds = new HashSet<>();
         try {
             OverdueReport[] reportResults = this.almaAnalyticsReportClient.getReport();
-            for (OverdueReport overdueReport : reportResults)
+            for (OverdueReport overdueReport : reportResults) {
                 primaryIds.add(overdueReport.getPrimaryIdentifier());
+                log.info(overdueReport.getPrimaryIdentifier());
+            }
+            log.info(String.valueOf(primaryIds.size()));
             primaryIds.forEach(this::extendUser);
+
         } catch (IOException ioe) {
             log.error("could not retrieve analytics report :", ioe);
         }
@@ -174,6 +178,7 @@ public class AlmaUserService {
         for (UserIdentifier userIdentifier : user.getUserIdentifier())
             if ("02".equals(userIdentifier.getIdType().getValue()))
                 userNumber = Long.parseLong(userIdentifier.getValue());
+        log.info(String.format("updating user with id %d", userNumber));
         if (userNumber != 0L) {
             ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddress(userNumber);
             if (response != null) {

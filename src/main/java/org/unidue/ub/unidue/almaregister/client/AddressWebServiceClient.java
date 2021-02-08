@@ -11,7 +11,6 @@ public class AddressWebServiceClient extends WebServiceGatewaySupport {
     public ReadAddressByRegistrationnumberResponse getAddress(long registrationNumber) {
         ReadAddressByRegistrationnumber request = new ReadAddressByRegistrationnumber();
         request.setRegistrationnumber(registrationNumber);
-        ReadAddressByRegistrationnumberResponse response = (ReadAddressByRegistrationnumberResponse) getWebServiceTemplate().marshalSendAndReceive(request);
-        return response;
+        return (ReadAddressByRegistrationnumberResponse) getWebServiceTemplate().marshalSendAndReceive(request);
     }
 }
