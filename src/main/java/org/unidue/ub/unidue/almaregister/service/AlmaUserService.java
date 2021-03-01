@@ -82,37 +82,43 @@ public class AlmaUserService {
             throw new MissingShibbolethDataException("no type given");
         if (type.contains("student")) {
             registrationRequest.userStatus = "student";
+            registrationRequest.primaryId = zimId;
             // if the user is a student collect the data from the student system to fill in further user information
             log.debug("setting attributes for student");
-            String matrikelString = ((String) this.httpServletRequest.getAttribute("SHIB_matrikel"));
-            long matrikel = Long.getLong(matrikelString);
-            ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddress(matrikel);
-            switch (String.valueOf(response.getAddress().getGenderId())) {
-                case "0": {
-                    registrationRequest.setGender("NONE");
-                    break;
+            try {
+                String matrikelString = ((String) this.httpServletRequest.getAttribute("SHIB_schacPersonalUniqueCode"));
+                log.info("retrieved matrikel number " + matrikelString);
+                long matrikel = Long.getLong(matrikelString);
+                ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddress(matrikel);
+                switch (String.valueOf(response.getAddress().getGenderId())) {
+                    case "0": {
+                        registrationRequest.setGender("NONE");
+                        break;
+                    }
+                    case "1": {
+                        registrationRequest.setGender("MALE");
+                        break;
+                    }
+                    case "2": {
+                        registrationRequest.setGender("FEMALE");
+                        break;
+                    }
+                    case "3": {
+                        registrationRequest.setGender("OTHER");
+                        break;
+                    }
                 }
-                case "1": {
-                    registrationRequest.setGender("MALE");
-                    break;
-                }
-                case "2": {
-                    registrationRequest.setGender("FEMALE");
-                    break;
-                }
-                case "3": {
-                    registrationRequest.setGender("OTHER");
-                    break;
-                }
+            } catch (Exception e) {
+                log.warn("an error occurred: could not extract matrikel number");
             }
         } else if (type.contains("staff")) {
             log.debug("setting attributes for staff member");
-            registrationRequest.userStatus = "staff";
+            registrationRequest.userStatus = "06";
             // if the user is no student, data are only taken from the shibboleth response
             registrationRequest.primaryId = zimId;
         } else {
             log.debug("setting attributes for external user");
-            registrationRequest.userStatus = "extern";
+            registrationRequest.userStatus = "22";
             // if the user is no student, data are only taken from the shibboleth response
             registrationRequest.primaryId = zimId;
         }
