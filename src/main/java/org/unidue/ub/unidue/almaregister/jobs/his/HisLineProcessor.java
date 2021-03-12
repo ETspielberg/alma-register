@@ -18,37 +18,43 @@ public class HisLineProcessor implements ItemProcessor<String, HisExport> {
     @Override
     public HisExport process(String line) {
         String[] parts = line.split("#");
-        if (parts.length < 22)
-            return null;
         HisExport hisExport = new HisExport();
-        hisExport.setBibkz(parts[fieldMap.get("bibkz")]);
-        hisExport.setCampus(parts[fieldMap.get("campus")]);
-        hisExport.setEmail(parts[fieldMap.get("email")]);
-        hisExport.setExgr(parts[fieldMap.get("exgr")]);
-        hisExport.setExmaantrag(parts[fieldMap.get("exmaantrag")]);
-        hisExport.setExmadatum(parts[fieldMap.get("exmadatum")]);
-        hisExport.setExmagrund(parts[fieldMap.get("exmagrund")]);
-        hisExport.setFestnetz(parts[fieldMap.get("festnetz")]);
-        hisExport.setGebdat(parts[fieldMap.get("gebdat")]);
-        hisExport.setGeschl(parts[fieldMap.get("geschl")]);
-        hisExport.setImmadatum(parts[fieldMap.get("immadatum")]);
-        hisExport.setLand(parts[fieldMap.get("land")]);
-        hisExport.setMobil(parts[fieldMap.get("mobil")]);
-        hisExport.setMtknr(parts[fieldMap.get("mtknr")]);
-        hisExport.setNachname(parts[fieldMap.get("nachname")]);
-        hisExport.setOrt(parts[fieldMap.get("ort")]);
-        hisExport.setPlz(parts[fieldMap.get("plz")]);
-        hisExport.setPozusatz(parts[fieldMap.get("pozusatz")]);
-        hisExport.setSemester(parts[fieldMap.get("semester")]);
-        hisExport.setStatus(parts[fieldMap.get("status")]);
-        hisExport.setStrasse(parts[fieldMap.get("strasse")]);
-        hisExport.setVorname(parts[fieldMap.get("vorname")]);
-        hisExport.setZimKennung(parts[fieldMap.get("zimKennung")]);
+        hisExport.setBibkz(getValue(parts, "bibkz"));
+        hisExport.setCampus(getValue(parts,"campus"));
+        hisExport.setEmail(getValue(parts,"email"));
+        hisExport.setExgr(getValue(parts,"exgr"));
+        hisExport.setExmaantrag(getValue(parts,"exmaantrag"));
+        hisExport.setExmadatum(getValue(parts,"exmadatum"));
+        hisExport.setExmagrund(getValue(parts,"exmagrund"));
+        hisExport.setFestnetz(getValue(parts,"festnetz"));
+        hisExport.setGebdat(getValue(parts,"gebdat"));
+        hisExport.setGeschl(getValue(parts,"geschl"));
+        hisExport.setImmadatum(getValue(parts,"immadatum"));
+        hisExport.setLand(getValue(parts,"land"));
+        hisExport.setMobil(getValue(parts,"mobil"));
+        hisExport.setMtknr(getValue(parts,"mtknr"));
+        hisExport.setNachname(getValue(parts,"nachname"));
+        hisExport.setOrt(getValue(parts,"ort"));
+        hisExport.setPlz(getValue(parts,"plz"));
+        hisExport.setPozusatz(getValue(parts,"pozusatz"));
+        hisExport.setSemester(getValue(parts,"semester"));
+        hisExport.setStatus(getValue(parts,"status"));
+        hisExport.setStrasse(getValue(parts,"strasse"));
+        hisExport.setVorname(getValue(parts,"vorname"));
+        hisExport.setZimKennung(getValue(parts,"zimKennung"));
         return hisExport;
     }
 
+    private String getValue(String[] parts, String field) {
+        try {
+            return parts[fieldMap.get(field)];
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
     @BeforeStep
-    public void retrieveFilename(StepExecution stepExecution) {
+    public void retrieveFieldmap(StepExecution stepExecution) {
         JobExecution jobExecution = stepExecution.getJobExecution();
         ExecutionContext jobContext = jobExecution.getExecutionContext();
         this.fieldMap = (Map<String, Integer>) jobContext.get("fieldMap");

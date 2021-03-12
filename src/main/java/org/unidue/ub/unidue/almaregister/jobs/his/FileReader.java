@@ -22,6 +22,9 @@ public class FileReader implements ItemReader<String> {
     @Value("#{jobParameters['his.filename'] ?: ''}")
     private String filename;
 
+    @Value("${libintel.data.dir}")
+    public String dataDir;
+
     private Boolean collected = false;
 
     private List<String> lines;
@@ -42,7 +45,7 @@ public class FileReader implements ItemReader<String> {
 
     private void readLines() throws IOException {
         lines = new ArrayList<>();
-        BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(this.filename));
+        BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(dataDir + this.filename));
         String readLine;
         while ((readLine = bufferedReader.readLine()) != null ) {
             if (!readLine.isEmpty()) {

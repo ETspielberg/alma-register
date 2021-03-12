@@ -4,22 +4,23 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Service;
 import org.unidue.ub.unidue.almaregister.model.HisExport;
 import org.unidue.ub.unidue.almaregister.repository.HisExportRepository;
+import org.unidue.ub.unidue.almaregister.service.HisService;
 
 import java.util.List;
 
 @Service
 public class HisExportWriter implements ItemWriter<HisExport> {
 
-    private final HisExportRepository hisExportRepository;
+    private final HisService hisService;
 
-    HisExportWriter(HisExportRepository hisExportRepository) {
-        this.hisExportRepository = hisExportRepository;
+    HisExportWriter(HisService hisService) {
+        this.hisService = hisService;
     }
 
     @Override
-    public void write(List<? extends HisExport> list) throws Exception {
+    public void write(List<? extends HisExport> list) {
         for (HisExport hisExport: list) {
-            this.hisExportRepository.save(hisExport);
+            this.hisService.save(hisExport);
         }
     }
 }
