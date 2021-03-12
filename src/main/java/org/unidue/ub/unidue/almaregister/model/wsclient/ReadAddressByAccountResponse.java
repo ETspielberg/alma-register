@@ -10,6 +10,7 @@ package org.unidue.ub.unidue.almaregister.model.wsclient;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -24,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="registrationnumber" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="address" type="{http://www.his.de/ws/UBAddressServiceUDE}Address"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -35,27 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "registrationnumber"
+    "address"
 })
-@XmlRootElement(name = "readAddressByRegistrationnumber")
-public class ReadAddressByRegistrationnumber {
+@XmlRootElement(name = "readAddressByAccountResponse")
+public class ReadAddressByAccountResponse {
 
-    protected long registrationnumber;
+    @XmlElement(required = true, nillable = true)
+    protected Address address;
 
     /**
-     * Ruft den Wert der registrationnumber-Eigenschaft ab.
+     * Ruft den Wert der address-Eigenschaft ab.
      * 
+     * @return
+     *     possible object is
+     *     {@link Address }
+     *     
      */
-    public long getRegistrationnumber() {
-        return registrationnumber;
+    public Address getAddress() {
+        return address;
     }
 
     /**
-     * Legt den Wert der registrationnumber-Eigenschaft fest.
+     * Legt den Wert der address-Eigenschaft fest.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Address }
+     *     
      */
-    public void setRegistrationnumber(long value) {
-        this.registrationnumber = value;
+    public void setAddress(Address value) {
+        this.address = value;
     }
 
 }

@@ -33,6 +33,20 @@
                     </sequence>
                 </complexType>
             </element>
+            <element name="readAddressByAccount">
+                <complexType>
+                    <sequence>
+                        <element name="account" type="string"/>
+                    </sequence>
+                </complexType>
+            </element>
+            <element name="readAddressByAccountResponse">
+                <complexType>
+                    <sequence>
+                        <element name="address" nillable="true" type="wns:Address"/>
+                    </sequence>
+                </complexType>
+            </element>
             <element name="ServiceFault">
                 <complexType>
                     <sequence>
@@ -51,6 +65,14 @@
             </complexType>
         </schema>
   </types>
+  <message name="readAddressByAccountResponse">
+    <part name="parameters" element="wns:readAddressByAccountResponse">
+    </part>
+  </message>
+  <message name="readAddressByAccount">
+    <part name="parameters" element="wns:readAddressByAccount">
+    </part>
+  </message>
   <message name="readAddressByRegistrationnumber">
     <part name="parameters" element="wns:readAddressByRegistrationnumber">
     </part>
@@ -73,6 +95,15 @@
       <fault name="serviceFault" message="wns:ServiceFault">
     </fault>
     </operation>
+    <operation name="readAddressByAccount">
+<documentation>Liefert die Adresse (Notification-STU/Studium - Korrespondenz)</documentation>
+      <input message="wns:readAddressByAccount">
+    </input>
+      <output message="wns:readAddressByAccountResponse">
+    </output>
+      <fault name="serviceFault" message="wns:ServiceFault">
+    </fault>
+    </operation>
   </portType>
   <binding name="UBAddressServiceUDEBinding" type="wns:UBAddressServiceUDEPortType">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -88,10 +119,21 @@
         <soap:fault name="serviceFault" use="literal"/>
       </fault>
     </operation>
+    <operation name="readAddressByAccount">
+      <soap:operation soapAction="http://www.his.de/ws/UBAddressServiceUDE/readAddressByAccount"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="serviceFault">
+        <soap:fault name="serviceFault" use="literal"/>
+      </fault>
+    </operation>
   </binding>
   <service name="UBAddressServiceUDE">
-<documentation>Liefert für eine Matrikelnummer (über SmartLife initial geliefert) Name/Adresse(Notification-STU/Studium -
-        Korrespondenz)</documentation>
+<documentation>Liefert für eine Matrikelnummer oder Unikennung Name/Adresse(Notification-STU/Studium - Korrespondenz)</documentation>
     <port name="UBAddressServiceUDEPort" binding="wns:UBAddressServiceUDEBinding">
       <soap:address location="http://localhost/qisserver/services2/UBAddressServiceUDE"/>
     </port>
