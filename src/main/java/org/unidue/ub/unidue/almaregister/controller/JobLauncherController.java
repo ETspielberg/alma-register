@@ -97,15 +97,4 @@ public class JobLauncherController {
         JobParameters jobParameters = jobParametersBuilder.toJobParameters();
         jobLauncher.run(hisJob, jobParameters);
     }
-
-    /**
-     * retreive the students data for a given zim identifier
-     * @param zimKennung the zim identifier
-     * @return a list of students data
-     */
-    @Secured("ROLE_ADMIN")
-    @GetMapping("secure/test/{zimKennung}")
-    public ResponseEntity<HisExport> getForZimKennung(@PathVariable String zimKennung) {
-        return ResponseEntity.ok(this.hisExportRepository.getByZimKennung(zimKennung));
-    }
 }
