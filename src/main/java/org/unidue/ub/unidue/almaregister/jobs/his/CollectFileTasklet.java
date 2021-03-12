@@ -53,7 +53,7 @@ public class CollectFileTasklet implements Tasklet {
     public RepeatStatus execute(StepContribution contribution,
                                 ChunkContext chunkContext) throws IOException {
 
-        log.info("loading file from " + targetUrl + " and saving it to " + filename);
+        log.info("loading file from " + targetUrl + " and saving it to " + dataDir + filename);
         Path filePath = Paths.get(dataDir + filename);
         AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(
                 filePath, READ, WRITE, CREATE);

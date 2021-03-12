@@ -27,17 +27,21 @@ public class FieldDeterminerTasklet implements Tasklet {
 
     private Map<String, Integer> fieldMap;
 
+    @Value("${libintel.data.dir}")
+    public String dataDir;
+
     @Value("#{jobParameters['his.filename'] ?: ''}")
     private String filename;
 
     public RepeatStatus execute(StepContribution contribution,
                                 ChunkContext chunkContext) {
+        log.info("preparing field indices for file " + filename);
         ExecutionContext jobExecutionContext = chunkContext.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
         this.fieldMap = new HashMap<>();
         Integer initialLines = 0;
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(dataDir + filename));
             String readLine;
             while ((readLine = bufferedReader.readLine()) != null) {
                 readLine = readLine.toLowerCase();
