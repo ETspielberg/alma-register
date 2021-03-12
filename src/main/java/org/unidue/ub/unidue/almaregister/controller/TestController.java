@@ -57,11 +57,17 @@ public class TestController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/hisExport/{zimId}")
+    @GetMapping("/hisExport/zimId/{zimId}")
     public ResponseEntity<?> testHisExport(@PathVariable String zimId) {
         log.info("requesting user " + zimId);
         HisExport hisExport = this.hisService.getByZimId(zimId);
-        log.info(hisExport.getNachname());
+        return ResponseEntity.ok(hisExport);
+    }
+
+    @GetMapping("/hisExport/matrikel/{matrikel}")
+    public ResponseEntity<?> testHisExportByMatrikel(@PathVariable String matrikel) {
+        log.info("requesting user " + matrikel);
+        HisExport hisExport = this.hisService.getByMatrikel(matrikel);
         return ResponseEntity.ok(hisExport);
     }
 
