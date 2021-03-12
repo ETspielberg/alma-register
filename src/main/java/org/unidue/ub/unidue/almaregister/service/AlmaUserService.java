@@ -10,13 +10,18 @@ import org.unidue.ub.alma.shared.user.*;
 import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
 import org.unidue.ub.unidue.almaregister.client.AlmaAnalyticsReportClient;
 import org.unidue.ub.unidue.almaregister.client.AlmaUserApiClient;
+import org.unidue.ub.unidue.almaregister.model.Overdue;
 import org.unidue.ub.unidue.almaregister.model.OverdueReport;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 import org.unidue.ub.unidue.almaregister.model.wsclient.ReadAddressByRegistrationnumberResponse;
+import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
+import org.unidue.ub.unidue.almaregister.service.exceptions.MissingHisDataException;
+import org.unidue.ub.unidue.almaregister.service.exceptions.MissingShibbolethDataException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -89,7 +94,7 @@ public class AlmaUserService {
                 String matrikelString = ((String) this.httpServletRequest.getAttribute("SHIB_schacPersonalUniqueCode"));
                 log.info("retrieved matrikel number " + matrikelString);
                 long matrikel = Long.getLong(matrikelString);
-                ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddress(matrikel);
+                ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddressByMatrikel(matrikel);
                 switch (String.valueOf(response.getAddress().getGenderId())) {
                     case "0": {
                         registrationRequest.setGender("NONE");
@@ -110,6 +115,7 @@ public class AlmaUserService {
                 }
             } catch (Exception e) {
                 log.warn("an error occurred: could not extract matrikel number");
+                return registrationRequest;
             }
         } else if (type.contains("staff")) {
             log.debug("setting attributes for staff member");
@@ -161,10 +167,10 @@ public class AlmaUserService {
     public void updateUserAdresses() {
         Set<String> primaryIds = new HashSet<>();
         try {
-            OverdueReport[] reportResults = this.almaAnalyticsReportClient.getReport();
-            for (OverdueReport overdueReport : reportResults) {
-                primaryIds.add(overdueReport.getPrimaryIdentifier());
-                log.info(overdueReport.getPrimaryIdentifier());
+            List<Overdue> reportResults = this.almaAnalyticsReportClient.getReport(Overdue.PATH, OverdueReport.class).getRows();
+            for (Overdue overdue : reportResults) {
+                primaryIds.add(overdue.getPrimaryIdentifier());
+                log.info(overdue.getPrimaryIdentifier());
             }
             log.info(String.valueOf(primaryIds.size()));
             primaryIds.forEach(this::extendUser);
@@ -186,7 +192,7 @@ public class AlmaUserService {
                 userNumber = Long.parseLong(userIdentifier.getValue());
         log.info(String.format("updating user with id %d", userNumber));
         if (userNumber != 0L) {
-            ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddress(userNumber);
+            ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddressByMatrikel(userNumber);
             if (response != null) {
                 Address address = new Address().addAddressTypeItem(new AddressAddressType().value("home"))
                         .city(response.getAddress().getCity())

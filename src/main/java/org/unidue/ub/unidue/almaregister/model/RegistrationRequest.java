@@ -49,6 +49,12 @@ public class RegistrationRequest {
 
     public String externalId = "";
 
+    public String matrikelNumber = "";
+
+    public int cardCurrens = 0;
+
+    public String cardNumber = "";
+
     public RegistrationRequest() {
     }
 
