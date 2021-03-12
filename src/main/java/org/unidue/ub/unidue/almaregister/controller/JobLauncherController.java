@@ -105,7 +105,7 @@ public class JobLauncherController {
      */
     @Secured("ROLE_ADMIN")
     @GetMapping("secure/test/{zimKennung}")
-    public ResponseEntity<List<HisExport>> getForZimKennung(@PathVariable String zimKennung) {
-        return ResponseEntity.ok(this.hisExportRepository.findAllByZimKennung(zimKennung));
+    public ResponseEntity<HisExport> getForZimKennung(@PathVariable String zimKennung) {
+        return ResponseEntity.ok(this.hisExportRepository.getByZimKennung(zimKennung));
     }
 }
