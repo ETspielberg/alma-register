@@ -52,7 +52,7 @@ public class TestController {
 
     @GetMapping("/ws/byZimId/{zimId}")
     public ResponseEntity<?> testWebServiceByZimId(@PathVariable String zimId) {
-        log.info("requesting user " + zimId);
+        log.info(String.format("requesting user %s of %d users",zimId, this.hisService.countAll()));
         ReadAddressByAccountResponse response = this.addressWebServiceClient.getAddressByZimId(zimId);
         return ResponseEntity.ok(response);
     }

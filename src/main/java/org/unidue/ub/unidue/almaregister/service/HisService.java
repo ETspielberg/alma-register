@@ -32,4 +32,8 @@ public class HisService {
     public HisExport getByMatrikel(String matrikel) {
         return this.hisExportRepository.findByMtknr(matrikel);
     }
+
+    public long countAll() {
+        return this.hisExportRepository.count();
+    }
 }

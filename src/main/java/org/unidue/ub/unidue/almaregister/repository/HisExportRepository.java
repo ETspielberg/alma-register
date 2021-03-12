@@ -1,6 +1,7 @@
 package org.unidue.ub.unidue.almaregister.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.unidue.ub.unidue.almaregister.model.HisExport;
 
@@ -15,4 +16,5 @@ public interface HisExportRepository extends JpaRepository<HisExport, String> {
 
     HisExport findByMtknr(String matrikel);
 
+    long count();
 }
