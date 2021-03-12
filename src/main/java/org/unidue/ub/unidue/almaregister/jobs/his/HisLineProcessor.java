@@ -46,6 +46,8 @@ public class HisLineProcessor implements ItemProcessor<String, HisExport> {
         hisExport.setStrasse(getValue(parts,"strasse"));
         hisExport.setVorname(getValue(parts,"vorname"));
         hisExport.setZimKennung(getValue(parts,"zimKennung"));
+        hisExport.setCardCurrens(getValue(parts, "cardCurrens"));
+        hisExport.setAbschluss1(getValue(parts, "abschluss"));
         log.info("processed entry " + hisExport.getBibkz());
         return hisExport;
     }

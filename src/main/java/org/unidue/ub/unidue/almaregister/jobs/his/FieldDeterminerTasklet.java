@@ -2,10 +2,7 @@ package org.unidue.ub.unidue.almaregister.jobs.his;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.StepContribution;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -73,6 +70,10 @@ public class FieldDeterminerTasklet implements Tasklet {
                 }
                 case "bibkz": {
                     fieldMap.put("bibkz", i);
+                    break;
+                }
+                case "chip-folgenr": {
+                    fieldMap.put("cardCurrens", i);
                     break;
                 }
                 case "geschl": {
@@ -151,8 +152,28 @@ public class FieldDeterminerTasklet implements Tasklet {
                     fieldMap.put("exmadatum", i);
                     break;
                 }
+                case "abschluss1": {
+                    fieldMap.put("abschluss", i);
+                    break;
+                }
+                case "fach1": {
+                    fieldMap.put("fach1", i);
+                    break;
+                }
+                case "fach2": {
+                    fieldMap.put("fach2", i);
+                    break;
+                }
+                case "fach3": {
+                    fieldMap.put("fach3", i);
+                    break;
+                }
                 case "exmaantrag": {
                     fieldMap.put("exmaantrag", i);
+                    break;
+                }
+                case "hörerstatus": {
+                    fieldMap.put("hoererstatus", i);
                     break;
                 }
             }

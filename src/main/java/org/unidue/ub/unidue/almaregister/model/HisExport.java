@@ -45,6 +45,18 @@ public class HisExport {
 
     private String campus;
 
+    private String abschluss1;
+
+    private String fach1;
+
+    private String fach2;
+
+    private String fach3;
+
+    private String cardCurrens;
+
+    private String hoererStatus;
+
     private String exgr;
 
     private String exmagrund;
@@ -235,5 +247,53 @@ public class HisExport {
 
     public void setExmaantrag(String exmaantrag) {
         this.exmaantrag = exmaantrag;
+    }
+
+    public String getAbschluss1() {
+        return abschluss1;
+    }
+
+    public void setAbschluss1(String abschluss1) {
+        this.abschluss1 = abschluss1;
+    }
+
+    public String getFach1() {
+        return fach1;
+    }
+
+    public void setFach1(String fach1) {
+        this.fach1 = fach1;
+    }
+
+    public String getFach2() {
+        return fach2;
+    }
+
+    public void setFach2(String fach2) {
+        this.fach2 = fach2;
+    }
+
+    public String getFach3() {
+        return fach3;
+    }
+
+    public void setFach3(String fach3) {
+        this.fach3 = fach3;
+    }
+
+    public String getCardCurrens() {
+        return cardCurrens;
+    }
+
+    public void setCardCurrens(String cardCurrens) {
+        this.cardCurrens = cardCurrens;
+    }
+
+    public String getHoererStatus() {
+        return hoererStatus;
+    }
+
+    public void setHoererStatus(String hoererStatus) {
+        this.hoererStatus = hoererStatus;
     }
 }
