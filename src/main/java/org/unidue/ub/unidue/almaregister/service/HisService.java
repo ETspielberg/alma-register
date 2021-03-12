@@ -15,12 +15,10 @@ public class HisService {
         this.hisExportRepository = hisExportRepository;
     }
 
-    @Transactional
     public void clear() {
         this.hisExportRepository.deleteAll();
     }
 
-    @Transactional
     public void save(HisExport hisExport) {
         this.hisExportRepository.save(hisExport);
     }
