@@ -1,68 +1,100 @@
 package org.unidue.ub.unidue.almaregister.model.his;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "his_export")
 public class HisExport {
 
+    @Column(name = "mtknr")
     private String mtknr;
 
     @Id
+    @Column(name = "zim_kennung")
     private String zimKennung;
 
+    @Column(name = "bibkz")
     private String bibkz;
 
+    @Column(name = "geschl")
     private String geschl;
 
+    @Column(name = "nachname")
     private String nachname;
 
+    @Column(name = "vorname")
     private String vorname;
 
+    @Column(name = "gebdat")
     private String gebdat;
 
+    @Column(name = "strasse")
     private String strasse;
 
+    @Column(name = "pozusatz")
     private String pozusatz;
 
+    @Column(name = "plz")
     private String plz;
 
+    @Column(name = "ort")
     private String ort;
 
+    @Column(name = "land")
     private String land;
 
+    @Column(name = "festnetz")
     private String festnetz;
 
+    @Column(name = "mobil")
     private String mobil;
 
+    @Column(name = "email")
     private String email;
 
+    @Column(name = "immadatum")
     private String immadatum;
 
+    @Column(name = "status")
     private String status;
 
+    @Column(name = "semester")
     private String semester;
 
+    @Column(name = "campus")
     private String campus;
 
+    @Column(name = "abschluss1")
     private String abschluss1;
 
+    @Column(name = "fach1")
     private String fach1;
 
+    @Column(name = "fach2")
     private String fach2;
 
+    @Column(name = "fach3")
     private String fach3;
 
+    @Column(name = "cardCurrens")
     private String cardCurrens;
 
+    @Column(name = "hoererStatus")
     private String hoererStatus;
 
+    @Column(name = "exgr")
     private String exgr;
 
+    @Column(name = "exmagrund")
     private String exmagrund;
 
+    @Column(name = "exmadatum")
     private String exmadatum;
 
+    @Column(name = "exmaantrag")
     private String exmaantrag;
 
     public String getMtknr() {
