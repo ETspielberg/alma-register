@@ -22,6 +22,7 @@ public class HisLineProcessor implements ItemProcessor<String, HisExport> {
     @Override
     public HisExport process(String line) {
         String[] parts = line.split("#");
+        log.info(String.format("read %d properties from his export file", parts.length));
         HisExport hisExport = new HisExport();
         hisExport.setBibkz(getValue(parts, "bibkz"));
         hisExport.setCampus(getValue(parts,"campus"));

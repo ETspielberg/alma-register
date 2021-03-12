@@ -60,6 +60,7 @@ public class FieldDeterminerTasklet implements Tasklet {
     private void prepareMapsFromLine(String readLine) {
         String[] parts = readLine.split("#");
         for (int i = 0; i < parts.length; i++) {
+            log.info(String.format("column %d: %s", i, (parts[i])));
             switch (parts[i]) {
                 case "mtknr": {
                     fieldMap.put("mtknr", i);
