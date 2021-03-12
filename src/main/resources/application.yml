@@ -9,8 +9,7 @@ spring:
       jdbc-url: jdbc:h2:mem:testdb
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create
+    generate-ddl: true
   batch:
     job.enabled: false
     initialize-schema: always
