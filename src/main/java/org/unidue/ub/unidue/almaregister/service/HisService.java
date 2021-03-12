@@ -26,7 +26,7 @@ public class HisService {
         this.hisExportRepository.save(hisExport);
     }
 
-    public List<HisExport> getByZimId(String zimId) {
-        return this.hisExportRepository.findAllByZimKennung(zimId);
+    public HisExport getByZimId(String zimId) {
+        return this.hisExportRepository.getByZimKennung(zimId);
     }
 }

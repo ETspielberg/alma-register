@@ -60,7 +60,7 @@ public class TestController {
     @GetMapping("/ws/hisExport/{zimId}")
     public ResponseEntity<?> testHisExport(@PathVariable String zimId) {
         log.info("requesting user " + zimId);
-        List<HisExport> hisExport = this.hisService.getByZimId(zimId);
+        HisExport hisExport = this.hisService.getByZimId(zimId);
         return ResponseEntity.ok(hisExport);
     }
 

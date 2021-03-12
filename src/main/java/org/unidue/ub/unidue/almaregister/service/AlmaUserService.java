@@ -10,6 +10,7 @@ import org.unidue.ub.alma.shared.user.*;
 import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
 import org.unidue.ub.unidue.almaregister.client.AlmaAnalyticsReportClient;
 import org.unidue.ub.unidue.almaregister.client.AlmaUserApiClient;
+import org.unidue.ub.unidue.almaregister.model.HisExport;
 import org.unidue.ub.unidue.almaregister.model.Overdue;
 import org.unidue.ub.unidue.almaregister.model.OverdueReport;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
@@ -35,6 +36,8 @@ public class AlmaUserService {
 
     private final AlmaAnalyticsReportClient almaAnalyticsReportClient;
 
+    private final HisService hisService;
+
     private final static Logger log = LoggerFactory.getLogger(AlmaUserService.class);
 
     /**
@@ -47,11 +50,13 @@ public class AlmaUserService {
     AlmaUserService(AlmaUserApiClient almaUserApiClient,
                     HttpServletRequest httpServletRequest,
                     AddressWebServiceClient addressWebServiceClient,
-                    AlmaAnalyticsReportClient almaAnalyticsReportClient) {
+                    AlmaAnalyticsReportClient almaAnalyticsReportClient,
+                    HisService hisService) {
         this.almaUserApiClient = almaUserApiClient;
         this.httpServletRequest = httpServletRequest;
         this.addressWebServiceClient = addressWebServiceClient;
         this.almaAnalyticsReportClient = almaAnalyticsReportClient;
+        this.hisService = hisService;
     }
 
     /**
@@ -91,11 +96,10 @@ public class AlmaUserService {
             // if the user is a student collect the data from the student system to fill in further user information
             log.debug("setting attributes for student");
             try {
-                String matrikelString = ((String) this.httpServletRequest.getAttribute("SHIB_schacPersonalUniqueCode"));
-                log.info("retrieved matrikel number " + matrikelString);
-                long matrikel = Long.getLong(matrikelString);
-                ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddressByMatrikel(matrikel);
-                switch (String.valueOf(response.getAddress().getGenderId())) {
+                HisExport hisExports = this.hisService.getByZimId(zimId);
+                String matrikelString = hisExports.getBibkz();
+                registrationRequest.cardNumber = matrikelString;
+                switch (String.valueOf(hisExports.getGeschl())) {
                     case "0": {
                         registrationRequest.setGender("NONE");
                         break;

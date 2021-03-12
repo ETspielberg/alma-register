@@ -11,7 +11,7 @@ public interface HisExportRepository extends JpaRepository<HisExport, String> {
 
     HisExport save(HisExport hisExport);
 
-    List<HisExport> findAllByZimKennung(String zimKennung);
+    HisExport getByZimKennung(String zimKennung);
 
     HisExport findByZimKennung(String zimKennung);
 }
