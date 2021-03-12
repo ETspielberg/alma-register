@@ -7,7 +7,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.unidue.ub.unidue.almaregister.model.HisExport;
+import org.unidue.ub.unidue.almaregister.model.his.HisExport;
 import org.unidue.ub.unidue.almaregister.repository.HisExportRepository;
 import org.unidue.ub.unidue.almaregister.service.HisService;
 

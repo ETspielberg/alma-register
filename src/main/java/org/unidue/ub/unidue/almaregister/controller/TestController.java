@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
-import org.unidue.ub.unidue.almaregister.model.HisExport;
+import org.unidue.ub.unidue.almaregister.model.his.HisExport;
 import org.unidue.ub.unidue.almaregister.model.wsclient.ReadAddressByAccountResponse;
 import org.unidue.ub.unidue.almaregister.model.wsclient.ReadAddressByRegistrationnumberResponse;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 import org.unidue.ub.unidue.almaregister.service.HisService;
 import org.unidue.ub.unidue.almaregister.service.ScheduledService;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("secure/test")

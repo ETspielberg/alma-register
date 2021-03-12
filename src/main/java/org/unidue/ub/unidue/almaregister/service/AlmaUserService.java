@@ -10,7 +10,7 @@ import org.unidue.ub.alma.shared.user.*;
 import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
 import org.unidue.ub.unidue.almaregister.client.AlmaAnalyticsReportClient;
 import org.unidue.ub.unidue.almaregister.client.AlmaUserApiClient;
-import org.unidue.ub.unidue.almaregister.model.HisExport;
+import org.unidue.ub.unidue.almaregister.model.his.HisExport;
 import org.unidue.ub.unidue.almaregister.model.Overdue;
 import org.unidue.ub.unidue.almaregister.model.OverdueReport;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;

@@ -1,4 +1,4 @@
-package org.unidue.ub.unidue.almaregister.model;
+package org.unidue.ub.unidue.almaregister.model.his;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

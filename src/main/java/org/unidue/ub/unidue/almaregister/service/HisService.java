@@ -1,10 +1,8 @@
 package org.unidue.ub.unidue.almaregister.service;
 
 import org.springframework.stereotype.Service;
-import org.unidue.ub.unidue.almaregister.model.HisExport;
+import org.unidue.ub.unidue.almaregister.model.his.HisExport;
 import org.unidue.ub.unidue.almaregister.repository.HisExportRepository;
-
-import javax.transaction.Transactional;
 
 @Service
 public class HisService {
