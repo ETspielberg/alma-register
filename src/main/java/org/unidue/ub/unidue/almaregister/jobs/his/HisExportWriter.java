@@ -22,9 +22,8 @@ public class HisExportWriter implements ItemWriter<HisExport> {
 
     @Override
     public void write(List<? extends HisExport> list) {
-        for (HisExport hisExport: list) {
-            this.hisService.save(hisExport);
-        }
+        List<HisExport> exportList = (List<HisExport>) list;
+        this.hisService.saveAll(exportList);
         log.info(String.format("saved %d of %d entries to repository", hisService.countAll(), list.size()));
     }
 }
