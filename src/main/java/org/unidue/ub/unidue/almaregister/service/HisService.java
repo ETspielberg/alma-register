@@ -5,6 +5,7 @@ import org.unidue.ub.unidue.almaregister.model.HisExport;
 import org.unidue.ub.unidue.almaregister.repository.HisExportRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class HisService {
@@ -23,5 +24,9 @@ public class HisService {
     @Transactional
     public void save(HisExport hisExport) {
         this.hisExportRepository.save(hisExport);
+    }
+
+    public List<HisExport> getByZimId(String zimId) {
+        return this.hisExportRepository.findAllByZimKennung(zimId);
     }
 }
