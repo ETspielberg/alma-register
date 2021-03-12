@@ -7,44 +7,52 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.unidue.ub.unidue.almaregister.model.OverdueReport;
+import org.unidue.ub.unidue.almaregister.model.Overdue;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.*;
 
 @Service
 public class AlmaAnalyticsReportClient {
 
-    private final Logger log = LoggerFactory.getLogger(AlmaAnalyticsReportClient.class);
+    private final static Logger log = LoggerFactory.getLogger(AlmaAnalyticsReportClient.class);
 
-    private final static String almaAnalyticsBaseUrl = "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/analytics/reports";
+    /**
+     * The general path for all Alma analytics reports
+     */
+    private final static String urlTemplate = "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/analytics/reports?path=%s&apikey=%s";
 
     @Value("${alma.api.user.key}")
     private String almaUserApiKey;
 
-    public OverdueReport[] getReport() throws IOException {
+    public <T> T getReport(String reportPath, Class<T> clazz) throws IOException {
+        String url = String.format(urlTemplate, reportPath, almaUserApiKey);
+        log.debug("querying url: " + url);
         RestTemplate restTemplate = new RestTemplate();
-        String url = almaAnalyticsBaseUrl + "?path=/shared/Universität+Duisburg-Essen+49HBZ_UDE/Reports/Benutzer+nach+3.+Mahnung&apikey=" + almaUserApiKey;
         String response = restTemplate.getForObject(url, String.class);
-        File xslFile = new ClassPathResource("/xsl/OverdueReport.xsl").getFile();
+        log.debug("queried alma api with response: " + response);
+        InputStream xslFile = new ClassPathResource("/xslt/analytics2xml.xsl").getInputStream();
         String transformed = transformXmlDocument(response, xslFile);
+        log.debug("converted response into string: " + transformed);
         XmlMapper xmlMapper = new XmlMapper();
-        xmlMapper.enable(ACCEPT_EMPTY_STRING_AS_NULL_OBJECT,ACCEPT_SINGLE_VALUE_AS_ARRAY )
-                .disable(FAIL_ON_UNKNOWN_PROPERTIES, FAIL_ON_IGNORED_PROPERTIES);
-        return xmlMapper.readValue(transformed, OverdueReport[].class);
+        return xmlMapper.readValue(transformed, clazz);
     }
 
-    public static String transformXmlDocument(String inputXmlString,
-                                              File xsltFile) {
+
+    /**
+     * helper function for the xsl transformation
+     * @param inputXmlString the String to be transformed
+     * @param xsltFile the filename relativ to the resources folder
+     * @return the transformed xml as String
+     */
+    private String transformXmlDocument(String inputXmlString,
+                                        InputStream xsltFile) {
 
         TransformerFactory factory = TransformerFactory.newInstance();
         StreamSource xslt = new StreamSource(xsltFile);
@@ -55,9 +63,10 @@ public class AlmaAnalyticsReportClient {
 
         try {
             Transformer transformer = factory.newTransformer(xslt);
+            transformer.setParameter("apikey", this.almaUserApiKey);
             transformer.transform(text, textOP);
         } catch (TransformerException e) {
-            e.printStackTrace();
+            log.error("could not transform analytics report", e);
         }
         return writer.toString();
     }
