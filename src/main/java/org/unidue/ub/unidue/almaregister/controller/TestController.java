@@ -52,21 +52,21 @@ public class TestController {
 
     @GetMapping("/ws/byZimId/{zimId}")
     public ResponseEntity<?> testWebServiceByZimId(@PathVariable String zimId) {
-        log.info(String.format("requesting user %s of %d users",zimId, this.hisService.countAll()));
+        log.info("requesting user " + zimId);
         ReadAddressByAccountResponse response = this.addressWebServiceClient.getAddressByZimId(zimId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/hisExport/zimId/{zimId}")
     public ResponseEntity<?> testHisExport(@PathVariable String zimId) {
-        log.info("requesting user " + zimId);
+        log.info(String.format("requesting user %s of %d users",zimId, this.hisService.countAll()));
         HisExport hisExport = this.hisService.getByZimId(zimId);
         return ResponseEntity.ok(hisExport);
     }
 
     @GetMapping("/hisExport/matrikel/{matrikel}")
     public ResponseEntity<?> testHisExportByMatrikel(@PathVariable String matrikel) {
-        log.info("requesting user " + matrikel);
+        log.info(String.format("requesting user %s of %d users",matrikel, this.hisService.countAll()));
         HisExport hisExport = this.hisService.getByMatrikel(matrikel);
         return ResponseEntity.ok(hisExport);
     }
