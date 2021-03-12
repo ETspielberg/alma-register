@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import org.unidue.ub.unidue.almaregister.model.his.HisExport;
 import org.unidue.ub.unidue.almaregister.repository.HisExportRepository;
 
+import java.util.List;
+
 @Service
 public class HisService {
 
@@ -31,5 +33,9 @@ public class HisService {
 
     public long countAll() {
         return this.hisExportRepository.count();
+    }
+
+    public void saveAll(List<HisExport> list) {
+        this.hisExportRepository.saveAll(list);
     }
 }
