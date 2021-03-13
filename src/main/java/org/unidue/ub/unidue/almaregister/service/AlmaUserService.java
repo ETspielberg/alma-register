@@ -91,14 +91,18 @@ public class AlmaUserService {
         if (type == null)
             throw new MissingShibbolethDataException("no type given");
         if (type.contains("student")) {
-            registrationRequest.userStatus = "student";
+            registrationRequest.userStatus = "01";
             registrationRequest.primaryId = zimId;
             // if the user is a student collect the data from the student system to fill in further user information
             log.debug("setting attributes for student");
             try {
                 HisExport hisExports = this.hisService.getByZimId(zimId);
-                String matrikelString = hisExports.getBibkz();
-                registrationRequest.cardNumber = matrikelString;
+                long matrikel = Long.parseLong(hisExports.getBibkz());
+                long cardCurrens = 0L;
+                if (hisExports.getCardCurrens() != null) {
+                    cardCurrens = Long.parseLong(hisExports.getCardCurrens());
+                }
+                registrationRequest.cardNumber = String.format("%sS%08d%02d", hisExports.getCampus(), matrikel, cardCurrens);
                 switch (String.valueOf(hisExports.getGeschl())) {
                     case "0": {
                         registrationRequest.setGender("NONE");

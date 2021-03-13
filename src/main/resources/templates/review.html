@@ -48,7 +48,7 @@
                             <td th:text="*{userStatus}"></td>
                             <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}" readonly="readonly" hidden>
                         </tr>
-                        <tr>
+                        <tr th:if="*{userStatus == '06'}">
                             <th>
                                 <label for="cardNumber" th:text="#{review.cardnumber}">Kartennummer</label>
                             </th>
@@ -56,14 +56,13 @@
                                 <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
                             </td>
                         </tr>
-
-                        <tr th:if="*{userStatus == 'student'}">
+                        <tr th:if="*{userStatus == '01'}">
                             <th>
-                                Matrikelnummer
+                                <label for="cardNumberStudent" th:text="#{review.cardnumber}">Kartennummer</label>
                             </th>
-                            <td th:text="*{externalId}"></td>
+                            <td th:text="*{cardNumber}"></td>
+                            <input id="cardNumberStudent" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}" readonly="readonly" hidden>
                         </tr>
-
                         <div class="field fieldOption">
                             <div>
                                 <input th:value="*{termsAccepted}" th:field="*{termsAccepted}" type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
