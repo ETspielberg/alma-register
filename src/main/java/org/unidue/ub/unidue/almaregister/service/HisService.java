@@ -40,6 +40,7 @@ public class HisService {
 
     @Transactional
     public void saveAll(List<HisExport> list) {
-        this.hisExportRepository.saveAll(list);
+        for (HisExport hisExport: list)
+            this.hisExportRepository.saveAndFlush(hisExport);
     }
 }
