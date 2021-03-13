@@ -97,7 +97,7 @@ public class AlmaUserService {
             log.debug("setting attributes for student");
             try {
                 HisExport hisExports = this.hisService.getByZimId(zimId);
-                long matrikel = Long.parseLong(hisExports.getBibkz());
+                long matrikel = Long.parseLong(hisExports.getMtknr());
                 long cardCurrens = 0L;
                 if (hisExports.getCardCurrens() != null && !hisExports.getCardCurrens().isEmpty()) {
                     cardCurrens = Long.parseLong(hisExports.getCardCurrens());
