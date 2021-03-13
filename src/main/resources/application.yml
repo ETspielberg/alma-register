@@ -9,7 +9,6 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
-    show-sql: true
   batch:
     job.enabled: false
     initialize-schema: always
