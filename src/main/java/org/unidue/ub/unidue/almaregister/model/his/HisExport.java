@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "his_export")
-public class HisExport implements Serializable, Persistable<String> {
+public class HisExport implements Serializable {
 
     @Column(name = "mtknr")
     private String mtknr;
@@ -330,13 +330,6 @@ public class HisExport implements Serializable, Persistable<String> {
 
     public void setHoererStatus(String hoererStatus) {
         this.hoererStatus = hoererStatus;
-    }
-
-    public String getId() {return this.zimKennung;}
-
-    @Override
-    public boolean isNew() {
-        return true;
     }
 
     @Override
