@@ -99,7 +99,7 @@ public class AlmaUserService {
                 HisExport hisExports = this.hisService.getByZimId(zimId);
                 long matrikel = Long.parseLong(hisExports.getBibkz());
                 long cardCurrens = 0L;
-                if (hisExports.getCardCurrens() != null) {
+                if (hisExports.getCardCurrens() != null && !hisExports.getCardCurrens().isEmpty()) {
                     cardCurrens = Long.parseLong(hisExports.getCardCurrens());
                 }
                 registrationRequest.cardNumber = String.format("%sS%08d%02d", hisExports.getCampus(), matrikel, cardCurrens);
