@@ -190,6 +190,30 @@ public class RegistrationRequest {
         this.externalId = externalId;
     }
 
+    public String getMatrikelNumber() {
+        return matrikelNumber;
+    }
+
+    public void setMatrikelNumber(String matrikelNumber) {
+        this.matrikelNumber = matrikelNumber;
+    }
+
+    public int getCardCurrens() {
+        return cardCurrens;
+    }
+
+    public void setCardCurrens(int cardCurrens) {
+        this.cardCurrens = cardCurrens;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
     /**
      * creates an AlmaUser object to be submitted to Alma Users API from the supplied personal data.
      *
