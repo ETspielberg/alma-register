@@ -1,5 +1,7 @@
 package org.unidue.ub.unidue.almaregister.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.unidue.ub.unidue.almaregister.model.his.HisExport;
 import org.unidue.ub.unidue.almaregister.repository.HisExportRepository;
@@ -11,6 +13,8 @@ import java.util.List;
 public class HisService {
 
     private final HisExportRepository hisExportRepository;
+
+    private final Logger log = LoggerFactory.getLogger(HisService.class);
 
     HisService(HisExportRepository hisExportRepository) {
         this.hisExportRepository = hisExportRepository;
@@ -27,10 +31,12 @@ public class HisService {
     }
 
     public HisExport getByZimId(String zimId) {
+        log.info("retreiving HIS data by ZIM-ID " + zimId);
         return this.hisExportRepository.findByZimKennung(zimId);
     }
 
     public HisExport getByMatrikel(String matrikel) {
+        log.info("retreiving HIS data by matrikel " + matrikel);
         return this.hisExportRepository.findByMtknr(matrikel);
     }
 
@@ -40,7 +46,6 @@ public class HisService {
 
     @Transactional
     public void saveAll(List<HisExport> list) {
-        for (HisExport hisExport: list)
-            this.hisExportRepository.save(hisExport);
+        this.hisExportRepository.saveAll(list);
     }
 }
