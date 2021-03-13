@@ -1,13 +1,16 @@
 package org.unidue.ub.unidue.almaregister.model.his;
 
+import org.springframework.data.domain.Persistable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "his_export")
-public class HisExport {
+public class HisExport implements Serializable, Persistable<String> {
 
     @Column(name = "mtknr")
     private String mtknr;
@@ -327,6 +330,13 @@ public class HisExport {
 
     public void setHoererStatus(String hoererStatus) {
         this.hoererStatus = hoererStatus;
+    }
+
+    public String getId() {return this.zimKennung;}
+
+    @Override
+    public boolean isNew() {
+        return true;
     }
 
     @Override

@@ -37,6 +37,7 @@ alma:
       from: information.ub@uni-due.de
 logging:
   level:
+    root: DEBUG
     org:
       hibernate:
         SQL: DEBUG
