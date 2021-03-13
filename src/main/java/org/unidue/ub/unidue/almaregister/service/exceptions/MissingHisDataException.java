@@ -1,4 +1,4 @@
-package org.unidue.ub.unidue.almaregister.service;
+package org.unidue.ub.unidue.almaregister.service.exceptions;
 
 /**
  * Exception thrown if no data could be obtained from the student system

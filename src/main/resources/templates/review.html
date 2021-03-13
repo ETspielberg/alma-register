@@ -14,38 +14,54 @@
                     <table class="table table-striped">
                         <tr>
                             <th>
-                                Vorname
+                                <label for="firstName" th:text="#{first.name}">Vorname</label>
+
                             </th>
                             <td th:text="*{firstName}"></td>
                             <input id="firstName" type="text" th:field="*{firstName}" th:value="*{firstName}" readonly="readonly" hidden>
                         </tr>
                         <tr>
                             <th>
-                                Name
+                                <label for="lastName" th:text="#{last.name}">Name</label>
                             </th>
                             <td th:text="*{lastName}"></td>
                             <input id="lastName" type="text" th:field="*{lastName}" th:value="*{lastName}" readonly="readonly" hidden>
                         </tr>
                         <tr>
                             <th>
-                                E-Mail
+                                <label for="email" th:text="#{email}"> E-Mail</label>
                             </th>
                             <td th:text="*{email}"></td>
                             <input id="email" type="email" th:field="*{email}" th:value="*{email}" readonly="readonly" hidden>
                         </tr>
                         <tr>
                             <th>
-                                ZIM-ID
+                                <label for="primaryId" th:text="#{review.zim.id}">ZIM-ID</label>
                             </th>
                             <td th:text="*{primaryId}"></td>
                             <input id="primaryId" type="text" th:field="*{primaryId}" th:value="*{primaryId}" readonly="readonly" hidden>
                         </tr>
                         <tr>
                             <th>
-                                Benutzerstatus
+                                <label for="userStatus" th:text="#{user.status}">Benutzerstatus</label>
                             </th>
                             <td th:text="*{userStatus}"></td>
                             <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}" readonly="readonly" hidden>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="cardNumber" th:text="#{review.cardnumber}">Kartennummer</label>
+                            </th>
+                            <td>
+                                <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
+                            </td>
+                        </tr>
+
+                        <tr th:if="*{userStatus == 'student'}">
+                            <th>
+                                Matrikelnummer
+                            </th>
+                            <td th:text="*{externalId}"></td>
                         </tr>
 
                         <div class="field fieldOption">

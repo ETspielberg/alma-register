@@ -5,47 +5,43 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.unidue.ub.unidue.almaregister.model.HisExport;
+import org.unidue.ub.unidue.almaregister.model.his.HisExport;
 import org.unidue.ub.unidue.almaregister.repository.HisExportRepository;
+import org.unidue.ub.unidue.almaregister.service.HisService;
 
 @Configuration
 @EnableBatchProcessing
 public class HisConfiguration {
 
-    @Value("${his.data.username:anonymous}")
-    private String username;
-
-    @Value("${his.data.password:password}")
-    private String password;
-
     public final JobBuilderFactory jobBuilderFactory;
 
     public final StepBuilderFactory stepBuilderFactory;
 
-    private final HisExportRepository hisExportRepository;
+    private final HisService hisService;
 
     HisConfiguration(HisExportRepository hisExportRepository,
                      StepBuilderFactory stepBuilderFactory,
-                     JobBuilderFactory jobBuilderFactory) {
-        this.hisExportRepository = hisExportRepository;
+                     JobBuilderFactory jobBuilderFactory,
+                     HisService hisService) {
         this.stepBuilderFactory = stepBuilderFactory;
         this.jobBuilderFactory = jobBuilderFactory;
+        this.hisService = hisService;
     }
 
     @Bean
     CollectFileTasklet collectFileTasklet() {
-        return new CollectFileTasklet()
-                .withPasssword(this.password)
-                .withUsername(this.username);
+        return new CollectFileTasklet();
     }
 
     @Bean
     FieldDeterminerTasklet fieldDeterminerTasklet() {
         return new FieldDeterminerTasklet();
     }
+
+    @Bean
+    ClearTableTasklet clearTableTasklet() {return new ClearTableTasklet(hisService);}
 
     @Bean
     FileReader fileReader() {
@@ -59,7 +55,7 @@ public class HisConfiguration {
 
     @Bean
     HisExportWriter hisExportWriter() {
-        return new HisExportWriter(this.hisExportRepository);
+        return new HisExportWriter(this.hisService);
     }
 
     @Bean
@@ -73,6 +69,13 @@ public class HisConfiguration {
     public Step prepareMap() {
         return stepBuilderFactory.get("prepareMap")
                 .tasklet(fieldDeterminerTasklet())
+                .build();
+    }
+
+    @Bean
+    public Step clearTable() {
+        return stepBuilderFactory.get("clearTable")
+                .tasklet(clearTableTasklet())
                 .build();
     }
 
@@ -91,6 +94,7 @@ public class HisConfiguration {
         return jobBuilderFactory.get("hisJob")
                 .start(downloadFile())
                 .next(prepareMap())
+                //.next(clearTable())
                 .next(hisConvertStep())
                 .build();
     }

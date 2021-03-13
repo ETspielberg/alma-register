@@ -10,13 +10,19 @@ import org.unidue.ub.alma.shared.user.*;
 import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
 import org.unidue.ub.unidue.almaregister.client.AlmaAnalyticsReportClient;
 import org.unidue.ub.unidue.almaregister.client.AlmaUserApiClient;
+import org.unidue.ub.unidue.almaregister.model.his.HisExport;
+import org.unidue.ub.unidue.almaregister.model.Overdue;
 import org.unidue.ub.unidue.almaregister.model.OverdueReport;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 import org.unidue.ub.unidue.almaregister.model.wsclient.ReadAddressByRegistrationnumberResponse;
+import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
+import org.unidue.ub.unidue.almaregister.service.exceptions.MissingHisDataException;
+import org.unidue.ub.unidue.almaregister.service.exceptions.MissingShibbolethDataException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -30,6 +36,8 @@ public class AlmaUserService {
 
     private final AlmaAnalyticsReportClient almaAnalyticsReportClient;
 
+    private final HisService hisService;
+
     private final static Logger log = LoggerFactory.getLogger(AlmaUserService.class);
 
     /**
@@ -42,11 +50,13 @@ public class AlmaUserService {
     AlmaUserService(AlmaUserApiClient almaUserApiClient,
                     HttpServletRequest httpServletRequest,
                     AddressWebServiceClient addressWebServiceClient,
-                    AlmaAnalyticsReportClient almaAnalyticsReportClient) {
+                    AlmaAnalyticsReportClient almaAnalyticsReportClient,
+                    HisService hisService) {
         this.almaUserApiClient = almaUserApiClient;
         this.httpServletRequest = httpServletRequest;
         this.addressWebServiceClient = addressWebServiceClient;
         this.almaAnalyticsReportClient = almaAnalyticsReportClient;
+        this.hisService = hisService;
     }
 
     /**
@@ -86,11 +96,10 @@ public class AlmaUserService {
             // if the user is a student collect the data from the student system to fill in further user information
             log.debug("setting attributes for student");
             try {
-                String matrikelString = ((String) this.httpServletRequest.getAttribute("SHIB_schacPersonalUniqueCode"));
-                log.info("retrieved matrikel number " + matrikelString);
-                long matrikel = Long.getLong(matrikelString);
-                ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddress(matrikel);
-                switch (String.valueOf(response.getAddress().getGenderId())) {
+                HisExport hisExports = this.hisService.getByZimId(zimId);
+                String matrikelString = hisExports.getBibkz();
+                registrationRequest.cardNumber = matrikelString;
+                switch (String.valueOf(hisExports.getGeschl())) {
                     case "0": {
                         registrationRequest.setGender("NONE");
                         break;
@@ -110,6 +119,7 @@ public class AlmaUserService {
                 }
             } catch (Exception e) {
                 log.warn("an error occurred: could not extract matrikel number");
+                return registrationRequest;
             }
         } else if (type.contains("staff")) {
             log.debug("setting attributes for staff member");
@@ -161,10 +171,10 @@ public class AlmaUserService {
     public void updateUserAdresses() {
         Set<String> primaryIds = new HashSet<>();
         try {
-            OverdueReport[] reportResults = this.almaAnalyticsReportClient.getReport();
-            for (OverdueReport overdueReport : reportResults) {
-                primaryIds.add(overdueReport.getPrimaryIdentifier());
-                log.info(overdueReport.getPrimaryIdentifier());
+            List<Overdue> reportResults = this.almaAnalyticsReportClient.getReport(Overdue.PATH, OverdueReport.class).getRows();
+            for (Overdue overdue : reportResults) {
+                primaryIds.add(overdue.getPrimaryIdentifier());
+                log.info(overdue.getPrimaryIdentifier());
             }
             log.info(String.valueOf(primaryIds.size()));
             primaryIds.forEach(this::extendUser);
@@ -186,7 +196,7 @@ public class AlmaUserService {
                 userNumber = Long.parseLong(userIdentifier.getValue());
         log.info(String.format("updating user with id %d", userNumber));
         if (userNumber != 0L) {
-            ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddress(userNumber);
+            ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddressByMatrikel(userNumber);
             if (response != null) {
                 Address address = new Address().addAddressTypeItem(new AddressAddressType().value("home"))
                         .city(response.getAddress().getCity())

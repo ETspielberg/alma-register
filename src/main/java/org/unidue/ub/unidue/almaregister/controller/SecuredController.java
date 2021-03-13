@@ -13,10 +13,10 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
-import org.unidue.ub.unidue.almaregister.service.AlmaConnectionException;
+import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
-import org.unidue.ub.unidue.almaregister.service.MissingHisDataException;
-import org.unidue.ub.unidue.almaregister.service.MissingShibbolethDataException;
+import org.unidue.ub.unidue.almaregister.service.exceptions.MissingHisDataException;
+import org.unidue.ub.unidue.almaregister.service.exceptions.MissingShibbolethDataException;
 
 import java.security.Principal;
 import java.util.LinkedHashMap;
@@ -68,6 +68,11 @@ public class SecuredController {
             model.addAttribute("registrationRequest", registrationRequest);
             return "review";
         } else {
+            if (registrationRequest.userStatus.equals("student") && registrationRequest.externalId == null) {
+                model.addAttribute("userStatus", registrationRequest.userStatus);
+                model.addAttribute("matrikelGiven", false);
+            }
+
             model.addAttribute("redirectUrl", redirectUrl);
             return "alreadyExists";
         }

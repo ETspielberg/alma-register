@@ -10,6 +10,7 @@ package org.unidue.ub.unidue.almaregister.model.wsclient;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -24,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="registrationnumber" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="account" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -35,27 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "registrationnumber"
+    "account"
 })
-@XmlRootElement(name = "readAddressByRegistrationnumber")
-public class ReadAddressByRegistrationnumber {
+@XmlRootElement(name = "readAddressByAccount")
+public class ReadAddressByAccount {
 
-    protected long registrationnumber;
+    @XmlElement(required = true)
+    protected String account;
 
     /**
-     * Ruft den Wert der registrationnumber-Eigenschaft ab.
+     * Ruft den Wert der account-Eigenschaft ab.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public long getRegistrationnumber() {
-        return registrationnumber;
+    public String getAccount() {
+        return account;
     }
 
     /**
-     * Legt den Wert der registrationnumber-Eigenschaft fest.
+     * Legt den Wert der account-Eigenschaft fest.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
-    public void setRegistrationnumber(long value) {
-        this.registrationnumber = value;
+    public void setAccount(String value) {
+        this.account = value;
     }
 
 }

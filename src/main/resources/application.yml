@@ -2,14 +2,14 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: password
+    his:
+      driver-class-name: org.h2.Driver
+      username: sa
+      password: password
+      jdbc-url: jdbc:h2:mem:testdb
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: update
+    generate-ddl: true
   batch:
     job.enabled: false
     initialize-schema: always
@@ -38,6 +38,8 @@ alma:
 logging:
   level:
     org:
+      hibernate:
+        SQL: DEBUG
       unidue:
         ub:
           unidue:

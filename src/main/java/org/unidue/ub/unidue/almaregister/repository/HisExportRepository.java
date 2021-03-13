@@ -2,14 +2,15 @@ package org.unidue.ub.unidue.almaregister.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.unidue.ub.unidue.almaregister.model.HisExport;
+import org.unidue.ub.unidue.almaregister.model.his.HisExport;
 
-import java.util.List;
 
 @Repository
 public interface HisExportRepository extends JpaRepository<HisExport, String> {
 
-    HisExport save(HisExport hisExport);
+    HisExport findByZimKennung(String zimKennung);
 
-    List<HisExport> findAllByZimKennung(String zimKennung);
+    HisExport findByMtknr(String matrikel);
+
+    long count();
 }
