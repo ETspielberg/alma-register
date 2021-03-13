@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.unidue.ub.unidue.almaregister.model.his.HisExport;
 import org.unidue.ub.unidue.almaregister.repository.HisExportRepository;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -14,15 +15,19 @@ public class HisService {
 
     private final HisExportRepository hisExportRepository;
 
+    private final EntityManager entityManager;
+
     private final Logger log = LoggerFactory.getLogger(HisService.class);
 
-    HisService(HisExportRepository hisExportRepository) {
+    HisService(HisExportRepository hisExportRepository, EntityManager entityManager) {
         this.hisExportRepository = hisExportRepository;
+        this.entityManager = entityManager;
     }
 
     @Transactional
     public void clear() {
-        this.hisExportRepository.deleteAll();
+        String sql = "TRUNCATE his_export;";
+        entityManager.createNativeQuery(sql).executeUpdate();
     }
 
     @Transactional

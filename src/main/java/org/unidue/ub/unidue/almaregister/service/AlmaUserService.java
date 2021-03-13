@@ -122,7 +122,7 @@ public class AlmaUserService {
                     }
                 }
             } catch (Exception e) {
-                log.warn("an error occurred: could not extract matrikel number");
+                log.warn("an error occurred: could not extract matrikel number", e);
                 return registrationRequest;
             }
         } else if (type.contains("staff")) {
