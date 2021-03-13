@@ -36,6 +36,7 @@ public class ScheduledService {
             today = today.minusDays(1);
         String filename =  today.format(formatter) + "-1";
         jobParametersBuilder.addString("his.filename", filename).toJobParameters();
+        jobParametersBuilder.addDate("date", new Date()).toJobParameters();
         JobParameters jobParameters = jobParametersBuilder.toJobParameters();
         jobLauncher.run(hisJob, jobParameters);
     }

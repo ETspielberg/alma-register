@@ -79,10 +79,10 @@ public class HisExport {
     @Column(name = "fach3")
     private String fach3;
 
-    @Column(name = "cardCurrens")
+    @Column(name = "card_currens")
     private String cardCurrens;
 
-    @Column(name = "hoererStatus")
+    @Column(name = "hoerer_status")
     private String hoererStatus;
 
     @Column(name = "exgr")
