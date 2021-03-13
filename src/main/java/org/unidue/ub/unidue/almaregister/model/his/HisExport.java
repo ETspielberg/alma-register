@@ -328,4 +328,9 @@ public class HisExport {
     public void setHoererStatus(String hoererStatus) {
         this.hoererStatus = hoererStatus;
     }
+
+    @Override
+    public String toString() {
+        return mtknr + ';' + zimKennung + ';' + geschl + ';' + gebdat + ';' +bibkz + ';' +ort + ';' + plz + ';' + strasse + ';' + ort  + ';' + semester + ';' + status + ';' + campus;
+    }
 }
