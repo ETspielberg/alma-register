@@ -2,14 +2,13 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    his:
-      driver-class-name: org.h2.Driver
-      username: sa
-      password: password
-      jdbc-url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    generate-ddl: true
+    hibernate:
+      ddl-auto: update
   batch:
     job.enabled: false
     initialize-schema: always

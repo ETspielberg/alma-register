@@ -2,13 +2,19 @@ package org.unidue.ub.unidue.almaregister.configuration;
 
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
 import org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean;
+import org.springframework.batch.support.DatabaseType;
 import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import javax.sql.DataSource;
 
 /**
  * configuration for the batch jobs to be processed
@@ -29,26 +35,27 @@ public class BatchConfiguration {
         return executor;
     }
 
-    /**
-     * the transaction manager to be used to store the
-     * @return the platform transaction manager
-     */
-    @Bean(name = "transactionManager")
-    public PlatformTransactionManager transactionManager() {
+    @Bean
+    public DataSource dataSource() {
+        EmbeddedDatabaseBuilder embeddedDatabaseBuilder = new EmbeddedDatabaseBuilder();
+        return embeddedDatabaseBuilder.addScript("classpath:org/springframework/batch/core/schema-drop-h2.sql")
+                .addScript("classpath:org/springframework/batch/core/schema-h2.sql")
+                .setType(EmbeddedDatabaseType.H2)
+                .build();
+    }
+
+    @Bean
+    public ResourcelessTransactionManager transactionManager() {
         return new ResourcelessTransactionManager();
     }
 
-    /**
-     * Teh repository holding the information about running jobs
-     * @param transactionManager  the transaction manager bean
-     * @return the repository managing the running jobs
-     * @throws Exception
-     */
     @Bean
-    public JobRepository jobRepository(PlatformTransactionManager transactionManager) throws Exception {
-        MapJobRepositoryFactoryBean mapJobRepositoryFactoryBean = new MapJobRepositoryFactoryBean(transactionManager);
-        mapJobRepositoryFactoryBean.setTransactionManager(transactionManager);
-        return mapJobRepositoryFactoryBean.getObject();
+    public JobRepository jobRepository() throws Exception {
+        JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
+        factory.setDatabaseType(DatabaseType.H2.getProductName());
+        factory.setDataSource(dataSource());
+        factory.setTransactionManager(transactionManager());
+        return factory.getObject();
     }
 
     /**
