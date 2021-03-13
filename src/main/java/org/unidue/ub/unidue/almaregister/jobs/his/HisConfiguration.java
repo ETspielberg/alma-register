@@ -92,8 +92,8 @@ public class HisConfiguration {
     @Bean
     public Job hisJob () {
         return jobBuilderFactory.get("hisJob")
-                //.start(downloadFile())
-                .start(prepareMap())
+                .start(downloadFile())
+                .next(prepareMap())
                 .next(clearTable())
                 .next(hisConvertStep())
                 .build();
