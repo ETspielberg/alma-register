@@ -37,8 +37,6 @@ alma:
 logging:
   level:
     org:
-      hibernate:
-        SQL: DEBUG
       unidue:
         ub:
           unidue:
