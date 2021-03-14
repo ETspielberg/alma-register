@@ -45,7 +45,7 @@
                             <th>
                                 <label for="userStatus" th:text="#{user.status}">Benutzerstatus</label>
                             </th>
-                            <td th:text="*{userStatus}"></td>
+                            <td th:text="#{'user.status.' + *{userStatus}}"></td>
                             <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}" readonly="readonly" hidden>
                         </tr>
                         <tr th:if="*{userStatus == '06'}">
