@@ -86,13 +86,12 @@ public class AlmaUserService {
         String zimId = (String) this.httpServletRequest.getAttribute("SHIB_uid");
         registrationRequest.externalId = zimId;
         registrationRequest.email = (String) this.httpServletRequest.getAttribute("SHIB_mail");
-
+        registrationRequest.primaryId = zimId;
         // if no data can be obtained from the shibboleth response
         if (type == null)
             throw new MissingShibbolethDataException("no type given");
         if (type.contains("student")) {
             registrationRequest.userStatus = "01";
-            registrationRequest.primaryId = zimId;
             // if the user is a student collect the data from the student system to fill in further user information
             log.debug("setting attributes for student");
             try {
@@ -128,13 +127,9 @@ public class AlmaUserService {
         } else if (type.contains("staff")) {
             log.debug("setting attributes for staff member");
             registrationRequest.userStatus = "06";
-            // if the user is no student, data are only taken from the shibboleth response
-            registrationRequest.primaryId = zimId;
         } else {
             log.debug("setting attributes for external user");
             registrationRequest.userStatus = "22";
-            // if the user is no student, data are only taken from the shibboleth response
-            registrationRequest.primaryId = zimId;
         }
         return registrationRequest;
     }
