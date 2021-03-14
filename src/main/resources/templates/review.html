@@ -56,7 +56,7 @@
                                 <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
                             </td>
                         </tr>
-                        tr th:if="*{userStatus == '22'}">
+                        <tr th:if="*{userStatus == '22'}">
                         <th>
                             <label for="cardNumberExtern" th:text="#{review.cardnumber}">Kartennummer</label>
                         </th>
