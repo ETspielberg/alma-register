@@ -14,6 +14,18 @@
                     <table class="table table-striped">
                         <tr>
                             <th>
+                                <label for="title-input" th:text="#{title}"></label>
+                            </th>
+                            <td>
+                                <select id="title-input" th:field="*{title}">
+                                    <option th:value="'none'" th:text="#{title.none}"></option>
+                                    <option th:value="'dr'" th:text="#{title.dr}"></option>
+                                    <option th:value="'prof'" th:text="#{title.prof}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
                                 <label for="firstName" th:text="#{first.name}">Vorname</label>
 
                             </th>
@@ -56,13 +68,29 @@
                                 <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
                             </td>
                         </tr>
+                        <tr>
+                            <th>
+                                <label for="birthdate-input" th:text="#{birth.date}"></label>
+                            </th>
+                            <td>
+                                <input id="birthdate-input" type="date" th:field="*{birthDate}" required>
+                            </td>
+                        </tr>
 
                         <tr th:if="*{userStatus == 'student'}">
-                            <th>
+                            <th th:text="#{matrikel}">
                                 Matrikelnummer
                             </th>
                             <td th:text="*{externalId}"></td>
                         </tr>
+                        <tr th:if="*{userStatus == 'student'}">
+                            <th th:text="#{additional.email.addresses}">
+                                Weitere E-Mail-Addressen
+                            </th>
+                            <input id="addEmailAddresses" type="text" th:field="*{additionalEmailAdresses}" th:value="*{additionalEmailAdresses}" readonly="readonly" hidden>
+                            <td ><p th:each="addEmail: *{additionalEmailAdresses}"><span th:text="addEmail"></span> </p></td>
+                        </tr>
+
 
                         <div class="field fieldOption">
                             <div>

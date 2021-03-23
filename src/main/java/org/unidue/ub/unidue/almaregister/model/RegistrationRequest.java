@@ -7,7 +7,9 @@ import org.unidue.ub.alma.shared.user.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * A POJO holding all the necessary information to create an AlmaUser request.
@@ -54,6 +56,8 @@ public class RegistrationRequest {
     public int cardCurrens = 0;
 
     public String cardNumber = "";
+
+    public List<String> additionalEmailAdresses = new ArrayList<>();
 
     public RegistrationRequest() {
     }
@@ -239,10 +243,20 @@ public class RegistrationRequest {
                     .accountType(new UserAccountType().value("INTERNAL"))
                     .setExpiryDate(expiryDate);
         } else {
+            if (birthDate != null) {
+                Date birthday = dateFromLocalDate(birthDate);
+                almaUser.pinNumber(pinFormat.format(birthday));
+            }
             emailAddress
                     .emailAddress(email)
                     .addEmailTypeItem(new EmailEmailType().value("personal"))
                     .preferred(true);
+            for (String additionalEmailAddress : this.additionalEmailAdresses) {
+                Email addEmail = new Email().emailAddress(additionalEmailAddress)
+                        .addEmailTypeItem(new EmailEmailType().value("personal"))
+                        .preferred(false);
+                contactInfo.addEmailItem(addEmail);
+            }
             contactInfo.addEmailItem(emailAddress)
                     .setAddress(null);
             almaUser.status(new UserStatus().value("ACTIVE"))

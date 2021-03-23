@@ -21,6 +21,8 @@ import org.unidue.ub.unidue.almaregister.service.exceptions.MissingShibbolethDat
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -98,6 +100,15 @@ public class AlmaUserService {
             try {
                 HisExport hisExports = this.hisService.getByZimId(zimId);
                 String matrikelString = hisExports.getBibkz();
+                if (!hisExports.getEmail().equals(registrationRequest.email))
+                    registrationRequest.additionalEmailAdresses.add(hisExports.getEmail());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                try {
+                    LocalDate birthday = LocalDate.parse(hisExports.getGebdat(), formatter);
+                    registrationRequest.setBirthDate(birthday);
+                } catch (Exception e) {
+                    log.warn("could not parse birthday",e);
+                }
                 registrationRequest.cardNumber = matrikelString;
                 switch (String.valueOf(hisExports.getGeschl())) {
                     case "0": {
