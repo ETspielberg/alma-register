@@ -88,13 +88,12 @@ public class AlmaUserService {
         String zimId = (String) this.httpServletRequest.getAttribute("SHIB_uid");
         registrationRequest.externalId = zimId;
         registrationRequest.email = (String) this.httpServletRequest.getAttribute("SHIB_mail");
-
+        registrationRequest.primaryId = zimId;
         // if no data can be obtained from the shibboleth response
         if (type == null)
             throw new MissingShibbolethDataException("no type given");
         if (type.contains("student")) {
-            registrationRequest.userStatus = "student";
-            registrationRequest.primaryId = zimId;
+            registrationRequest.userStatus = "01";
             // if the user is a student collect the data from the student system to fill in further user information
             log.debug("setting attributes for student");
             try {
@@ -110,6 +109,12 @@ public class AlmaUserService {
                     log.warn("could not parse birthday",e);
                 }
                 registrationRequest.cardNumber = matrikelString;
+                long matrikel = Long.parseLong(hisExports.getMtknr());
+                long cardCurrens = 0L;
+                if (hisExports.getCardCurrens() != null && !hisExports.getCardCurrens().isEmpty()) {
+                    cardCurrens = Long.parseLong(hisExports.getCardCurrens());
+                }
+                registrationRequest.cardNumber = String.format("%sS%08d%02d", hisExports.getCampus(), matrikel, cardCurrens);
                 switch (String.valueOf(hisExports.getGeschl())) {
                     case "0": {
                         registrationRequest.setGender("NONE");
@@ -129,19 +134,15 @@ public class AlmaUserService {
                     }
                 }
             } catch (Exception e) {
-                log.warn("an error occurred: could not extract matrikel number");
+                log.warn("an error occurred: could not extract matrikel number", e);
                 return registrationRequest;
             }
         } else if (type.contains("staff")) {
             log.debug("setting attributes for staff member");
             registrationRequest.userStatus = "06";
-            // if the user is no student, data are only taken from the shibboleth response
-            registrationRequest.primaryId = zimId;
         } else {
             log.debug("setting attributes for external user");
             registrationRequest.userStatus = "22";
-            // if the user is no student, data are only taken from the shibboleth response
-            registrationRequest.primaryId = zimId;
         }
         return registrationRequest;
     }

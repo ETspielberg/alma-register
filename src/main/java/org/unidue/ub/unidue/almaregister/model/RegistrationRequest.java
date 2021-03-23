@@ -194,6 +194,30 @@ public class RegistrationRequest {
         this.externalId = externalId;
     }
 
+    public String getMatrikelNumber() {
+        return matrikelNumber;
+    }
+
+    public void setMatrikelNumber(String matrikelNumber) {
+        this.matrikelNumber = matrikelNumber;
+    }
+
+    public int getCardCurrens() {
+        return cardCurrens;
+    }
+
+    public void setCardCurrens(int cardCurrens) {
+        this.cardCurrens = cardCurrens;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
     /**
      * creates an AlmaUser object to be submitted to Alma Users API from the supplied personal data.
      *
@@ -262,8 +286,14 @@ public class RegistrationRequest {
             almaUser.status(new UserStatus().value("ACTIVE"))
                     .accountType(new UserAccountType().value("EXTERNAL"))
                     .externalId(externalId);
+
+            if (!cardNumber.isEmpty()) {
+                UserIdentifierIdType userIdentifierIdTypeCard = new UserIdentifierIdType().value("01");
+                UserIdentifier cardIdentifier = new UserIdentifier().idType(userIdentifierIdTypeCard).status("ACTIVE").value(cardNumber).segmentType("external");
+                almaUser.addUserIdentifierItem(cardIdentifier);
+            }
             UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("03");
-            UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(primaryId).segmentType("internal");
+            UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(primaryId).segmentType("external");
             almaUser.addUserIdentifierItem(userIdentifier);
         }
         return almaUser.contactInfo(contactInfo);

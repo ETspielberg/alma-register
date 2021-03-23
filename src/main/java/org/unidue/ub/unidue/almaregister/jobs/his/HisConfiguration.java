@@ -94,7 +94,7 @@ public class HisConfiguration {
         return jobBuilderFactory.get("hisJob")
                 .start(downloadFile())
                 .next(prepareMap())
-                //.next(clearTable())
+                .next(clearTable())
                 .next(hisConvertStep())
                 .build();
     }

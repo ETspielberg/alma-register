@@ -61,6 +61,7 @@ public class CollectFileTasklet implements Tasklet {
                 .baseUrl("https://" + targetUrl + filename)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, "text/plain")
                 .defaultHeader(HttpHeaders.USER_AGENT, "Spring 5 WebClient")
+                .defaultHeader(HttpHeaders.ACCEPT_ENCODING, "UTF-8")
                 .build();
         Flux<DataBuffer> incoming = webClient.get()
                 .header("Authorization", "Basic " + Base64Utils.encodeToString((this.username + ":" + this.password).getBytes(UTF_8)))

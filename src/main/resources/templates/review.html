@@ -57,10 +57,10 @@
                             <th>
                                 <label for="userStatus" th:text="#{user.status}">Benutzerstatus</label>
                             </th>
-                            <td th:text="*{userStatus}"></td>
+                            <td th:text="#{'user.status.' + *{userStatus}}"></td>
                             <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}" readonly="readonly" hidden>
                         </tr>
-                        <tr>
+                        <tr th:if="*{userStatus == '06'}">
                             <th>
                                 <label for="cardNumber" th:text="#{review.cardnumber}">Kartennummer</label>
                             </th>
@@ -68,6 +68,17 @@
                                 <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
                             </td>
                         </tr>
+                        <tr th:if="*{userStatus == '22'}">
+                        <th>
+                            <label for="cardNumberExtern" th:text="#{review.cardnumber}">Kartennummer</label>
+                        </th>
+                        <td>
+                            <input id="cardNumberExtern" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
+                        </td>
+                        </tr>
+                        <tr th:if="*{userStatus == '01'}">
+                            <th>
+                                <label for="cardNumberStudent" th:text="#{review.cardnumber}">Kartennummer</label>
                         <tr>
                             <th>
                                 <label for="birthdate-input" th:text="#{birth.date}"></label>
@@ -81,7 +92,8 @@
                             <th th:text="#{matrikel}">
                                 Matrikelnummer
                             </th>
-                            <td th:text="*{externalId}"></td>
+                            <td th:text="*{cardNumber}"></td>
+                            <input id="cardNumberStudent" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}" readonly="readonly" hidden>
                         </tr>
                         <tr th:if="*{userStatus == 'student'}">
                             <th th:text="#{additional.email.addresses}">
