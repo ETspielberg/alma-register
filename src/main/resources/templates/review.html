@@ -76,9 +76,6 @@
                             <input id="cardNumberExtern" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
                         </td>
                         </tr>
-                        <tr th:if="*{userStatus == '01'}">
-                            <th>
-                                <label for="cardNumberStudent" th:text="#{review.cardnumber}">Kartennummer</label>
                         <tr>
                             <th>
                                 <label for="birthdate-input" th:text="#{birth.date}"></label>
@@ -87,15 +84,7 @@
                                 <input id="birthdate-input" type="date" th:field="*{birthDate}" required>
                             </td>
                         </tr>
-
-                        <tr th:if="*{userStatus == 'student'}">
-                            <th th:text="#{matrikel}">
-                                Matrikelnummer
-                            </th>
-                            <td th:text="*{cardNumber}"></td>
-                            <input id="cardNumberStudent" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}" readonly="readonly" hidden>
-                        </tr>
-                        <tr th:if="*{userStatus == 'student'}">
+                        <tr th:if="*{userStatus == '01'}">
                             <th th:text="#{additional.email.addresses}">
                                 Weitere E-Mail-Addressen
                             </th>
