@@ -81,16 +81,6 @@
                                 <input id="birthdate-input" type="date" th:field="*{birthDate}" required>
                             </td>
                         </tr>
-                        <tr th:if="*{userStatus == '01'}">
-                            <th th:text="#{additional.email.addresses}">
-                                Weitere E-Mail-Addressen
-                            </th>
-                            <input id="addEmailAddresses" type="text" th:field="*{additionalEmailAdresses}"
-                                   th:value="*{additionalEmailAdresses}" readonly="readonly" hidden>
-                            <td><p th:each="addEmail: *{additionalEmailAdresses}"><span th:text="addEmail"></span></p>
-                            </td>
-                        </tr>
-
 
                         <div class="field fieldOption">
                             <div>
