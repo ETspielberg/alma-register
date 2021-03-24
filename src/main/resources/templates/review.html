@@ -30,51 +30,48 @@
 
                             </th>
                             <td th:text="*{firstName}"></td>
-                            <input id="firstName" type="text" th:field="*{firstName}" th:value="*{firstName}" readonly="readonly" hidden>
+                            <input id="firstName" type="text" th:field="*{firstName}" th:value="*{firstName}"
+                                   readonly="readonly" hidden>
                         </tr>
                         <tr>
                             <th>
                                 <label for="lastName" th:text="#{last.name}">Name</label>
                             </th>
                             <td th:text="*{lastName}"></td>
-                            <input id="lastName" type="text" th:field="*{lastName}" th:value="*{lastName}" readonly="readonly" hidden>
+                            <input id="lastName" type="text" th:field="*{lastName}" th:value="*{lastName}"
+                                   readonly="readonly" hidden>
                         </tr>
                         <tr>
                             <th>
                                 <label for="email" th:text="#{email}"> E-Mail</label>
                             </th>
                             <td th:text="*{email}"></td>
-                            <input id="email" type="email" th:field="*{email}" th:value="*{email}" readonly="readonly" hidden>
+                            <input id="email" type="email" th:field="*{email}" th:value="*{email}" readonly="readonly"
+                                   hidden>
                         </tr>
                         <tr>
                             <th>
                                 <label for="primaryId" th:text="#{review.zim.id}">ZIM-ID</label>
                             </th>
                             <td th:text="*{primaryId}"></td>
-                            <input id="primaryId" type="text" th:field="*{primaryId}" th:value="*{primaryId}" readonly="readonly" hidden>
+                            <input id="primaryId" type="text" th:field="*{primaryId}" th:value="*{primaryId}"
+                                   readonly="readonly" hidden>
                         </tr>
                         <tr>
                             <th>
                                 <label for="userStatus" th:text="#{user.status}">Benutzerstatus</label>
                             </th>
                             <td th:text="#{'user.status.' + *{userStatus}}"></td>
-                            <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}" readonly="readonly" hidden>
+                            <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}"
+                                   readonly="readonly" hidden>
                         </tr>
-                        <tr th:if="*{userStatus == '06'}">
+                        <tr>
                             <th>
                                 <label for="cardNumber" th:text="#{review.cardnumber}">Kartennummer</label>
                             </th>
                             <td>
                                 <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
                             </td>
-                        </tr>
-                        <tr th:if="*{userStatus == '22'}">
-                        <th>
-                            <label for="cardNumberExtern" th:text="#{review.cardnumber}">Kartennummer</label>
-                        </th>
-                        <td>
-                            <input id="cardNumberExtern" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
-                        </td>
                         </tr>
                         <tr>
                             <th>
@@ -88,18 +85,22 @@
                             <th th:text="#{additional.email.addresses}">
                                 Weitere E-Mail-Addressen
                             </th>
-                            <input id="addEmailAddresses" type="text" th:field="*{additionalEmailAdresses}" th:value="*{additionalEmailAdresses}" readonly="readonly" hidden>
-                            <td ><p th:each="addEmail: *{additionalEmailAdresses}"><span th:text="addEmail"></span> </p></td>
+                            <input id="addEmailAddresses" type="text" th:field="*{additionalEmailAdresses}"
+                                   th:value="*{additionalEmailAdresses}" readonly="readonly" hidden>
+                            <td><p th:each="addEmail: *{additionalEmailAdresses}"><span th:text="addEmail"></span></p>
+                            </td>
                         </tr>
 
 
                         <div class="field fieldOption">
                             <div>
-                                <input th:value="*{termsAccepted}" th:field="*{termsAccepted}" type="checkbox" name="termsAndConditions" id="termsAndConditions" required/>
-                                <label th:utext="#{index.terms.label}" for="termsAndConditions">  </label>
+                                <input th:value="*{termsAccepted}" th:field="*{termsAccepted}" type="checkbox"
+                                       name="termsAndConditions" id="termsAndConditions" required/>
+                                <label th:utext="#{index.terms.label}" for="termsAndConditions"> </label>
                             </div>
                             <div>
-                                <input th:value="*{privacyAccepted}" th:field="*{privacyAccepted}" type="checkbox" name="privacy" id="privacy" required />
+                                <input th:value="*{privacyAccepted}" th:field="*{privacyAccepted}" type="checkbox"
+                                       name="privacy" id="privacy" required/>
                                 <label th:utext="#{index.privacy.label}" for="privacy"></label>
                             </div>
                         </div>
