@@ -259,6 +259,7 @@ public class RegistrationRequest {
             int random = (int) (Math.random() * 1000000);
             UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("INACTIVE").value("NEU-" + random).segmentType("internal");
             almaUser.status(new UserStatus().value("INACTIVE"))
+                    .userTitle(new UserUserTitle().value(title))
                     .gender(new UserGender().value(gender))
                     .addUserIdentifierItem(userIdentifier)
                     .birthDate(birthday)
@@ -284,6 +285,7 @@ public class RegistrationRequest {
             contactInfo.addEmailItem(emailAddress)
                     .setAddress(null);
             almaUser.status(new UserStatus().value("ACTIVE"))
+                    .userTitle(new UserUserTitle().value(title))
                     .accountType(new UserAccountType().value("EXTERNAL"))
                     .externalId(externalId);
 

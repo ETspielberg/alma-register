@@ -34,9 +34,10 @@
                                 </th>
                                 <td>
                                     <select id="title-input" th:field="*{title}">
-                                        <option th:value="'none'" th:text="#{title.none}"></option>
-                                        <option th:value="'dr'" th:text="#{title.dr}"></option>
-                                        <option th:value="'prof'" th:text="#{title.prof}"></option>
+                                        <option th:value="''" th:text="#{title.none}"></option>
+                                        <option th:value="'DR'" th:text="#{title.dr}"></option>
+                                        <option th:value="'PROF'" th:text="#{title.prof}"></option>
+                                        <option th:value="'PROFDR'" th:text="#{title.prof.dr}"></option>
                                     </select>
                                 </td>
                             </tr>
@@ -157,6 +158,10 @@
                         </div>
                         <label id="errors"/>
                     </div>
+                    <div class="field fieldOption">
+                        <strong>*</strong>: <span th:text="#{required.fields}"></span>
+                    </div>
+
                     <input id="submit" disabled="true" type="submit" class="btn btn-primary" th:value="#{register.register}"/>
                 </form>
             </div>
