@@ -119,7 +119,7 @@ public class PublicController {
             AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage()), true);
             log.info(String.format("User %s %s sucessfully registered with new id %s",
                     almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
-            mailSenderService.sendNotificationMail(almaUser, locale.getLanguage());
+            mailSenderService.sendNotificationMail(almaUser, locale);
             return new RedirectView("success");
         } catch (Exception e) {
             throw new AlmaConnectionException("could not create user");

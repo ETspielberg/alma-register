@@ -15,6 +15,7 @@ import org.unidue.ub.alma.shared.user.AlmaUser;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 
 @Service
 public class MailSenderService {
@@ -43,14 +44,14 @@ public class MailSenderService {
         this.messageSource = messageSource;
     }
 
-    public void sendNotificationMail(AlmaUser almaUser, String language) {
+    public void sendNotificationMail(AlmaUser almaUser, Locale locale) {
         String email = almaUser.getContactInfo().getEmail().get(0).getEmailAddress();
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom(registerEmailFrom);
             messageHelper.setTo(email);
-            String text = buildMailBody(almaUser);
-            if ("en".equals(language))
+            String text = buildMailBody(almaUser, locale);
+            if ("en".equalsIgnoreCase(locale.getLanguage()))
                 messageHelper.setSubject("Welcome to the library of the University of Duisburg-Essen");
             else
                 messageHelper.setSubject("Herzlich willkommen an der Universitätsbibliothek Duisburg-Essen");
@@ -60,7 +61,7 @@ public class MailSenderService {
         log.debug("sent email to " + email);
     }
 
-    private String buildMailBody(AlmaUser almaUser) {
+    private String buildMailBody(AlmaUser almaUser, Locale language) {
         Context context = new Context();
         context.setVariable("lastname", almaUser.getLastName());
         context.setVariable("firstname", almaUser.getFirstName());
@@ -73,8 +74,9 @@ public class MailSenderService {
         context.setVariable("isMinor", isMinor);
         context.setVariable("primaryId", almaUser.getPrimaryId());
         context.setVariable("gender", almaUser.getGender().getDesc());
+        context.setLocale(language);
         log.info(almaUser.getGender().getDesc());
-        context.setVariable("title", almaUser.getUserTitle().getValue());
+        context.setVariable("title", almaUser.getUserTitle().getDesc());
         return templateEngine.process("registrationSuccessMailTemplate", context);
     }
 
