@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
@@ -71,8 +72,9 @@ public class PublicController {
      * @return the public success page
      */
     @GetMapping("/success")
-    public String getSuccessPage(Model model) {
+    public String getSuccessPage(Model model, @ModelAttribute("showLink") final boolean showLink) {
         model.addAttribute("redirectUrl", redirectUrl);
+        model.addAttribute("showLink", showLink);
         model.addAttribute("module", "success");
         return "success";
     }
@@ -98,7 +100,7 @@ public class PublicController {
      * @return the registration page with errors, if the terms or the privacy was not accepted, otherwise a redirect to the success page
      */
     @PostMapping("/register")
-    public RedirectView registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, Locale locale) {
+    public RedirectView registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, Locale locale, final RedirectAttributes redirectAttribute) {
         boolean error = false;
         log.info(registrationRequest.firstName + " " + registrationRequest.lastName);
         log.info("Privacy: " + registrationRequest.privacyAccepted);
@@ -120,7 +122,9 @@ public class PublicController {
             log.info(String.format("User %s %s sucessfully registered with new id %s",
                     almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
             mailSenderService.sendNotificationMail(almaUser, locale);
-            return new RedirectView("success");
+            RedirectView redirectView = new RedirectView("success");
+            redirectAttribute.addFlashAttribute("showLink", ("22".equals(almaUser.getUserGroup().getValue()) || almaUser.getUserGroup().getValue() == null));
+            return redirectView;
         } catch (Exception e) {
             throw new AlmaConnectionException("could not create user");
         }

@@ -13,11 +13,16 @@
             </div>
         </div>
         <div th:if="${redirectUrl}" class="row">
-            <div class="col">
+            <div th:if="${showLink}" class="col">
                 <a th:href="${redirectUrl}">
                     <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
                 </a>
                 <p><span th:text="#{success.shibboleth.login.necessary}"></span></p>
+            </div>
+            <div th:if="!${showLink}" class="col">
+                <p>
+                    <span th:text="#{success.documents.necessary}"></span>
+                </p>
             </div>
         </div>
     </div>
