@@ -123,7 +123,7 @@ public class PublicController {
                     almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
             mailSenderService.sendNotificationMail(almaUser, locale);
             RedirectView redirectView = new RedirectView("success");
-            redirectAttribute.addFlashAttribute("showLink", ("20".equals(almaUser.getUserGroup().getValue()) || "22".equals(almaUser.getUserGroup().getValue()) || almaUser.getUserGroup().getValue() == null));
+            redirectAttribute.addFlashAttribute("showLink", ("01".equals(almaUser.getUserGroup().getValue()) || "06".equals(almaUser.getUserGroup().getValue())));
             return redirectView;
         } catch (Exception e) {
             throw new AlmaConnectionException("could not create user");
