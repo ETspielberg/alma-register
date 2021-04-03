@@ -72,9 +72,9 @@ public class PublicController {
      * @return the public success page
      */
     @GetMapping("/success")
-    public String getSuccessPage(Model model, @ModelAttribute("showLink") final boolean showLink) {
+    public String getSuccessPage(Model model, @ModelAttribute("userGroup") final String userGroup) {
         model.addAttribute("redirectUrl", redirectUrl);
-        model.addAttribute("showLink", showLink);
+        model.addAttribute("userGroup", userGroup);
         model.addAttribute("module", "success");
         return "success";
     }
@@ -123,7 +123,7 @@ public class PublicController {
                     almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
             mailSenderService.sendNotificationMail(almaUser, locale);
             RedirectView redirectView = new RedirectView("success");
-            redirectAttribute.addFlashAttribute("showLink", ("01".equals(almaUser.getUserGroup().getValue()) || "06".equals(almaUser.getUserGroup().getValue())));
+            redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
             return redirectView;
         } catch (Exception e) {
             throw new AlmaConnectionException("could not create user");

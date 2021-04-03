@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
@@ -38,7 +39,8 @@ public class SecuredController {
     private String redirectUrl;
 
     @GetMapping("/success")
-    public String getSuccessPage(Model model) {
+    public String getSuccessPage(Model model, @ModelAttribute("userGroup") final String userGroup) {
+        model.addAttribute("userGroup", userGroup);
         model.addAttribute("redirectUrl", redirectUrl);
         return "success";
     }
@@ -86,7 +88,7 @@ public class SecuredController {
      * @throws AlmaConnectionException thrown if no connection to the alma Users API could be established
      */
     @PostMapping("/review")
-    public RedirectView confirmCreation(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, Locale locale) throws AlmaConnectionException {
+    public RedirectView confirmCreation(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, Locale locale, final RedirectAttributes redirectAttribute) throws AlmaConnectionException {
         boolean error = false;
         if (!registrationRequest.privacyAccepted) {
             result.rejectValue("privacyAccepted", "error.privacyAccepted");
@@ -101,8 +103,9 @@ public class SecuredController {
         }
         AlmaUser almaUser = registrationRequest.getAlmaUser(locale.getLanguage());
         this.almaUserService.createAlmaUser(almaUser, false);
-        //return new RedirectView("redirect: https://" + redirectUrl);
-        return new RedirectView("success");
+        RedirectView redirectView = new RedirectView("success");
+        redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
+        return redirectView;
     }
 
     /**
