@@ -82,7 +82,24 @@
                                 <input id="birthdate-input" type="date" th:field="*{birthDate}" required>
                             </td>
                         </tr>
-
+                        <tr>
+                            <th>
+                                <label for="roomNumber-input" th:text="#{room.number}"></label>
+                            </th>
+                            <td>
+                                <input id="roomNumber-input" type="text" size="30" class="form-control" required
+                                       th:field="*{roomNumber}" th:placeholder="#{room.number}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="city-input" th:text="#{city}"></label>
+                            </th>
+                            <td>
+                                <input id="city-input" type="text" size="30" class="form-control" required
+                                       th:field="*{city}" th:placeholder="#{city}">
+                            </td>
+                        </tr>
                         <div class="field fieldOption">
                             <div>
                                 <input th:value="*{termsAccepted}" th:field="*{termsAccepted}" type="checkbox"

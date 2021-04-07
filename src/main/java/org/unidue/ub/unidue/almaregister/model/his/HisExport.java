@@ -1,12 +1,13 @@
 package org.unidue.ub.unidue.almaregister.model.his;
 
-import org.springframework.data.domain.Persistable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "his_export")
@@ -99,6 +100,21 @@ public class HisExport implements Serializable {
 
     @Column(name = "exmaantrag")
     private String exmaantrag;
+
+    @Column(name = "changed")
+    private boolean changed = false;
+
+    @Column(name = "hash")
+    private String hash;
+
+    @Column(name = "exmatriculated")
+    private boolean exmatriculated = false;
+
+    @Column(name = "last_changed")
+    private Date lastChanged;
+
+    @Column(name = "contained")
+    private boolean contained = true;
 
     public String getMtknr() {
         return mtknr;
@@ -330,6 +346,79 @@ public class HisExport implements Serializable {
 
     public void setHoererStatus(String hoererStatus) {
         this.hoererStatus = hoererStatus;
+    }
+
+    public boolean getChanged() {
+        return changed;
+    }
+
+    public void setChanged(boolean changed) {
+        this.changed = changed;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    public boolean getExmatriculated() {
+        return exmatriculated;
+    }
+
+    public void setExmatriculated(boolean exmatriculated) {
+        this.exmatriculated = exmatriculated;
+    }
+
+    public Date getLastChanged() {
+        return lastChanged;
+    }
+
+    public void setLastChanged(Date lastChanged) {
+        this.lastChanged = lastChanged;
+    }
+
+    public boolean getContained() {
+        return contained;
+    }
+
+    public void setContained(boolean conteined) {
+        this.contained = conteined;
+    }
+
+    public String calculateHash() {
+        List<String> fieldsForHash = Arrays.asList(mtknr, zimKennung, nachname, vorname, geschl, gebdat, cardCurrens);
+        int result = 1;
+        for( String s : fieldsForHash )
+            result = result * 31 + s.hashCode();
+        this.hash = String.valueOf(result);
+        return this.hash;
+    }
+
+    public boolean updateEntry(HisExport newExport) {
+        if (newExport.calculateHash().equals(this.calculateHash())) {
+            this.contained = true;
+            this.changed = false;
+            this.exmatriculated = false;
+            return false;
+        }
+        else {
+            this.vorname = newExport.vorname;
+            this.nachname = newExport.nachname;
+            this.zimKennung = newExport.zimKennung;
+            this.geschl = newExport.geschl;
+            this.gebdat = newExport.gebdat;
+            this.mtknr = newExport.mtknr;
+            this.exmatriculated = false;
+            this.cardCurrens = newExport.cardCurrens;
+            this.changed = true;
+            this.lastChanged = new Date();
+            this.calculateHash();
+            this.contained = true;
+            return true;
+        }
     }
 
     @Override

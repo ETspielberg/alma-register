@@ -72,7 +72,7 @@ public class TestController {
     @GetMapping("/analytics")
     public ResponseEntity<?> testAnalyticsService() {
         log.info("testing user update");
-        this.almaUserService.updateUserAdresses();
+        this.scheduledService.updateUserAdresses();
         return ResponseEntity.ok().build();
     }
 

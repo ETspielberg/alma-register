@@ -57,6 +57,8 @@ public class RegistrationRequest {
 
     public String cardNumber = "";
 
+    public String roomNumber = "";
+
     public List<String> additionalEmailAdresses = new ArrayList<>();
 
     public RegistrationRequest() {
@@ -194,6 +196,14 @@ public class RegistrationRequest {
         this.externalId = externalId;
     }
 
+    public String getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
     public String getMatrikelNumber() {
         return matrikelNumber;
     }
@@ -270,8 +280,15 @@ public class RegistrationRequest {
         } else {
             if (birthDate != null) {
                 Date birthday = dateFromLocalDate(birthDate);
-                almaUser.pinNumber(pinFormat.format(birthday));
+                almaUser.pinNumber(pinFormat.format(birthday))
+                        .birthDate(birthday);
             }
+            Address postalAddress = new Address()
+                    .city(city)
+                    .line1(roomNumber)
+                    .preferred(true)
+                    .addAddressTypeItem(new AddressAddressType().value("work"));
+            contactInfo.addAddressItem(postalAddress);
             emailAddress
                     .emailAddress(email)
                     .addEmailTypeItem(new EmailEmailType().value("personal"))

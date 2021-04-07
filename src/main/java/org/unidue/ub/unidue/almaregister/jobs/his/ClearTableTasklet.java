@@ -24,7 +24,7 @@ public class ClearTableTasklet implements Tasklet {
 
     public RepeatStatus execute(StepContribution contribution,
                                 ChunkContext chunkContext) {
-        this.hisService.clear();
+        this.hisService.setFieldsForNewRun();
         log.debug("cleared his export table");
         return RepeatStatus.FINISHED;
     }

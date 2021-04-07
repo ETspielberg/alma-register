@@ -33,8 +33,6 @@ public class SecuredController {
 
     private final AlmaUserService almaUserService;
 
-    private final AddressWebServiceClient addressWebServiceClient;
-
     @Value("${alma.redirect.url:https://www.uni-due.de/ub}")
     private String redirectUrl;
 
@@ -50,10 +48,8 @@ public class SecuredController {
      *
      * @param almaUserService the Alma user service, responsible for retrieving the registration request object from the Shibboleth request attributes and to submit the corresponding AlmaUser object to the Alma Users API
      */
-    SecuredController(AlmaUserService almaUserService,
-                      AddressWebServiceClient addressWebServiceClient) {
+    SecuredController(AlmaUserService almaUserService) {
         this.almaUserService = almaUserService;
-        this.addressWebServiceClient = addressWebServiceClient;
     }
 
     /**

@@ -21,6 +21,8 @@ import org.unidue.ub.unidue.almaregister.service.exceptions.MissingShibbolethDat
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -34,10 +36,6 @@ public class AlmaUserService {
 
     private final HttpServletRequest httpServletRequest;
 
-    private final AddressWebServiceClient addressWebServiceClient;
-
-    private final AlmaAnalyticsReportClient almaAnalyticsReportClient;
-
     private final HisService hisService;
 
     private final static Logger log = LoggerFactory.getLogger(AlmaUserService.class);
@@ -47,17 +45,12 @@ public class AlmaUserService {
      *
      * @param almaUserApiClient       the Feign client to the Alma User API
      * @param httpServletRequest      the current request object
-     * @param addressWebServiceClient the repository holding the students data
      */
     AlmaUserService(AlmaUserApiClient almaUserApiClient,
                     HttpServletRequest httpServletRequest,
-                    AddressWebServiceClient addressWebServiceClient,
-                    AlmaAnalyticsReportClient almaAnalyticsReportClient,
                     HisService hisService) {
         this.almaUserApiClient = almaUserApiClient;
         this.httpServletRequest = httpServletRequest;
-        this.addressWebServiceClient = addressWebServiceClient;
-        this.almaAnalyticsReportClient = almaAnalyticsReportClient;
         this.hisService = hisService;
     }
 
@@ -71,6 +64,11 @@ public class AlmaUserService {
      */
     public RegistrationRequest generateRegistrationRequest() throws MissingShibbolethDataException, MissingHisDataException {
         RegistrationRequest registrationRequest = new RegistrationRequest();
+        try {
+            this.httpServletRequest.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException uee) {
+            log.warn("could not retrieve request with encoding utf-8. using standard encoding instead");
+        }
         try {
             // try to read the shibboleth id
             String id = ((String) this.httpServletRequest.getAttribute("SHIB_persistent-id")).split("!")[2];
@@ -178,50 +176,7 @@ public class AlmaUserService {
         }
     }
 
-    @Async("threadPoolTaskExecutor")
-    @Scheduled(cron = "0 0 7 * * *")
-    public void updateUserAdresses() {
-        Set<String> primaryIds = new HashSet<>();
-        try {
-            List<Overdue> reportResults = this.almaAnalyticsReportClient.getReport(Overdue.PATH, OverdueReport.class).getRows();
-            for (Overdue overdue : reportResults) {
-                primaryIds.add(overdue.getPrimaryIdentifier());
-                log.info(overdue.getPrimaryIdentifier());
-            }
-            log.info(String.valueOf(primaryIds.size()));
-            primaryIds.forEach(this::extendUser);
 
-        } catch (IOException ioe) {
-            log.error("could not retrieve analytics report :", ioe);
-        }
-    }
 
-    private void extendUser(String primaryId) {
-        AlmaUser user = this.almaUserApiClient.getUser(primaryId, "application/json");
-        long userNumber = 0L;
-        if (!"01".equals(user.getUserGroup().getValue())) {
-            log.warn(String.format("could not update addresse for user %s: not a student", primaryId));
-            return;
-        }
-        for (UserIdentifier userIdentifier : user.getUserIdentifier())
-            if ("02".equals(userIdentifier.getIdType().getValue()))
-                userNumber = Long.parseLong(userIdentifier.getValue());
-        log.info(String.format("updating user with id %d", userNumber));
-        if (userNumber != 0L) {
-            ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddressByMatrikel(userNumber);
-            if (response != null) {
-                Address address = new Address().addAddressTypeItem(new AddressAddressType().value("home"))
-                        .city(response.getAddress().getCity())
-                        .country(new AddressCountry().value(response.getAddress().getCountry()))
-                        .line1(response.getAddress().getStreet())
-                        .line2(response.getAddress().getAddressaddition())
-                        .line3(response.getAddress().getPostcode() + " " + response.getAddress().getCity());
-                user.getContactInfo().addAddressItem(address);
-                this.almaUserApiClient.updateUser(user.getPrimaryId(), user);
-                log.info(String.format("retrieved address for user %s", primaryId ));
-            } else
-                log.warn(String.format("could not get address for user %s from his system.", primaryId));
-        } else
-            log.warn(String.format("could not update addresse for user %s: no matrikel number", primaryId));
-    }
+
 }

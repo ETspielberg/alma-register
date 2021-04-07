@@ -51,6 +51,19 @@ public class HisService {
 
     @Transactional
     public void saveAll(List<HisExport> list) {
-        this.hisExportRepository.saveAll(list);
+        for (HisExport hisExport: list) {
+            HisExport oldEntry = this.hisExportRepository.findByZimKennung(hisExport.getZimKennung());
+            if (oldEntry == null)
+                this.hisExportRepository.save(hisExport);
+            else {
+                if (oldEntry.updateEntry(hisExport))
+                    this.hisExportRepository.save(oldEntry);
+            }
+        }
+    }
+
+    @Transactional
+    public void setFieldsForNewRun() {
+        this.hisExportRepository.updateChangedAndContainedAndExmatriculated(false, false, true);
     }
 }
