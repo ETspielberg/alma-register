@@ -288,19 +288,19 @@ public class RegistrationRequest {
                     .line1(roomNumber)
                     .preferred(true)
                     .addAddressTypeItem(new AddressAddressType().value("work"));
-            contactInfo.addAddressItem(postalAddress);
             emailAddress
                     .emailAddress(email)
                     .addEmailTypeItem(new EmailEmailType().value("personal"))
                     .preferred(true);
+            contactInfo.addEmailItem(emailAddress)
+                    .addAddressItem(postalAddress);
             for (String additionalEmailAddress : this.additionalEmailAdresses) {
                 Email addEmail = new Email().emailAddress(additionalEmailAddress)
                         .addEmailTypeItem(new EmailEmailType().value("personal"))
                         .preferred(false);
                 contactInfo.addEmailItem(addEmail);
             }
-            contactInfo.addEmailItem(emailAddress)
-                    .setAddress(null);
+
             almaUser.status(new UserStatus().value("ACTIVE"))
                     .userTitle(new UserUserTitle().value(title))
                     .accountType(new UserAccountType().value("EXTERNAL"))

@@ -98,7 +98,7 @@ public class SecuredController {
             return new RedirectView("review");
         }
         AlmaUser almaUser = registrationRequest.getAlmaUser(locale.getLanguage());
-        this.almaUserService.createAlmaUser(almaUser, false);
+        this.almaUserService.createAlmaUser(almaUser, true);
         RedirectView redirectView = new RedirectView("success");
         redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
         return redirectView;
