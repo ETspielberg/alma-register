@@ -60,6 +60,7 @@ public class SecuredController {
 
     /**
      * the controller for reviewing the data as obtained by the Shibboleth login procedure
+     *
      * @param model the model object binding the registration request object to the web form
      * @return returns the review page
      * @throws MissingShibbolethDataException thrown if the necessary data could not be read from the Shibboleth request attributes
@@ -84,8 +85,9 @@ public class SecuredController {
 
     /**
      * submission controller accepting the registration request object as generated from the Shibboleth data.
+     *
      * @param registrationRequest the registration request object as obtained from the Shibboleth request data
-     * @param result the result to display rejection if the privacy conditions or the terms of use have not been accepted
+     * @param result              the result to display rejection if the privacy conditions or the terms of use have not been accepted
      * @return the review page with errors, if the terms or the privacy was not accepted, otherwise a redirect to the success page
      * @throws AlmaConnectionException thrown if no connection to the alma Users API could be established
      */
@@ -112,6 +114,7 @@ public class SecuredController {
 
     /**
      * the controller for reviewing the data as obtained by the Shibboleth login procedure
+     *
      * @param model the model object binding the registration request object to the web form
      * @return returns the review page
      * @throws MissingShibbolethDataException thrown if the necessary data could not be read from the Shibboleth request attributes
@@ -136,8 +139,9 @@ public class SecuredController {
 
     /**
      * submission controller accepting the registration request object as generated from the Shibboleth data.
+     *
      * @param registrationRequest the registration request object as obtained from the Shibboleth request data
-     * @param result the result to display rejection if the privacy conditions or the terms of use have not been accepted
+     * @param result              the result to display rejection if the privacy conditions or the terms of use have not been accepted
      * @return the review page with errors, if the terms or the privacy was not accepted, otherwise a redirect to the success page
      * @throws AlmaConnectionException thrown if no connection to the alma Users API could be established
      */
@@ -157,20 +161,16 @@ public class SecuredController {
         UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("03");
         UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(registrationRequest.primaryId).segmentType("external");
         almaUser.addUserIdentifierItem(userIdentifier);
-        try {
-            almaUser = this.almaUserService.updateAlmaUser(registrationRequest.cardNumber, almaUser);
-            RedirectView redirectView = new RedirectView("success");
-            redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
-            return redirectView;
-        } catch (Exception e) {
-            result.rejectValue("userNotFound", "error.userNotFound");
-            return new RedirectView("review");
-        }
+        almaUser = this.almaUserService.updateAlmaUser(registrationRequest.cardNumber, almaUser);
+        RedirectView redirectView = new RedirectView("success");
+        redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
+        return redirectView;
     }
 
 
     /**
      * endpoint for reviewing the current user and the corresponding authorities (for debugging purposes or as source for the user object within a single page application
+     *
      * @param principal the principal object
      * @return a map holding the name of the principal and the corresponding roles-
      */
@@ -190,6 +190,7 @@ public class SecuredController {
 
     /**
      * Exception handling if one of the following exceptions is thrown: MissingShibbolethDataException, MissingHisDataException, AlmaConnectionException
+     *
      * @param ex Exception to be handled
      * @return the error page bound to the error message.
      */
