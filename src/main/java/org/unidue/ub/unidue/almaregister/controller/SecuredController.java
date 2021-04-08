@@ -1,5 +1,7 @@
 package org.unidue.ub.unidue.almaregister.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -37,6 +39,8 @@ public class SecuredController {
 
     @Value("${alma.redirect.url:https://www.uni-due.de/ub}")
     private String redirectUrl;
+
+    private final Logger log = LoggerFactory.getLogger(SecuredController.class);
 
     @GetMapping("/success")
     public String getSuccessPage(Model model, @ModelAttribute("userGroup") final String userGroup) {
@@ -146,6 +150,7 @@ public class SecuredController {
         }
         AlmaUser almaUser = this.almaUserService.getExistingAccount(registrationRequest.cardNumber);
         if (!almaUser.getLastName().strip().equals(registrationRequest.lastName.strip())) {
+            log.warn(almaUser.getLastName().strip() + " tried to be updated with shibboleth user " + registrationRequest.lastName.strip());
             result.rejectValue("userdataDoNotMatch", "error.userdataDoNotMatch");
             return new RedirectView("review");
         }
