@@ -177,6 +177,11 @@ public class AlmaUserService {
     }
 
 
+    public AlmaUser getExistingAccount(String cardNumber) {
+        return this.almaUserApiClient.getUser(cardNumber, "application/json");
+    }
 
-
+    public AlmaUser updateAlmaUser(String userId, AlmaUser almaUser) {
+        return this.almaUserApiClient.updateUser(userId, almaUser);
+    }
 }

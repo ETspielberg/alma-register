@@ -12,6 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.alma.shared.user.AlmaUser;
+import org.unidue.ub.alma.shared.user.UserIdentifier;
+import org.unidue.ub.alma.shared.user.UserIdentifierIdType;
 import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
@@ -103,6 +105,64 @@ public class SecuredController {
         redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
         return redirectView;
     }
+
+    /**
+     * the controller for reviewing the data as obtained by the Shibboleth login procedure
+     * @param model the model object binding the registration request object to the web form
+     * @return returns the review page
+     * @throws MissingShibbolethDataException thrown if the necessary data could not be read from the Shibboleth request attributes
+     */
+    @GetMapping("/connect")
+    public String getConnectPage(Model model) throws MissingShibbolethDataException {
+        RegistrationRequest registrationRequest = this.almaUserService.generateRegistrationRequest();
+        AlmaUser almaUser = this.almaUserService.checkExistingUser(registrationRequest.primaryId);
+        if (almaUser == null) {
+            model.addAttribute("registrationRequest", registrationRequest);
+            return "connect";
+        } else {
+            if (registrationRequest.userStatus.equals("student") && registrationRequest.externalId == null) {
+                model.addAttribute("userStatus", registrationRequest.userStatus);
+                model.addAttribute("matrikelGiven", false);
+            }
+
+            model.addAttribute("redirectUrl", redirectUrl);
+            return "alreadyExists";
+        }
+    }
+
+    /**
+     * submission controller accepting the registration request object as generated from the Shibboleth data.
+     * @param registrationRequest the registration request object as obtained from the Shibboleth request data
+     * @param result the result to display rejection if the privacy conditions or the terms of use have not been accepted
+     * @return the review page with errors, if the terms or the privacy was not accepted, otherwise a redirect to the success page
+     * @throws AlmaConnectionException thrown if no connection to the alma Users API could be established
+     */
+    @PostMapping("/connect")
+    public RedirectView confirmConnect(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, Locale locale, final RedirectAttributes redirectAttribute) throws AlmaConnectionException {
+        boolean error = false;
+        if (!registrationRequest.privacyAccepted) {
+            result.rejectValue("privacyAccepted", "error.privacyAccepted");
+            return new RedirectView("review");
+        }
+        AlmaUser almaUser = this.almaUserService.getExistingAccount(registrationRequest.cardNumber);
+        if (!almaUser.getLastName().strip().equals(registrationRequest.lastName.strip())) {
+            result.rejectValue("userdataDoNotMatch", "error.userdataDoNotMatch");
+            return new RedirectView("review");
+        }
+        UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("03");
+        UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(registrationRequest.primaryId).segmentType("external");
+        almaUser.addUserIdentifierItem(userIdentifier);
+        try {
+            almaUser = this.almaUserService.updateAlmaUser(registrationRequest.cardNumber, almaUser);
+            RedirectView redirectView = new RedirectView("success");
+            redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
+            return redirectView;
+        } catch (Exception e) {
+            result.rejectValue("userNotFound", "error.userNotFound");
+            return new RedirectView("review");
+        }
+    }
+
 
     /**
      * endpoint for reviewing the current user and the corresponding authorities (for debugging purposes or as source for the user object within a single page application

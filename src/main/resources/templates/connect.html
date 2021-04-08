@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{|layout_${#locale}|}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{connect.heading}"></title>
+</head>
+<body>
+<div class="container-background bg-colored bg-gray" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 th:text="#{connect.heading}"></h1>
+                <form th:action="@{/secure/connect}" th:object="${registrationRequest}" method="post">
+                    <p th:text="#{connect.description}"></p>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>
+                                <label for="cardNumber" th:text="#{review.cardnumber}">Kartennummer</label>
+                            </th>
+                            <td>
+                                <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="field fieldOption">
+                        <div>
+                            <input th:value="*{privacyAccepted}" th:field="*{privacyAccepted}" type="checkbox"
+                                   name="privacy" id="privacy" required/>
+                            <label th:utext="#{index.privacy.label}" for="privacy"></label>
+                        </div>
+                    </div>
+                    <input id="externalId" type="text" th:field="*{externalId}" th:value="*{externalId}" hidden>
+                    <input type="submit" class="btn btn-primary" value="Verknüpfen"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
