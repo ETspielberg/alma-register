@@ -328,7 +328,7 @@ public class RegistrationRequest {
                 almaUser.addUserIdentifierItem(cardIdentifier);
             }
             UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("03");
-            UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(externalId).segmentType("external");
+            UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(primaryId).segmentType("external");
             almaUser.addUserIdentifierItem(userIdentifier);
         }        return almaUser.contactInfo(contactInfo);
     }

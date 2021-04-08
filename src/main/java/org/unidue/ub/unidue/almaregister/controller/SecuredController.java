@@ -159,7 +159,7 @@ public class SecuredController {
             return new RedirectView("review");
         }
         UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("03");
-        UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(registrationRequest.primaryId).segmentType("external");
+        UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(registrationRequest.externalId).segmentType("external");
         almaUser.addUserIdentifierItem(userIdentifier);
         almaUser = this.almaUserService.updateAlmaUser(registrationRequest.cardNumber, almaUser);
         RedirectView redirectView = new RedirectView("success");
