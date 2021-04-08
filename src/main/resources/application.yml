@@ -35,6 +35,7 @@ alma:
     email:
       from: information.ub@uni-due.de
 logging:
+  level:
     org:
       unidue:
         ub:
