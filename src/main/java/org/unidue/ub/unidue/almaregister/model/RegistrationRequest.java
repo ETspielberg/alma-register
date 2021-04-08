@@ -41,6 +41,8 @@ public class RegistrationRequest {
 
     public String password = "";
 
+    public String campus = "";
+
     public String passwordRepeat = "";
 
     public boolean privacyAccepted = false;
@@ -228,6 +230,14 @@ public class RegistrationRequest {
         this.cardNumber = cardNumber;
     }
 
+    public String getCampus() {
+        return campus;
+    }
+
+    public void setCampus(String campus) {
+        this.campus = campus;
+    }
+
     /**
      * creates an AlmaUser object to be submitted to Alma Users API from the supplied personal data.
      *
@@ -278,22 +288,28 @@ public class RegistrationRequest {
                     .accountType(new UserAccountType().value("INTERNAL"))
                     .setExpiryDate(expiryDate);
         } else {
+
+            // set birthday amd pin-number
             if (birthDate != null) {
                 Date birthday = dateFromLocalDate(birthDate);
                 almaUser.pinNumber(pinFormat.format(birthday))
                         .birthDate(birthday);
             }
-            Address postalAddress = new Address()
-                    .city(city)
-                    .line1(roomNumber)
-                    .preferred(true)
-                    .addAddressTypeItem(new AddressAddressType().value("work"));
+            //set address data for coworkers
+            if ("06".equals(userStatus)) {
+                Address postalAddress = new Address()
+                        .city(city)
+                        .line1(roomNumber)
+                        .line2(campus)
+                        .preferred(true)
+                        .addAddressTypeItem(new AddressAddressType().value("work"));
+                contactInfo.addAddressItem(postalAddress);
+            }
             emailAddress
                     .emailAddress(email)
                     .addEmailTypeItem(new EmailEmailType().value("personal"))
                     .preferred(true);
-            contactInfo.addEmailItem(emailAddress)
-                    .addAddressItem(postalAddress);
+            contactInfo.addEmailItem(emailAddress);
             for (String additionalEmailAddress : this.additionalEmailAdresses) {
                 Email addEmail = new Email().emailAddress(additionalEmailAddress)
                         .addEmailTypeItem(new EmailEmailType().value("personal"))
@@ -314,8 +330,7 @@ public class RegistrationRequest {
             UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("03");
             UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(primaryId).segmentType("external");
             almaUser.addUserIdentifierItem(userIdentifier);
-        }
-        return almaUser.contactInfo(contactInfo);
+        }        return almaUser.contactInfo(contactInfo);
     }
 
     private Date dateFromLocalDate(LocalDate localDate) {
