@@ -23,8 +23,8 @@
                                         <option value="" th:text="#{choose}"> Bitte auswählen </option>
                                         <option th:value="'FEMALE'" th:text="#{female}"></option>
                                         <option th:value="'MALE'" th:text="#{male}"></option>
-                                        <option th:value="'NONE'" th:text="#{gender.none}"></option>
                                         <option th:value="'OTHER'" th:text="#{other}"></option>
+                                        <option th:value="'NONE'" th:text="#{gender.none}"></option>
                                     </select>
                                 </td>
                             </tr>
@@ -66,9 +66,10 @@
                                 <td>
                                     <select id="userStatus-input" th:field="*{userStatus}" required>
                                         <option value="" th:text="#{choose}"> Bitte auswählen </option>
-                                        <option th:value="'20'" th:text="#{user.group.pupil}"></option>
-                                        <option th:value="'23'" th:text="#{user.group.uaruhr}"></option>
                                         <option th:value="'06'" th:text="#{user.group.coworker.clinics}"></option>
+                                        <option th:value="'23'" th:text="#{user.group.folkwang}"></option>
+                                        <option th:value="'23'" th:text="#{user.group.uaruhr}"></option>
+                                        <option th:value="'20'" th:text="#{user.group.pupil}"></option>
                                         <option th:value="'other'" th:text="#{user.group.other}"></option>
                                     </select>
                                 </td>

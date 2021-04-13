@@ -9,15 +9,17 @@
         <div class="row">
             <div class="col">
                     <h1 th:text="#{index.heading}"></h1>
-                <p th:utext="#{index.description}"></p>
+                <!--<p th:utext="#{index.description}"></p>-->
                     <form th:action="@{/secure/review}" method="get">
                         <br/>
                         <input type="submit" class="btn btn-primary" th:value="#{index.register.member}" />
                     </form>
+                <p th:utext="#{index.register.member.additional.information}">
                 <form th:action="@{/register}" method="get">
                     <br/>
                     <input type="submit" class="btn btn-primary" th:value="#{index.register.extern}"/>
                 </form>
+                <p th:utext="#{index.register.extern.additional.information}">
                 <p><span th:text="#{success.shibboleth.login.necessary}"></span></p>
             </div>
         </div>
