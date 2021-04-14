@@ -103,6 +103,16 @@
                                 </select>
                             </td>
                         </tr>
+                        <tr>
+                            <th>
+                                <label for="pin-input" th:text="#{pin.number}"></label>
+                            </th>
+                            <td>
+                                <input id="pin-input" type="text" th:field="*{pinNumber}"
+                                       th:placeholder="#{pin.number}" required pattern="\d{8}"
+                                       title="must be 3 or 8 digit"/>
+                            </td>
+                        </tr>
                     </table>
                     <div class="field fieldOption">
                         <div>

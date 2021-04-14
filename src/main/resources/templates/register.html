@@ -20,7 +20,7 @@
                                 </th>
                                 <td>
                                     <select id="gender-input" th:field="*{gender}" required>
-                                        <option value="" th:text="#{choose}"> Bitte auswählen </option>
+                                        <option value="" th:text="#{choose}"> Bitte auswählen</option>
                                         <option th:value="'FEMALE'" th:text="#{female}"></option>
                                         <option th:value="'MALE'" th:text="#{male}"></option>
                                         <option th:value="'OTHER'" th:text="#{other}"></option>
@@ -65,7 +65,7 @@
                                 </th>
                                 <td>
                                     <select id="userStatus-input" th:field="*{userStatus}" required>
-                                        <option value="" th:text="#{choose}"> Bitte auswählen </option>
+                                        <option value="" th:text="#{choose}"> Bitte auswählen</option>
                                         <option th:value="'06'" th:text="#{user.group.coworker.clinics}"></option>
                                         <option th:value="'23'" th:text="#{user.group.folkwang}"></option>
                                         <option th:value="'23'" th:text="#{user.group.uaruhr}"></option>
@@ -120,6 +120,16 @@
                             </tr>
                             <tr>
                                 <th>
+                                    <label for="pin-input" th:text="#{pin.number}"></label>
+                                </th>
+                                <td>
+                                    <input id="pin-input" type="text" th:field="*{pinNumber}"
+                                           th:placeholder="#{pin.number}" required pattern="\d{8}"
+                                           title="must be 3 or 8 digit"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
                                     <label for="password-input" th:text="#{password}"></label>
                                 </th>
                                 <td>
@@ -138,12 +148,16 @@
                             </tr>
                         </table>
                         <div style="padding-left: 35px;" id="message">
-                            <h3  th:text="#{password.must.have}">Password must contain the following:</h3>
-                            <p id="letter" class="ui-password-invalid" th:text="#{password.letter}">A <b>lowercase</b> letter</p>
-                            <p id="capital" class="ui-password-invalid" th:text="#{password.capital}">A <b>capital (uppercase)</b> letter</p>
+                            <h3 th:text="#{password.must.have}">Password must contain the following:</h3>
+                            <p id="letter" class="ui-password-invalid" th:text="#{password.letter}">A <b>lowercase</b>
+                                letter</p>
+                            <p id="capital" class="ui-password-invalid" th:text="#{password.capital}">A <b>capital
+                                (uppercase)</b> letter</p>
                             <p id="number" class="ui-password-invalid" th:text="#{password.number}">A <b>number</b></p>
-                            <p id="length" class="ui-password-invalid" th:text="#{password.length}">Minimum <b>8 characters</b></p>
-                            <p id="repeat" class="ui-password-invalid" th:text="#{password.match}">Passwords match</b></p>
+                            <p id="length" class="ui-password-invalid" th:text="#{password.length}">Minimum <b>8
+                                characters</b></p>
+                            <p id="repeat" class="ui-password-invalid" th:text="#{password.match}">Passwords
+                                match</b></p>
                         </div>
 
                     </fieldset>
@@ -164,7 +178,8 @@
                         <strong>*</strong>: <span th:text="#{required.fields}"></span>
                     </div>
 
-                    <input id="submit" disabled="true" type="submit" class="btn btn-primary" th:value="#{register.register}"/>
+                    <input id="submit" disabled="true" type="submit" class="btn btn-primary"
+                           th:value="#{register.register}"/>
                 </form>
             </div>
         </div>
@@ -187,11 +202,11 @@
         var total_bool = false;
 
         // When the user starts to type something inside the password field
-        passwordInput.onkeyup = function() {
+        passwordInput.onkeyup = function () {
             // Validate lowercase letters
             var lowerCaseLetters = /[a-z]/g;
             letter_bool = passwordInput.value.match(lowerCaseLetters)
-            if(letter_bool) {
+            if (letter_bool) {
                 letter.classList.remove("ui-password-invalid");
                 letter.classList.add("ui-password-valid");
             } else {
@@ -202,7 +217,7 @@
             // Validate capital letters
             var upperCaseLetters = /[A-Z]/g;
             capital_bool = passwordInput.value.match(upperCaseLetters)
-            if(capital_bool) {
+            if (capital_bool) {
                 capital.classList.remove("ui-password-invalid");
                 capital.classList.add("ui-password-valid");
             } else {
@@ -213,7 +228,7 @@
             // Validate numbers
             var numbers = /[0-9]/g;
             number_bool = passwordInput.value.match(numbers)
-            if(number_bool) {
+            if (number_bool) {
                 number.classList.remove("ui-password-invalid");
                 number.classList.add("ui-password-valid");
             } else {
@@ -223,7 +238,7 @@
 
             // Validate length
             length_bool = passwordInput.value.length >= 8
-            if(length_bool) {
+            if (length_bool) {
                 length.classList.remove("ui-password-invalid");
                 length.classList.add("ui-password-valid");
             } else {
@@ -237,7 +252,7 @@
                 submit.disabled = true;
             }
         }
-        passwordRepeat.onkeyup = function() {
+        passwordRepeat.onkeyup = function () {
             repeat_bool = passwordInput.value === passwordRepeat.value
             if (repeat_bool) {
                 repeat.classList.remove("ui-password-invalid");
@@ -255,7 +270,6 @@
         }
     </script>
 </div>
-
 
 
 </body>

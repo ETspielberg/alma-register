@@ -53,6 +53,8 @@ public class RegistrationRequest {
 
     public String externalId = "";
 
+    public int pinNumber = 0;
+
     public String matrikelNumber = "";
 
     public int cardCurrens = 0;
@@ -284,7 +286,7 @@ public class RegistrationRequest {
                     .addUserIdentifierItem(userIdentifier)
                     .birthDate(birthday)
                     .password(password)
-                    .pinNumber(pinFormat.format(birthday))
+                    .pinNumber(String.format("%08d", pinNumber))
                     .accountType(new UserAccountType().value("INTERNAL"))
                     .setExpiryDate(expiryDate);
         } else {
@@ -292,7 +294,7 @@ public class RegistrationRequest {
             // set birthday amd pin-number
             if (birthDate != null) {
                 Date birthday = dateFromLocalDate(birthDate);
-                almaUser.pinNumber(pinFormat.format(birthday))
+                almaUser.pinNumber(String.format("%08d", pinNumber))
                         .birthDate(birthday);
             }
             //set address data for coworkers
