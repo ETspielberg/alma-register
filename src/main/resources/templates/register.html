@@ -125,7 +125,7 @@
                                 <td>
                                     <input id="pin-input" type="text" th:field="*{pinNumber}"
                                            th:placeholder="#{pin.number}" required pattern="\d{8}"
-                                           title="must be 3 or 8 digit"/>
+                                           th:title="#{pin.number.title}"/>
                                 </td>
                             </tr>
                             <tr>
