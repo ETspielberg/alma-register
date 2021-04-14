@@ -240,6 +240,14 @@ public class RegistrationRequest {
         this.campus = campus;
     }
 
+    public int getPinNumber() {
+        return pinNumber;
+    }
+
+    public void setPinNumber(int pinNumber) {
+        this.pinNumber = pinNumber;
+    }
+
     /**
      * creates an AlmaUser object to be submitted to Alma Users API from the supplied personal data.
      *
