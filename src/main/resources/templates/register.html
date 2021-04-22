@@ -11,7 +11,7 @@
             <div class="col">
                 <h1 th:text="#{register.heading}"></h1>
                 <form th:action="@{register}" th:object="${registrationRequest}" method="post" autocomplete="on">
-                    <p th:text="#{register.description}"></p>
+                    <p th:utext="#{register.description}"></p>
                     <fieldset>
                         <table class="table table-striped">
                             <tr>
