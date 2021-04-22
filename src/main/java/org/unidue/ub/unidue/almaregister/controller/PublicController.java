@@ -121,7 +121,7 @@ public class PublicController {
             AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage()), true);
             log.info(String.format("User %s %s sucessfully registered with new id %s",
                     almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
-            mailSenderService.sendNotificationMail(almaUser, locale);
+            // mailSenderService.sendNotificationMail(almaUser, locale);
             RedirectView redirectView = new RedirectView("success");
             redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
             return redirectView;
