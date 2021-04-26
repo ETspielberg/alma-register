@@ -24,9 +24,9 @@
     </style>
 </head>
 <body>
-<h1 class="title" th:text="#{confirmation.email.title}">
+<h2 class="title" th:text="#{confirmation.email.title}">
     Herzlich Willkommen an der Universitätsbibliothek Duisburg-Essen
-</h1>
+</h2>
 <div class="text" th:switch="${gender}">
     <p th:case="Male">
         <span th:text="#{confirmation.email.salutation.male}">Sehr geehrter Herr</span> <span
@@ -45,6 +45,20 @@
             th:text="${title}"></span> <span th:text="${firstname}"></span> <span th:text="${lastname}"></span>,
     </p>
 </div>
+<div class="text" th:switch="${userStatus}">
+    <div th:utext="#{confirmation.email.welcome}"></div>
+    <div th:case="01">
+        <div th:utext="#{confirmation.email.contents.student}"></div>
+        <div th:utext="#{confirmation.email.contents.abisz}"></div>
+    </div>
+    <div th:default="">
+        <div th:utext="#{confirmation.email.contents.extern}"></div>
+        <div th:utext="#{confirmation.email.contents.pin.extern}"></div>
+    </div>
+
+    <div th:utext="#{confirmation.email.contents.abisz}"></div>
+    <div th:utext="#{confirmation.email.contents.contact}"></div>
+
 <p th:text="#{confirmation.email.welcome.long}">Wir freuen uns, dass Sie sich an der Universitätsbibliothek
     Duisburg-Essen angemeldet haben.</p>
 <p th:text="#{confirmation.email.documents}"> Bitte beachten Sie: Um alle Dienste der Bibliothek zu können, benötigen Sie einen Bibliotheksausweis. Diesen erhalten Sie an einer unserer Ausleihtheken. Legen Sie dort bitte Ihren Personalausweis vor.
