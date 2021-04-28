@@ -24,10 +24,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class AlmaUserService {
@@ -183,5 +182,27 @@ public class AlmaUserService {
 
     public AlmaUser updateAlmaUser(String userId, AlmaUser almaUser) {
         return this.almaUserApiClient.updateUser(userId, almaUser);
+    }
+
+    public boolean existsByLastnameAndBirthday(RegistrationRequest registrationRequest) {
+        String searchstring = String.format("q=last_name~%s", registrationRequest.lastName);
+        int limit = 50;
+        int offset = 0;
+        AlmaUsers almaUsers = this.almaUserApiClient.retrieveAlmaUsers("application/json", searchstring, limit,offset);
+        List<AlmaUser> usersFound = new ArrayList<>(almaUsers.getUsers());
+        while (almaUsers.getTotalRecordCount() < usersFound.size()) {
+            offset += limit;
+            usersFound.addAll(this.almaUserApiClient.retrieveAlmaUsers("application/json", searchstring, limit,offset).getUsers());
+        }
+        for (AlmaUser almaUser : usersFound) {
+            if (almaUser.getBirthDate().compareTo(dateFromLocalDate(registrationRequest.birthDate)) == 0)
+                return true;
+        }
+        return false;
+    }
+
+    private Date dateFromLocalDate(LocalDate localDate) {
+        ZoneId defaultZoneId = ZoneId.of("GMT");
+        return Date.from(localDate.atStartOfDay().atZone(defaultZoneId).toInstant());
     }
 }

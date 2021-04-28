@@ -4,6 +4,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.unidue.ub.alma.shared.user.AlmaUser;
+import org.unidue.ub.alma.shared.user.AlmaUsers;
+
+import java.util.List;
 
 @FeignClient(name="almaUser", url="https://api-eu.hosted.exlibrisgroup.com/almaws/v1", configuration=FeignConfiguration.class)
 @Service
@@ -25,4 +28,7 @@ public interface AlmaUserApiClient {
 
     @RequestMapping(method= RequestMethod.PUT, value="/users/{identifier}")
     AlmaUser updateUser(@PathVariable String identifier, @RequestBody AlmaUser user);
+
+    @RequestMapping(method = RequestMethod.GET, value = "/users")
+    AlmaUsers retrieveAlmaUsers(@RequestHeader("Accept") String accept, String q, int limit, int offset);
 }
