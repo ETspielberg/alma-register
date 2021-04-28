@@ -30,5 +30,5 @@ public interface AlmaUserApiClient {
     AlmaUser updateUser(@PathVariable String identifier, @RequestBody AlmaUser user);
 
     @RequestMapping(method = RequestMethod.GET, value = "/users")
-    AlmaUsers retrieveAlmaUsers(@RequestHeader("Accept") String accept, String q, int limit, int offset);
+    AlmaUsers retrieveAlmaUsers(@RequestHeader("Accept") String accept, @RequestParam("q") String q, @RequestParam("limit") int limit, @RequestParam("offset") int offset);
 }
