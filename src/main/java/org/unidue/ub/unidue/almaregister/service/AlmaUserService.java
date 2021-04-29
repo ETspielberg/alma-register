@@ -3,18 +3,11 @@ package org.unidue.ub.unidue.almaregister.service;
 import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.unidue.ub.alma.shared.user.*;
-import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
-import org.unidue.ub.unidue.almaregister.client.AlmaAnalyticsReportClient;
 import org.unidue.ub.unidue.almaregister.client.AlmaUserApiClient;
 import org.unidue.ub.unidue.almaregister.model.his.HisExport;
-import org.unidue.ub.unidue.almaregister.model.Overdue;
-import org.unidue.ub.unidue.almaregister.model.OverdueReport;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
-import org.unidue.ub.unidue.almaregister.model.wsclient.ReadAddressByRegistrationnumberResponse;
 import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.exceptions.MissingHisDataException;
 import org.unidue.ub.unidue.almaregister.service.exceptions.MissingShibbolethDataException;
@@ -185,20 +178,27 @@ public class AlmaUserService {
     }
 
     public boolean existsByLastnameAndBirthday(RegistrationRequest registrationRequest) {
-        String searchstring = String.format("q=last_name~%s", registrationRequest.lastName);
+        return false;
+        /*
+        String searchstring = String.format("last_name~%s", registrationRequest.lastName);
         int limit = 50;
         int offset = 0;
         AlmaUsers almaUsers = this.almaUserApiClient.retrieveAlmaUsers("application/json", searchstring, limit,offset);
-        List<AlmaUser> usersFound = new ArrayList<>(almaUsers.getUsers());
+        if (almaUsers.getTotalRecordCount() <= 0)
+            return false;
+        log.info(String.valueOf(almaUsers.getUser().size()));
+        List<AlmaUser> usersFound = almaUsers.getUser();
         while (almaUsers.getTotalRecordCount() < usersFound.size()) {
             offset += limit;
-            usersFound.addAll(this.almaUserApiClient.retrieveAlmaUsers("application/json", searchstring, limit,offset).getUsers());
+            usersFound.addAll(this.almaUserApiClient.retrieveAlmaUsers("application/json", searchstring, limit, offset).getUser());
         }
         for (AlmaUser almaUser : usersFound) {
+            almaUser = this.almaUserApiClient.getUser(almaUser.getPrimaryId(), "application/json");
             if (almaUser.getBirthDate().compareTo(dateFromLocalDate(registrationRequest.birthDate)) == 0)
                 return true;
         }
         return false;
+         */
     }
 
     private Date dateFromLocalDate(LocalDate localDate) {

@@ -116,4 +116,5 @@ public class MvcConfiguration implements WebMvcConfigurer {
         thymeleafViewResolver.setCharacterEncoding("UTF-8");
         return thymeleafViewResolver;
     }
+
 }
