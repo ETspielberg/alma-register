@@ -17,22 +17,27 @@
                 <a th:href="${redirectUrl}">
                     <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
                 </a>
-                <p><span th:text="#{success.shibboleth.login.necessary}"></span></p>
+                <p><span th:utext="#{success.shibboleth.login.necessary}"></span></p>
             </div>
             <div th:case="'06'" class="col">
                 <a th:href="${redirectUrl}">
                     <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
                 </a>
-                <p><span th:text="#{success.shibboleth.login.necessary}"></span></p>
+                <p><span th:utext="#{success.shibboleth.login.necessary}"></span></p>
             </div>
             <div th:case="'20'" class="col">
                 <p>
-                    <span th:text="#{success.documents.necessary.minors}"></span>
+                    <span th:utext="#{success.documents.necessary    }"></span>
                 </p>
             </div>
             <div th:case="'22'" class="col">
                 <p>
-                    <span th:text="#{success.documents.necessary}"></span>
+                    <span th:utext="#{success.documents.necessary}"></span>
+                </p>
+            </div>
+            <div th:case="*" class="col">
+                <p>
+                    <span th:utext="#{success.documents.necessary}"></span>
                 </p>
             </div>
         </div>
