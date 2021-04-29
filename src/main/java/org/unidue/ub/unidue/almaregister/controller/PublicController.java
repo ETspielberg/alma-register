@@ -117,15 +117,28 @@ public class PublicController {
         }
         if (error)
             return new RedirectView("register");
-        try {
-            AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage()), true);
-            log.info(String.format("User %s %s sucessfully registered with new id %s",
-                    almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
-            RedirectView redirectView = new RedirectView("success");
-            redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
-            return redirectView;
-        } catch (Exception e) {
-            throw new AlmaConnectionException("could not create user");
+
+        if (this.almaUserService.existsByLastnameAndBirthday(registrationRequest)) {
+            try {
+                RedirectView redirectView = new RedirectView("alreadyExists");
+                redirectAttribute.addFlashAttribute("redirectUrl", redirectUrl);
+                return redirectView;
+            } catch (Exception e) {
+                log.warn("An error occurred", e);
+                throw new AlmaConnectionException("could not create user");
+            }
+        } else {
+            try {
+                AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage()), true);
+                log.info(String.format("User %s %s sucessfully registered with new id %s",
+                        almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
+                RedirectView redirectView = new RedirectView("success");
+                redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
+                return redirectView;
+            } catch (Exception e) {
+                log.warn("An error occurred", e);
+                throw new AlmaConnectionException("could not create user");
+            }
         }
     }
 }
