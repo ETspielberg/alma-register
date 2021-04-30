@@ -344,7 +344,11 @@ public class RegistrationRequest {
     }
 
     private Date dateFromLocalDate(LocalDate localDate) {
-        ZoneId defaultZoneId = ZoneId.of("GMT");
-        return Date.from(localDate.atStartOfDay().atZone(defaultZoneId).toInstant());
+        try {
+            ZoneId defaultZoneId = ZoneId.of("GMT");
+            return Date.from(localDate.atStartOfDay().atZone(defaultZoneId).toInstant());
+        } catch (NullPointerException npe) {
+            return null;
+        }
     }
 }
