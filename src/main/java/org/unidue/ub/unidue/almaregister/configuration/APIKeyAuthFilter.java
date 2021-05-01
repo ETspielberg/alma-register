@@ -14,7 +14,10 @@ public class APIKeyAuthFilter extends AbstractPreAuthenticatedProcessingFilter {
 
     @Override
     protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
-        return request.getHeader(principalRequestHeader);
+        String apikey = request.getHeader(principalRequestHeader);
+        if (apikey == null || apikey.strip().isEmpty())
+            apikey = request.getParameter(principalRequestHeader);
+        return apikey;
     }
 
     @Override
