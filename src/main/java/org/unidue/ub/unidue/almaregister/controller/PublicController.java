@@ -15,7 +15,6 @@ import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
-import org.unidue.ub.unidue.almaregister.service.MailSenderService;
 
 import java.util.Locale;
 
@@ -30,8 +29,6 @@ public class PublicController {
 
     private final AlmaUserService almaUserService;
 
-    private final MailSenderService mailSenderService;
-
     private final Logger log = LoggerFactory.getLogger(PublicController.class);
 
     /**
@@ -39,9 +36,8 @@ public class PublicController {
      *
      * @param almaUserService saves AlmaUser objects to Alma
      */
-    PublicController(AlmaUserService almaUserService, MailSenderService mailSenderService) {
+    PublicController(AlmaUserService almaUserService) {
         this.almaUserService = almaUserService;
-        this.mailSenderService = mailSenderService;
     }
 
     /**
