@@ -1,5 +1,6 @@
 package org.unidue.ub.unidue.almaregister.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,9 @@ import java.util.Locale;
 public class MvcConfiguration implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
+
+    @Value("${alma.register.datadir:#{systemProperties['user.home']}/.almaregister}")
+    private String localTemplateFolder;
 
     MvcConfiguration(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
@@ -74,7 +78,8 @@ public class MvcConfiguration implements WebMvcConfigurer {
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:locale/messages");
+        messageSource.setBasenames("file:" + localTemplateFolder + "/locale/messages");
+        messageSource.setCacheSeconds(5);
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
