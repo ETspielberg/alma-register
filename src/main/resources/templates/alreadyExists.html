@@ -9,7 +9,8 @@
         <div class="row">
             <div class="col">
                 <h1 th:text="#{already.exists.heading}"></h1>
-                <p th:utext="#{already.exists.description}"></p>
+                <p th:if="${registrationRequest}"  th:utext="#{already.exists.probably.description}"></p>
+                <p th:unless="${registrationRequest}" th:utext="#{already.exists.description}"></p>
             </div>
         </div>
         <div th:if="${redirectUrl}" class="row">
@@ -17,7 +18,29 @@
                 <a th:href="${redirectUrl}">
                     <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
                 </a>
-                <p><span th:text="#{success.shibboleth.login.necessary}"></span></p>
+                <p><span th:unless="${registrationRequest}" th:text="#{success.shibboleth.login.necessary}"></span></p>
+            </div>
+        </div>
+        <div th:if="${registrationRequest}" class="row">
+            <div class="col">
+                <form th:action="@{/confirmRegister}" th:object="${registrationRequest}" method="post">
+                    <input id="gender" type="text" th:field="*{gender}" th:value="*{gender}" hidden>
+                    <input id="title" type="text" th:field="*{title}" th:value="*{title}" hidden>
+                    <input id="firstName" type="text" th:field="*{firstName}" th:value="*{gender}" hidden>
+                    <input id="lastName" type="text" th:field="*{lastName}" th:value="*{gender}" hidden>
+                    <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}" hidden>
+                    <input id="road" type="text" th:field="*{road}" th:value="*{road}" hidden>
+                    <input id="plz" type="text" th:field="*{plz}" th:value="*{plz}" hidden>
+                    <input id="city" type="text" th:field="*{city}" th:value="*{city}" hidden>
+                    <input id="birthDate" type="date" th:field="*{birthDate}" th:value="*{birthDate}" hidden>
+                    <input id="email" type="email" th:field="*{email}" th:value="*{email}" hidden>
+                    <input id="pinNumber" type="text" th:field="*{pinNumber}" th:value="*{pinNumber}" hidden>
+                    <input id="password" type="text" th:field="*{password}" th:value="*{password}" hidden>
+                    <input id="privacyAccepted" type="checkbox" th:field="*{privacyAccepted}" th:value="*{privacyAccepted}" hidden>
+                    <input id="termsAccepted" type="checkbox" th:field="*{termsAccepted}" th:value="*{termsAccepted}" hidden>
+                    <input id="submit" type="submit" class="btn btn-primary"
+                           th:value="#{register.confirm}"/>
+                </form>
             </div>
         </div>
     </div>

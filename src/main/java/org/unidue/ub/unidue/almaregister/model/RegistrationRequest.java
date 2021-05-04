@@ -4,9 +4,13 @@ package org.unidue.ub.unidue.almaregister.model;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.unidue.ub.alma.shared.user.*;
 
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +21,8 @@ import java.util.List;
 public class RegistrationRequest {
 
     private final static SimpleDateFormat pinFormat = new SimpleDateFormat("ddMMyyyy");
+
+    public final static DateTimeFormatter hashFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public String userStatus = "";
 
@@ -253,7 +259,7 @@ public class RegistrationRequest {
      *
      * @return an AlmaUser object
      */
-    public AlmaUser getAlmaUser(String language) {
+    public AlmaUser getAlmaUser(String language, boolean hashActive) {
         AlmaUser almaUser = new AlmaUser()
                 .lastName(lastName)
                 .firstName(firstName)
@@ -277,9 +283,18 @@ public class RegistrationRequest {
                     .preferred(true);
             contactInfo.addEmailItem(emailAddress)
                     .addAddressItem(postalAddress);
-
             Date birthday = dateFromLocalDate(birthDate);
             Date expiryDate;
+            if (hashActive) {
+                String hash = calculateHash();
+                if (hash != null) {
+                    UserIdentifierIdType hashIdentifierIdType = new UserIdentifierIdType().value("06");
+                    UserIdentifier hashIdentifier = new UserIdentifier().idType(hashIdentifierIdType).value(hash).segmentType("internal");
+
+                    hashIdentifier.setStatus("ACTIVE");
+                    almaUser.addUserIdentifierItem(hashIdentifier);
+                }
+            }
             if ("other".equals(userStatus)) {
                 expiryDate = dateFromLocalDate(LocalDate.now());
             } else {
@@ -287,6 +302,7 @@ public class RegistrationRequest {
             }
             UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("01");
             int random = (int) (Math.random() * 1000000);
+
             UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("INACTIVE").value("NEU-" + random).segmentType("internal");
             almaUser.status(new UserStatus().value("INACTIVE"))
                     .userTitle(new UserUserTitle().value(title))
@@ -339,8 +355,31 @@ public class RegistrationRequest {
             }
             UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("03");
             UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(primaryId).segmentType("external");
+            if (hashActive) {
+                String hash = calculateHash();
+            if (hash != null) {
+                UserIdentifierIdType hashIdentifierIdType = new UserIdentifierIdType().value("06");
+                UserIdentifier hashIdentifier = new UserIdentifier().idType(hashIdentifierIdType).value(hash).segmentType("internal");
+
+                hashIdentifier.setStatus("ACTIVE");
+                almaUser.addUserIdentifierItem(hashIdentifier);
+            }
+            }
             almaUser.addUserIdentifierItem(userIdentifier);
-        }        return almaUser.contactInfo(contactInfo);
+        }
+        return almaUser.contactInfo(contactInfo);
+    }
+
+    public String calculateHash() {
+        try {
+            String stringToBeHashed = String.format("%s-%s", this.lastName, hashFormat.format(this.birthDate));
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(stringToBeHashed.getBytes());
+            byte[] digest = md.digest();
+            return DatatypeConverter.printHexBinary(digest);
+        } catch (NoSuchAlgorithmException nsae) {
+            return null;
+        }
     }
 
     private Date dateFromLocalDate(LocalDate localDate) {

@@ -13,13 +13,10 @@ import org.unidue.ub.unidue.almaregister.service.exceptions.MissingHisDataExcept
 import org.unidue.ub.unidue.almaregister.service.exceptions.MissingShibbolethDataException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 
 @Service
 public class AlmaUserService {
@@ -35,8 +32,8 @@ public class AlmaUserService {
     /**
      * constructor based autowiring of alma user api client, the servlet request and the hstudents data repository
      *
-     * @param almaUserApiClient       the Feign client to the Alma User API
-     * @param httpServletRequest      the current request object
+     * @param almaUserApiClient  the Feign client to the Alma User API
+     * @param httpServletRequest the current request object
      */
     AlmaUserService(AlmaUserApiClient almaUserApiClient,
                     HttpServletRequest httpServletRequest,
@@ -96,7 +93,7 @@ public class AlmaUserService {
                     LocalDate birthday = LocalDate.parse(hisExports.getGebdat(), formatter);
                     registrationRequest.setBirthDate(birthday);
                 } catch (Exception e) {
-                    log.warn("could not parse birthday",e);
+                    log.warn("could not parse birthday", e);
                 }
                 registrationRequest.cardNumber = matrikelString;
                 long matrikel = Long.parseLong(hisExports.getMtknr());
@@ -177,32 +174,13 @@ public class AlmaUserService {
         return this.almaUserApiClient.updateUser(userId, almaUser);
     }
 
-    public boolean existsByLastnameAndBirthday(RegistrationRequest registrationRequest) {
-        return false;
-        /*
-        String searchstring = String.format("last_name~%s", registrationRequest.lastName);
-        int limit = 50;
-        int offset = 0;
-        AlmaUsers almaUsers = this.almaUserApiClient.retrieveAlmaUsers("application/json", searchstring, limit,offset);
-        if (almaUsers.getTotalRecordCount() <= 0)
+    public boolean existsByHash(RegistrationRequest registrationRequest) {
+        String hash = registrationRequest.calculateHash();
+        try {
+            this.almaUserApiClient.getUser(hash, "application/json");
+            return true;
+        } catch (Exception e) {
             return false;
-        log.info(String.valueOf(almaUsers.getUser().size()));
-        List<AlmaUser> usersFound = almaUsers.getUser();
-        while (almaUsers.getTotalRecordCount() < usersFound.size()) {
-            offset += limit;
-            usersFound.addAll(this.almaUserApiClient.retrieveAlmaUsers("application/json", searchstring, limit, offset).getUser());
         }
-        for (AlmaUser almaUser : usersFound) {
-            almaUser = this.almaUserApiClient.getUser(almaUser.getPrimaryId(), "application/json");
-            if (almaUser.getBirthDate().compareTo(dateFromLocalDate(registrationRequest.birthDate)) == 0)
-                return true;
-        }
-        return false;
-         */
-    }
-
-    private Date dateFromLocalDate(LocalDate localDate) {
-        ZoneId defaultZoneId = ZoneId.of("GMT");
-        return Date.from(localDate.atStartOfDay().atZone(defaultZoneId).toInstant());
     }
 }
