@@ -1,7 +1,5 @@
 package org.unidue.ub.unidue.almaregister.jobs.his;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.BeforeStep;
@@ -14,8 +12,6 @@ import java.util.Map;
 
 @Service
 public class HisLineProcessor implements ItemProcessor<String, HisExport> {
-
-    private final Logger log = LoggerFactory.getLogger(HisLineProcessor.class);
 
     private Map<String, Integer> fieldMap;
 

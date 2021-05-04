@@ -4,7 +4,9 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 
 public class ApiKeyAuth implements RequestInterceptor {
+
     private final String location;
+
     private final String paramName;
 
     private String apiKey;
@@ -19,23 +21,12 @@ public class ApiKeyAuth implements RequestInterceptor {
         this.paramName = paramName;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public String getParamName() {
-        return paramName;
-    }
-
-    public String getApiKey() {
-        return apiKey;
-    }
-
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
     }
 
     /**
+     * add api key to the request either as header, query parameter, or cookie
      * @param template the request template the authentication data are added to.
      */
     @Override

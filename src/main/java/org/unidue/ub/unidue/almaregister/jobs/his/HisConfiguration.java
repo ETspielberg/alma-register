@@ -8,7 +8,6 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.unidue.ub.unidue.almaregister.model.his.HisExport;
-import org.unidue.ub.unidue.almaregister.repository.HisExportRepository;
 import org.unidue.ub.unidue.almaregister.service.HisService;
 
 @Configuration
@@ -21,8 +20,7 @@ public class HisConfiguration {
 
     private final HisService hisService;
 
-    HisConfiguration(HisExportRepository hisExportRepository,
-                     StepBuilderFactory stepBuilderFactory,
+    HisConfiguration(StepBuilderFactory stepBuilderFactory,
                      JobBuilderFactory jobBuilderFactory,
                      HisService hisService) {
         this.stepBuilderFactory = stepBuilderFactory;

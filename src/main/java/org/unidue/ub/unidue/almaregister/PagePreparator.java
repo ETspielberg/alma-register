@@ -37,7 +37,6 @@ public class PagePreparator {
      * collects the template file from the given web page, cleans it and stores it as master template for the thymeleaf template engine
      */
     @Scheduled(cron = "0 0 2 * * *")
-    //@Scheduled(fixedRate = 5000)
     public void collectMasterTemplate() {
         List<String> languages = Arrays.asList("en", "de");
         for (String language : languages) {
@@ -45,18 +44,13 @@ public class PagePreparator {
                 String fragment = "layout:fragment";
                 Document doc;
                 String templateFile;
-                switch (language) {
-                    case "en": {
-                        doc = Jsoup.connect(masterTemplateHost + masterTemplatePathEn).get();
-                        fragment = "layout:fragment";
-                        templateFile = "layout_en.html";
-                        break;
-                    }
-                    default: {
-                        doc = Jsoup.connect(masterTemplateHost + masterTemplatePath).get();
-
-                        templateFile = "layout_de.html";
-                    }
+                if ("en".equals(language)) {
+                    doc = Jsoup.connect(masterTemplateHost + masterTemplatePathEn).get();
+                    fragment = "layout:fragment";
+                    templateFile = "layout_en.html";
+                } else {
+                    doc = Jsoup.connect(masterTemplateHost + masterTemplatePath).get();
+                    templateFile = "layout_de.html";
                 }
                 Elements html = doc.select("html");
                 html.attr("xmlns:th", "http://www.thymeleaf.org");

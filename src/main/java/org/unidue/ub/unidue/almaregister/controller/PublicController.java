@@ -114,9 +114,11 @@ public class PublicController {
         if (error)
             return new RedirectView("register");
 
-        if (this.almaUserService.existsByLastnameAndBirthday(registrationRequest)) {
+
+        if (this.almaUserService.existsByHash(registrationRequest)) {
             try {
                 RedirectView redirectView = new RedirectView("alreadyExists");
+                redirectAttribute.addFlashAttribute("registrationRequest", registrationRequest);
                 redirectAttribute.addFlashAttribute("redirectUrl", redirectUrl);
                 return redirectView;
             } catch (Exception e) {
@@ -125,7 +127,7 @@ public class PublicController {
             }
         } else {
             try {
-                AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage()), true);
+                AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage(), true), true);
                 log.info(String.format("User %s %s sucessfully registered with new id %s",
                         almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
                 RedirectView redirectView = new RedirectView("success");
@@ -136,5 +138,23 @@ public class PublicController {
                 throw new AlmaConnectionException("could not create user");
             }
         }
+    }
+
+    @GetMapping("/alreadyExists")
+    public String showAlreadyExistPage(Model model) {
+        return "alreadyExists";
+    }
+
+    @PostMapping("/confirmRegister")
+    public RedirectView registerAlmaUserAnyway(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, Locale locale, final RedirectAttributes redirectAttribute) {
+        log.info(registrationRequest.firstName + " " + registrationRequest.lastName);
+        log.info("Privacy: " + registrationRequest.privacyAccepted);
+        log.info("Terms: " + registrationRequest.termsAccepted);
+        AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage(), false), true);
+        log.info(String.format("User %s %s sucessfully registered with new id %s",
+                almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
+        RedirectView redirectView = new RedirectView("success");
+        redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
+        return redirectView;
     }
 }

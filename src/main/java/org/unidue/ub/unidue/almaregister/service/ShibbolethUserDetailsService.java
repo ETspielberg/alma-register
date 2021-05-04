@@ -38,8 +38,7 @@ public class ShibbolethUserDetailsService implements UserDetailsService {
         Set<GrantedAuthority> grantedAuthoritySet = new HashSet<>();
         if (scopedAffiliation != null)
                 grantedAuthoritySet.add(new SimpleGrantedAuthority("ROLE_" + scopedAffiliation.substring(0, scopedAffiliation.indexOf("@")).toUpperCase()));
-        UserDetails user = new User(username, "password", true, true, true, true,
+        return new User(username, "password", true, true, true, true,
                 grantedAuthoritySet);
-        return user;
     }
 }

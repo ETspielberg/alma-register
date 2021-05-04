@@ -1,5 +1,6 @@
 package org.unidue.ub.unidue.almaregister.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ public class ApiController {
         this.addressWebServiceClient = addressWebServiceClient;
     }
 
-    @GetMapping("address/{zimId}")
+    @GetMapping(name="address/{zimId}", produces=MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Address> getAddressdata(@PathVariable String zimId) {
         return ResponseEntity.ok(addressWebServiceClient.getAddressByZimId(zimId).getAddress());
     }

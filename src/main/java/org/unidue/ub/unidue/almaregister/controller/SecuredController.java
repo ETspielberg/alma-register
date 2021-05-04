@@ -16,7 +16,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.alma.shared.user.UserIdentifier;
 import org.unidue.ub.alma.shared.user.UserIdentifierIdType;
-import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
@@ -105,7 +104,7 @@ public class SecuredController {
         if (error) {
             return new RedirectView("review");
         }
-        AlmaUser almaUser = registrationRequest.getAlmaUser(locale.getLanguage());
+        AlmaUser almaUser = registrationRequest.getAlmaUser(locale.getLanguage(), true);
         this.almaUserService.createAlmaUser(almaUser, true);
         RedirectView redirectView = new RedirectView("success");
         redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
@@ -146,8 +145,7 @@ public class SecuredController {
      * @throws AlmaConnectionException thrown if no connection to the alma Users API could be established
      */
     @PostMapping("/connect")
-    public RedirectView confirmConnect(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, Locale locale, final RedirectAttributes redirectAttribute) throws AlmaConnectionException {
-        boolean error = false;
+    public RedirectView confirmConnect(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, final RedirectAttributes redirectAttribute) throws AlmaConnectionException {
         if (!registrationRequest.privacyAccepted) {
             result.rejectValue("privacyAccepted", "error.privacyAccepted");
             return new RedirectView("review");

@@ -49,7 +49,7 @@ public class FileReader implements ItemReader<String> {
         String readLine;
         while ((readLine = bufferedReader.readLine()) != null ) {
             if (!readLine.isEmpty()) {
-                if (readLine.toLowerCase().startsWith("Mtknr#")) {
+                if (readLine.toLowerCase().startsWith("mtknr#")) {
                     log.info("skipping line");
                     continue;
                 }

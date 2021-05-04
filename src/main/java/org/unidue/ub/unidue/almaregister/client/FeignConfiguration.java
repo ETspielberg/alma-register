@@ -1,7 +1,6 @@
 package org.unidue.ub.unidue.almaregister.client;
 
 import feign.RequestInterceptor;
-import feign.auth.BasicAuthRequestInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +31,10 @@ public class FeignConfiguration {
         return apiKeyAuth;
     }
 
+    /**
+     * enabling Feign Logging
+     * @return Feign logger Level
+     */
     @Bean
     feign.Logger.Level feignLoggerLevel() {
         return feign.Logger.Level.FULL;

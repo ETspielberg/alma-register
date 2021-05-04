@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.unidue.ub.unidue.almaregister.model.Overdue;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -15,8 +14,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
-
-import static com.fasterxml.jackson.databind.DeserializationFeature.*;
 
 @Service
 public class AlmaAnalyticsReportClient {
@@ -31,6 +28,14 @@ public class AlmaAnalyticsReportClient {
     @Value("${alma.api.user.key}")
     private String almaUserApiKey;
 
+    /**
+     * retreives an Analytics report
+     * @param reportPath the path of the report
+     * @param clazz the class of the report type
+     * @param <T> the returned report type
+     * @return the report
+     * @throws IOException thrown if no connection could be established
+     */
     public <T> T getReport(String reportPath, Class<T> clazz) throws IOException {
         String url = String.format(urlTemplate, reportPath, almaUserApiKey);
         log.debug("querying url: " + url);
