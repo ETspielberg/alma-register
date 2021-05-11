@@ -37,17 +37,15 @@
                                 <label for="firstName" th:text="#{first.name}">Vorname</label>
 
                             </th>
-                            <td th:text="*{firstName}"></td>
-                            <input id="firstName" type="text" th:field="*{firstName}" th:value="*{firstName}"
-                                   readonly="readonly" hidden>
+                            <!--<td th:text="*{firstName}"></td>-->
+                            <input id="firstName" type="text" th:field="*{firstName}" th:value="*{firstName}">
                         </tr>
                         <tr>
                             <th>
                                 <label for="lastName" th:text="#{last.name}">Name</label>
                             </th>
-                            <td th:text="*{lastName}"></td>
-                            <input id="lastName" type="text" th:field="*{lastName}" th:value="*{lastName}"
-                                   readonly="readonly" hidden>
+                            <!-- <td th:text="*{lastName}"></td>-->
+                            <input id="lastName" type="text" th:field="*{lastName}" th:value="*{lastName}">
                         </tr>
                         <tr>
                             <th>
