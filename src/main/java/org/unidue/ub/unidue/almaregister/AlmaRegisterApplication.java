@@ -12,6 +12,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import java.nio.charset.StandardCharsets;
+
 @SpringBootApplication
 @EnableFeignClients
 @EnableScheduling
@@ -40,6 +42,7 @@ public class AlmaRegisterApplication {
         Connector ajpConnector = new Connector("AJP/1.3");
         ajpConnector.setPort(ajpPort);
         ajpConnector.setSecure(false);
+        ajpConnector.setURIEncoding(StandardCharsets.UTF_8.name());
         ajpConnector.setAllowTrace(false);
         ajpConnector.setAttribute("tomcatAuthentication", false);
         ajpConnector.setAttribute("connectionTimeout", 20000);
