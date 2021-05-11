@@ -46,12 +46,12 @@ public class MailSenderService {
     }
 
     private String buildMailBody(RegistrationRequest registrationRequest) {
-        return "Liebe Kolleg:innen\n\n" +
+        return "Liebe Kolleg:innen,\n\n" +
                 String.format("Nutzer:in %s %s hat sich gerade über das Webformular angemeldet.\n",
                         registrationRequest.firstName, registrationRequest.lastName) +
-                String.format("Die ID %s vom Typ %s ist bereits im System vorhanden.\n",
+                String.format("Die eingegebene ID \"%s\" vom Typ %s ist bereits im System vorhanden.\n\n",
                         registrationRequest.duplicateId, registrationRequest.duplicateIdType) +
-                "Mit freundlichen Grüßen\n" +
+                "Mit freundlichen Grüßen,\n" +
                 "Das Registrierungsformular\n" +
                 "\n\nDies ist eine automatisch generierte E-Mail.\n";
     }
