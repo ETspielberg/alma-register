@@ -104,6 +104,14 @@ public class SecuredController {
         if (error) {
             return new RedirectView("review");
         }
+        boolean exists = this.almaUserService.userExists(registrationRequest);
+        if (exists) {
+            RedirectView redirectView = new RedirectView("reviewExisting");
+            redirectAttribute.addFlashAttribute("redirectUrl", redirectUrl);
+            redirectAttribute.addFlashAttribute("registrationRequest", registrationRequest);
+            redirectAttribute.addFlashAttribute("userStatus", registrationRequest.userStatus);
+            return redirectView;
+        }
         AlmaUser almaUser = registrationRequest.getAlmaUser(locale.getLanguage(), true);
         this.almaUserService.createAlmaUser(almaUser, true);
         RedirectView redirectView = new RedirectView("success");
