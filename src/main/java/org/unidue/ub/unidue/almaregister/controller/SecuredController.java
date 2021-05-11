@@ -17,6 +17,7 @@ import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.alma.shared.user.UserIdentifier;
 import org.unidue.ub.alma.shared.user.UserIdentifierIdType;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
+import org.unidue.ub.unidue.almaregister.service.MailSenderService;
 import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 import org.unidue.ub.unidue.almaregister.service.exceptions.MissingHisDataException;
@@ -39,6 +40,8 @@ public class SecuredController {
     @Value("${alma.redirect.url:https://www.uni-due.de/ub}")
     private String redirectUrl;
 
+    private final MailSenderService mailSenderService;
+
     private final Logger log = LoggerFactory.getLogger(SecuredController.class);
 
     @GetMapping("/success")
@@ -53,8 +56,9 @@ public class SecuredController {
      *
      * @param almaUserService the Alma user service, responsible for retrieving the registration request object from the Shibboleth request attributes and to submit the corresponding AlmaUser object to the Alma Users API
      */
-    SecuredController(AlmaUserService almaUserService) {
+    SecuredController(AlmaUserService almaUserService, MailSenderService mailSenderService) {
         this.almaUserService = almaUserService;
+        this.mailSenderService = mailSenderService;
     }
 
     /**
@@ -66,26 +70,21 @@ public class SecuredController {
      */
     @GetMapping("/review")
     public String getReviewPage(Model model) throws MissingShibbolethDataException {
-        RegistrationRequest registrationRequest = this.almaUserService.generateRegistrationRequest();
-        boolean exists = false;
-        if (this.almaUserService.checkExistingUser(registrationRequest.primaryId) != null)
-            exists = true;
-        if (this.almaUserService.existsByHash(registrationRequest))
-            exists = true;
-        if (!exists) {
-            if (this.almaUserService.existsByHash(registrationRequest))
+        RegistrationRequest registrationRequest = this.almaUserService.generateRegistrationRequestFromShibboleth();
 
-            model.addAttribute("registrationRequest", registrationRequest);
-            return "review";
-        } else {
-            if (registrationRequest.userStatus.equals("student") && registrationRequest.externalId == null) {
-                model.addAttribute("userStatus", registrationRequest.userStatus);
-                model.addAttribute("matrikelGiven", false);
-            }
+        String duplicatedIdType = this.almaUserService.userExists(registrationRequest);
+        boolean exists = !duplicatedIdType.isEmpty();
 
-            model.addAttribute("redirectUrl", redirectUrl);
-            return "alreadyExists";
-        }
+        model.addAttribute("registrationRequest", registrationRequest);
+        model.addAttribute("redirectUrl", redirectUrl);
+        model.addAttribute("userStatus", registrationRequest.userStatus);
+        model.addAttribute("exists", exists);
+        model.addAttribute("duplicatedIdType", duplicatedIdType);
+        if (registrationRequest.userStatus.equals("student") && registrationRequest.externalId == null) {
+            model.addAttribute("matrikelGiven", false);
+        } else
+            model.addAttribute("matrikelGiven", true);
+        return exists ? "reviewExisting" : "review";
     }
 
     /**
@@ -126,7 +125,7 @@ public class SecuredController {
      */
     @GetMapping("/connect")
     public String getConnectPage(Model model) throws MissingShibbolethDataException {
-        RegistrationRequest registrationRequest = this.almaUserService.generateRegistrationRequest();
+        RegistrationRequest registrationRequest = this.almaUserService.generateRegistrationRequestFromShibboleth();
         AlmaUser almaUser = this.almaUserService.checkExistingUser(registrationRequest.primaryId);
         if (almaUser == null) {
             model.addAttribute("registrationRequest", registrationRequest);

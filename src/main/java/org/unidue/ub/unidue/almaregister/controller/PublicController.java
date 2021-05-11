@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
+import org.unidue.ub.unidue.almaregister.service.MailSenderService;
 import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 
@@ -29,6 +30,8 @@ public class PublicController {
 
     private final AlmaUserService almaUserService;
 
+    private final MailSenderService mailSenderService;
+
     private final Logger log = LoggerFactory.getLogger(PublicController.class);
 
     /**
@@ -36,8 +39,10 @@ public class PublicController {
      *
      * @param almaUserService saves AlmaUser objects to Alma
      */
-    PublicController(AlmaUserService almaUserService) {
+    PublicController(AlmaUserService almaUserService,
+                     MailSenderService mailSenderService) {
         this.almaUserService = almaUserService;
+        this.mailSenderService = mailSenderService;
     }
 
     /**
@@ -92,47 +97,25 @@ public class PublicController {
      * controller for the registration request submission (POST).
      *
      * @param registrationRequest the registration request object, from which the AlmaUser object can be retreived.
-     * @param result              the result to display rejection if the privacy conditions or the terms of use have not been accepted
+     * @param locale the selected locale (currently 'en' and 'de' supported)
+     * @param model the model to be used for the display of the results
      * @return the registration page with errors, if the terms or the privacy was not accepted, otherwise a redirect to the success page
      */
     @PostMapping("/register")
-    public RedirectView registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, Locale locale, final RedirectAttributes redirectAttribute) {
-        boolean error = false;
-        log.info(registrationRequest.firstName + " " + registrationRequest.lastName);
-        log.info("Privacy: " + registrationRequest.privacyAccepted);
-        log.info("Terms: " + registrationRequest.termsAccepted);
-        if (!registrationRequest.privacyAccepted) {
-            result.rejectValue("privacyAccepted", "error.privacyAccepted");
-            log.warn("error.privacyAccepted");
-            error = true;
-        }
-        if (!registrationRequest.termsAccepted) {
-            result.rejectValue("termsAccepted", "error.termsAccepted");
-            log.warn("error.termsAccepted");
-            error = true;
-        }
-        if (error)
-            return new RedirectView("register");
-
-
-        if (this.almaUserService.existsByHash(registrationRequest)) {
-            try {
-                RedirectView redirectView = new RedirectView("alreadyExists");
-                redirectAttribute.addFlashAttribute("registrationRequest", registrationRequest);
-                redirectAttribute.addFlashAttribute("redirectUrl", redirectUrl);
-                return redirectView;
-            } catch (Exception e) {
-                log.warn("An error occurred", e);
-                throw new AlmaConnectionException("could not create user");
-            }
+    public String registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, Locale locale, Model model) {
+        if (!this.almaUserService.userExists(registrationRequest).isEmpty()) {
+            model.addAttribute("registrationRequest", registrationRequest);
+            model.addAttribute("redirectUrl", redirectUrl);
+            model.addAttribute("duplicatedId", registrationRequest.calculateHash());
+            model.addAttribute("duplicatedIdType", "Dublettencheck");
+            return "alreadyExists";
         } else {
             try {
                 AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage(), true), true);
                 log.info(String.format("User %s %s sucessfully registered with new id %s",
                         almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
-                RedirectView redirectView = new RedirectView("success");
-                redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
-                return redirectView;
+                model.addAttribute("userGroup", almaUser.getUserGroup().getValue());
+                return "success";
             } catch (Exception e) {
                 log.warn("An error occurred", e);
                 throw new AlmaConnectionException("could not create user");

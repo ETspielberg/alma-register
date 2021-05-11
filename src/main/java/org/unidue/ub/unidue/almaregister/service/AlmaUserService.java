@@ -44,6 +44,72 @@ public class AlmaUserService {
     }
 
     /**
+     * retrieves an existing Alma account
+     * @param identifier the identifier by which the Alma account is retrieved
+     * @return the created AlmaUser object
+     */
+    public AlmaUser getExistingAccount(String identifier) {
+        return this.almaUserApiClient.getUser(identifier, "application/json");
+    }
+
+    /**
+     * updates an existing Alma account
+     * @param identifier the identifier of the Alma account to be updated
+     * @param almaUser the Alma account object to be updated
+     * @return the updated AlmaUser object
+     */
+    public AlmaUser updateAlmaUser(String identifier, AlmaUser almaUser) {
+        return this.almaUserApiClient.updateUser(identifier, almaUser);
+    }
+
+    /**
+     * calls the Alma API to create a user account
+     *
+     * @param almaUser        the AlmaUser to be created
+     * @param pinNotification whether a notification E-Mail about the new pin shall be send
+     * @throws AlmaConnectionException thrown, ich the connection to the Alma API cannot be established
+     */
+    public AlmaUser createAlmaUser(AlmaUser almaUser, boolean pinNotification) throws AlmaConnectionException {
+        try {
+            return this.almaUserApiClient.postUsers("application/json", almaUser, pinNotification);
+        } catch (Exception e) {
+            log.warn("could not create user", e);
+            throw new AlmaConnectionException("could not create user");
+        }
+    }
+
+    /**
+     * checks, whether a user with the given uid exists in Alma
+     *
+     * @param identifier the uid to be checked
+     * @return a AlmaUser object, if the uid was found in Alma, null otherwise.
+     */
+    public AlmaUser checkExistingUser(String identifier) {
+        try {
+            return getExistingAccount(identifier);
+        } catch (FeignException fe) {
+            return null;
+        }
+    }
+
+    /**
+     * checks, whether a user with the given uid exists in Alma
+     *
+     * @param registrationRequest the registration request to be checked
+     * @return a AlmaUser object, if the uid was found in Alma, null otherwise.
+     */
+    public String userExists(RegistrationRequest registrationRequest) {
+        if (!registrationRequest.primaryId.isEmpty() && checkExistingUser(registrationRequest.primaryId) != null)
+            return "Unikennung";
+        if (!registrationRequest.cardNumber.isEmpty() && checkExistingUser(registrationRequest.cardNumber) != null)
+            return "Strichcode";
+        if (checkExistingUser(registrationRequest.calculateHash()) != null)
+            return "Dublettencheck";
+        else
+            return "";
+    }
+
+    /**
      * takes the Shibboleth attributes persistent-id, givenName, sn, affiliation, uid and mail and generates a
      * corresponding alma user registration request object.
      *
@@ -51,13 +117,18 @@ public class AlmaUserService {
      * @throws MissingShibbolethDataException thrown if the necessary Shibboleth attributes are not present.
      * @throws MissingHisDataException        thrown if the data from the students information system are not present.
      */
-    public RegistrationRequest generateRegistrationRequest() throws MissingShibbolethDataException, MissingHisDataException {
+    public RegistrationRequest generateRegistrationRequestFromShibboleth() throws MissingShibbolethDataException, MissingHisDataException {
+        // create bare registration request
         RegistrationRequest registrationRequest = new RegistrationRequest();
+
+        // set encoding of the servlet request in order to retrieve apropriate characters
         try {
             this.httpServletRequest.setCharacterEncoding(StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException uee) {
             log.warn("could not retrieve request with encoding utf-8. using standard encoding instead");
         }
+
+        // retrieve id from shibboleth attributes
         try {
             // try to read the shibboleth id
             String id = ((String) this.httpServletRequest.getAttribute("SHIB_persistent-id")).split("!")[2];
@@ -76,11 +147,13 @@ public class AlmaUserService {
         registrationRequest.externalId = zimId;
         registrationRequest.email = (String) this.httpServletRequest.getAttribute("SHIB_mail");
         registrationRequest.primaryId = zimId;
+
         // if no data can be obtained from the shibboleth response
         if (type == null)
             throw new MissingShibbolethDataException("no type given");
         if (type.contains("student")) {
             registrationRequest.userStatus = "01";
+
             // if the user is a student collect the data from the student system to fill in further user information
             log.debug("setting attributes for student");
             try {
@@ -95,13 +168,16 @@ public class AlmaUserService {
                 } catch (Exception e) {
                     log.warn("could not parse birthday", e);
                 }
-                registrationRequest.cardNumber = matrikelString;
+
+                // calculate card number from his export data
                 long matrikel = Long.parseLong(hisExports.getMtknr());
                 long cardCurrens = 0L;
                 if (hisExports.getCardCurrens() != null && !hisExports.getCardCurrens().isEmpty()) {
                     cardCurrens = Long.parseLong(hisExports.getCardCurrens());
                 }
                 registrationRequest.cardNumber = String.format("%sS%08d%02d", hisExports.getCampus(), matrikel, cardCurrens);
+
+                // set gender
                 switch (String.valueOf(hisExports.getGeschl())) {
                     case "0": {
                         registrationRequest.setGender("NONE");
@@ -132,55 +208,5 @@ public class AlmaUserService {
             registrationRequest.userStatus = "22";
         }
         return registrationRequest;
-    }
-
-
-    /**
-     * calls the Alma API to create a user account
-     *
-     * @param almaUser        the AlmaUser to be created
-     * @param pinNotification whether a notification E-Mail about the new pin shall be send
-     * @throws AlmaConnectionException thrown, ich the connection to the Alma API cannot be established
-     */
-    public AlmaUser createAlmaUser(AlmaUser almaUser, boolean pinNotification) throws AlmaConnectionException {
-        try {
-            return this.almaUserApiClient.postUsers("application/json", almaUser, pinNotification);
-        } catch (Exception e) {
-            log.warn("could not create user", e);
-            throw new AlmaConnectionException("could not create user");
-        }
-    }
-
-    /**
-     * checks, whether a user with the given uid exists in Alma
-     *
-     * @param identifier the uid to be checked
-     * @return a AlmaUser object, if the uid was found in Alma, null otherwise.
-     */
-    public AlmaUser checkExistingUser(String identifier) {
-        try {
-            return this.almaUserApiClient.getUser(identifier, "application/json");
-        } catch (FeignException fe) {
-            return null;
-        }
-    }
-
-
-    public AlmaUser getExistingAccount(String cardNumber) {
-        return this.almaUserApiClient.getUser(cardNumber, "application/json");
-    }
-
-    public AlmaUser updateAlmaUser(String userId, AlmaUser almaUser) {
-        return this.almaUserApiClient.updateUser(userId, almaUser);
-    }
-
-    public boolean existsByHash(RegistrationRequest registrationRequest) {
-        String hash = registrationRequest.calculateHash();
-        try {
-            this.almaUserApiClient.getUser(hash, "application/json");
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 }

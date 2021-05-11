@@ -3,81 +3,59 @@ package org.unidue.ub.unidue.almaregister.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.unidue.ub.alma.shared.user.AlmaUser;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Locale;
+import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 
 @Service
 public class MailSenderService {
 
     // the email address to appear as "from"
-    @Value("${alma.register.email.from}")
-    private String registerEmailFrom;
+    @Value("${alma.user.exists.email.from}")
+    private String userExistsEmailFrom;
+
+    // the email address to appear as "from"
+    @Value("${alma.user.exists.email.to}")
+    private String userExistsEmailTo;
 
     private final JavaMailSender emailSender;
 
     private final TemplateEngine templateEngine;
 
-    private final MessageSource messageSource;
-
     private static final Logger log = LoggerFactory.getLogger(MailSenderService.class);
 
 
     MailSenderService(
-            // error on unknown bean for emailSender can be ignored, emailSender bean is created from configuration properties
+            // potential error on unknown bean for emailSender can be ignored, emailSender bean is created from configuration properties
             JavaMailSender emailSender,
-            TemplateEngine templateEngine,
-            MessageSource messageSource
+            TemplateEngine templateEngine
     ) {
         this.emailSender = emailSender;
         this.templateEngine = templateEngine;
-        this.messageSource = messageSource;
     }
 
-    public void sendNotificationMail(AlmaUser almaUser, Locale locale) {
-        String email = almaUser.getContactInfo().getEmail().get(0).getEmailAddress();
+    public void sendNotificationMail(RegistrationRequest registrationRequest, String duplicatedId, String duplicatedIdType) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setFrom(registerEmailFrom);
-            messageHelper.setTo(email);
-            String text = buildMailBody(almaUser, locale);
-            if ("en".equalsIgnoreCase(locale.getLanguage()))
-                messageHelper.setSubject("Welcome to the library of the University of Duisburg-Essen");
-            else
-                messageHelper.setSubject("Herzlich willkommen an der Universitätsbibliothek Duisburg-Essen");
-            messageHelper.setText(text, true);
+            messageHelper.setFrom(userExistsEmailFrom);
+            messageHelper.setTo(userExistsEmailTo);
+            String text = buildMailBody(registrationRequest, duplicatedId, duplicatedIdType);
+            messageHelper.setSubject("Nutzer eventuell dublett vorhanden");
+            messageHelper.setText(text);
         };
         emailSender.send(messagePreparator);
-        log.debug("sent email to " + email);
+        log.debug("sent dublettencheck email");
     }
 
-    private String buildMailBody(AlmaUser almaUser, Locale language) {
-        Context context = new Context();
-        context.setVariable("lastname", almaUser.getLastName());
-        context.setVariable("firstname", almaUser.getFirstName());
-        LocalDate birthdate = almaUser.getBirthDate().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        LocalDate now = LocalDate.now();
-        long diff = ChronoUnit.YEARS.between(birthdate, now);
-        boolean isMinor = diff < 18;
-        context.setVariable("isMinor", isMinor);
-        context.setVariable("primaryId", almaUser.getPrimaryId());
-        context.setVariable("gender", almaUser.getGender().getDesc());
-        context.setLocale(language);
-        log.info(almaUser.getGender().getDesc());
-        context.setVariable("title", almaUser.getUserTitle().getDesc());
-        return templateEngine.process("registrationSuccessMailTemplate", context);
+    private String buildMailBody(RegistrationRequest registrationRequest, String duplicatedId, String duplicatedIdType) {
+        return String.format("Der Nutzer %s %s hat sich gerade angemeldet.\n", registrationRequest.firstName, registrationRequest.lastName) +
+                String.format("Die ID %s vom Typ %s ist bereits im System vorhanden.\n", duplicatedId, duplicatedIdType) +
+                "Mit freundlichen Grüßen\n" +
+                "\nDies ist eine automatisch generierte E-Mail.\n";
     }
 
 }
