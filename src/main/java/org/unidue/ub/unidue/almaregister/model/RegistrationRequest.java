@@ -69,6 +69,12 @@ public class RegistrationRequest {
 
     public String roomNumber = "";
 
+    public boolean exists = false;
+
+    public String duplicateId = "";
+
+    public String duplicateIdType = "";
+
     public List<String> additionalEmailAdresses = new ArrayList<>();
 
     public RegistrationRequest() {
@@ -252,6 +258,30 @@ public class RegistrationRequest {
 
     public void setPinNumber(int pinNumber) {
         this.pinNumber = pinNumber;
+    }
+
+    public boolean getExists() {
+        return exists;
+    }
+
+    public void setExists(boolean exists) {
+        this.exists = exists;
+    }
+
+    public String getDuplicateId() {
+        return duplicateId;
+    }
+
+    public void setDuplicateId(String duplicateId) {
+        this.duplicateId = duplicateId;
+    }
+
+    public String getDuplicateIdType() {
+        return duplicateIdType;
+    }
+
+    public void setDuplicateIdType(String duplicateIdType) {
+        this.duplicateIdType = duplicateIdType;
     }
 
     /**

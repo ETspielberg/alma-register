@@ -14,6 +14,7 @@ import org.unidue.ub.unidue.almaregister.service.exceptions.MissingShibbolethDat
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -98,15 +99,27 @@ public class AlmaUserService {
      * @param registrationRequest the registration request to be checked
      * @return a AlmaUser object, if the uid was found in Alma, null otherwise.
      */
-    public String userExists(RegistrationRequest registrationRequest) {
-        if (!registrationRequest.primaryId.isEmpty() && checkExistingUser(registrationRequest.primaryId) != null)
-            return "Unikennung";
-        if (!registrationRequest.cardNumber.isEmpty() && checkExistingUser(registrationRequest.cardNumber) != null)
-            return "Strichcode";
-        if (checkExistingUser(registrationRequest.calculateHash()) != null)
-            return "Dublettencheck";
+    public boolean userExists(RegistrationRequest registrationRequest) {
+        if (!registrationRequest.primaryId.isEmpty() && checkExistingUser(registrationRequest.primaryId) != null) {
+            registrationRequest.setExists(true);
+            registrationRequest.setDuplicateId(registrationRequest.primaryId);
+            registrationRequest.setDuplicateIdType("UniKennung");
+            return true;
+        }
+        if (!registrationRequest.cardNumber.isEmpty() && checkExistingUser(registrationRequest.cardNumber) != null) {
+            registrationRequest.setExists(true);
+            registrationRequest.setDuplicateId(registrationRequest.cardNumber);
+            registrationRequest.setDuplicateIdType("Strichcode");
+            return true;
+        }
+        if (checkExistingUser(registrationRequest.calculateHash()) != null) {
+            registrationRequest.setExists(true);
+            registrationRequest.setDuplicateId(registrationRequest.calculateHash());
+            registrationRequest.setDuplicateIdType("Dublettencheck");
+            return true;
+        }
         else
-            return "";
+            return false;
     }
 
     /**
@@ -140,12 +153,12 @@ public class AlmaUserService {
         }
 
         // set the values as obtained by the shibboleth attributes
-        registrationRequest.firstName = ((String) this.httpServletRequest.getAttribute("SHIB_givenName"));
-        registrationRequest.lastName = ((String) this.httpServletRequest.getAttribute("SHIB_sn"));
+        registrationRequest.firstName = coreectEncoding(((String) this.httpServletRequest.getAttribute("SHIB_givenName")));
+        registrationRequest.lastName = coreectEncoding(((String) this.httpServletRequest.getAttribute("SHIB_sn")));
         String type = (String) this.httpServletRequest.getAttribute("SHIB_affiliation");
         String zimId = (String) this.httpServletRequest.getAttribute("SHIB_uid");
         registrationRequest.externalId = zimId;
-        registrationRequest.email = (String) this.httpServletRequest.getAttribute("SHIB_mail");
+        registrationRequest.email = coreectEncoding((String) this.httpServletRequest.getAttribute("SHIB_mail"));
         registrationRequest.primaryId = zimId;
 
         // if no data can be obtained from the shibboleth response
@@ -158,7 +171,6 @@ public class AlmaUserService {
             log.debug("setting attributes for student");
             try {
                 HisExport hisExports = this.hisService.getByZimId(zimId);
-                String matrikelString = hisExports.getBibkz();
                 if (!hisExports.getEmail().equals(registrationRequest.email))
                     registrationRequest.additionalEmailAdresses.add(hisExports.getEmail());
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -208,5 +220,11 @@ public class AlmaUserService {
             registrationRequest.userStatus = "22";
         }
         return registrationRequest;
+    }
+
+    private String coreectEncoding(String string) {
+        Charset fromCharset = StandardCharsets.ISO_8859_1;
+        Charset toCharset = StandardCharsets.UTF_8;
+        return new String(string.getBytes(fromCharset), toCharset);
     }
 }

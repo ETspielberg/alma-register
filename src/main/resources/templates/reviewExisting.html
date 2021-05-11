@@ -1,143 +1,94 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{|layout_${#locale}|}" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="#{review.heading}"></title>
+    <title th:text="#{already.exists.heading}"></title>
 </head>
 <body>
 <div class="container-background bg-colored bg-gray" layout:fragment="content">
     <div class="container">
-        <div class="row">
-            <div class="col">
-                <h1 th:text="#{review.heading}"></h1>
-                <p th:if="${exists}"  th:utext="#{already.exists.probably.description}"></p>
-                <div class="col">
-                    <a th:href="${redirectUrl}">
-                        <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
-                    </a>
-                    <p><span th:unless="${registrationRequest}" th:text="#{success.shibboleth.login.necessary}"></span></p>
+        <div th:switch="registrationRequest.duplicateIdType" class="row">
+            <div th: case="'Dublettencheck'" class="col">
+                <h1 th:text="#{already.exists.heading}"></h1>
+                <p th:utext="#{already.exists.probably.description}"></p>
+                <div th:if="${redirectUrl}" class="row">
+                    <div class="col">
+                        <a th:href="${redirectUrl}">
+                            <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
+                        </a>
+                        <p><span th:unless="${registrationRequest}" th:text="#{success.shibboleth.login.necessary}"></span></p>
+                    </div>
                 </div>
-                <form th:action="@{/secure/review}" th:object="${registrationRequest}" method="post">
-                    <p th:text="#{review.description}"></p>
-                    <table class="table table-striped">
-                        <tr>
-                            <th>
-                                <label for="title-input" th:text="#{title}"></label>
-                            </th>
-                            <td>
-                                <select id="title-input" th:field="*{title}">
-                                    <option th:value="''" th:text="#{title.none}"></option>
-                                    <option th:value="'DR'" th:text="#{title.dr}"></option>
-                                    <option th:value="'PROF'" th:text="#{title.prof}"></option>
-                                    <option th:value="'PROFDR'" th:text="#{title.prof.dr}"></option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="firstName" th:text="#{first.name}">Vorname</label>
-
-                            </th>
-                            <td th:text="*{firstName}"></td>
-                            <input id="firstName" type="text" th:field="*{firstName}" th:value="*{firstName}"
-                                   readonly="readonly" hidden>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="lastName" th:text="#{last.name}">Name</label>
-                            </th>
-                            <td th:text="*{lastName}"></td>
-                            <input id="lastName" type="text" th:field="*{lastName}" th:value="*{lastName}"
-                                   readonly="readonly" hidden>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="email" th:text="#{email}"> E-Mail</label>
-                            </th>
-                            <td th:text="*{email}"></td>
-                            <input id="email" type="email" th:field="*{email}" th:value="*{email}" readonly="readonly"
-                                   hidden>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="primaryId" th:text="#{review.zim.id}">ZIM-ID</label>
-                            </th>
-                            <td th:text="*{primaryId}"></td>
-                            <input id="primaryId" type="text" th:field="*{primaryId}" th:value="*{primaryId}"
-                                   readonly="readonly" hidden>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="userStatus" th:text="#{user.status}">Benutzerstatus</label>
-                            </th>
-                            <td th:text="#{'user.status.' + *{userStatus}}"></td>
-                            <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}"
-                                   readonly="readonly" hidden>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="cardNumber" th:text="#{review.cardnumber}">Kartennummer</label>
-                            </th>
-                            <td>
-                                <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="birthdate-input" th:text="#{birth.date}"></label>
-                            </th>
-                            <td>
-                                <input id="birthdate-input" type="date" th:field="*{birthDate}" required>
-                            </td>
-                        </tr>
-                        <tr th:if="*{userStatus.equals('06')}">
-                            <th>
-                                <label for="roomNumber-input" th:text="#{room.number}"></label>
-                            </th>
-                            <td>
-                                <input id="roomNumber-input" type="text" size="30" class="form-control" required
-                                       th:field="*{roomNumber}" th:placeholder="#{room.number}">
-                            </td>
-                        </tr>
-                        <tr th:if="*{userStatus.equals('06')}">
-                            <th>
-                                <label for="campus-input" th:text="#{campus}"></label>
-                            </th>
-                            <td>
-                                <select id="campus-input" th:field="*{campus}">
-                                    <option th:value="'essen'" th:text="#{essen}"></option>
-                                    <option th:value="'duisburg'" th:text="#{duisburg}"></option>
-                                    <option th:value="'clinic'" th:text="#{klinikum}"></option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="pin-input" th:text="#{pin.number}"></label>
-                            </th>
-                            <td>
-                                <input id="pin-input" type="text" th:field="*{pinNumber}"
-                                       th:placeholder="#{pin.number}" required pattern="\d{8}"
-                                       th:title="#{pin.number.title}"/>
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="field fieldOption">
-                        <div>
-                            <input th:value="*{termsAccepted}" th:field="*{termsAccepted}" type="checkbox"
-                                   name="termsAndConditions" id="termsAndConditions" required/>
-                            <label th:utext="#{index.terms.label}" for="termsAndConditions"> </label>
-                        </div>
-                        <div>
-                            <input th:value="*{privacyAccepted}" th:field="*{privacyAccepted}" type="checkbox"
-                                   name="privacy" id="privacy" required/>
-                            <label th:utext="#{index.privacy.label}" for="privacy"></label>
-                        </div>
+            </div>
+            <div th: case="'UniKennung'" class="col">
+                <h1 th:text="#{already.exists.heading}"></h1>
+                <p th:utext="#{already.exists.description}"></p>
+                <div th:if="${redirectUrl}" class="row">
+                    <div class="col">
+                        <a th:href="${redirectUrl}">
+                            <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
+                        </a>
+                        <p><span th:unless="${registrationRequest}" th:text="#{success.shibboleth.login.necessary}"></span></p>
                     </div>
-                    <input id="externalId" type="text" th:field="*{externalId}" th:value="*{externalId}" hidden>
-                    <input type="submit" class="btn btn-primary" value="Die Daten sind korrekt"/>
-                    <div class="field fieldOption">
-                        <strong>*</strong>: <span th:text="#{required.fields}"></span>
-                    </div>
+                </div>
+            </div>
+            <div th: case="'Strichcode'" class="col">
+                <h1 th:text="#{already.exists.heading}"></h1>
+                <p th:utext="#{already.exists.description}"></p>
+                <p th:utext="#{connect.identifier.description}"></p>
+                <div th: case="'Dublettencheck'" class="col">
+                    <h1 th:text="#{already.exists.heading}"></h1>
+                    <p th:utext="#{already.exists.probably.description}"></p>
+                    <p th:utext="#{connect.identifier.description}"></p>
+                    <form th:action="@{/secure/connect}" th:object="${registrationRequest}" method="post">
+                        <p th:text="#{connect.description}"></p>
+                        <table class="table table-striped">
+                            <tr>
+                                <th>
+                                    <label for="cardNumber" th:text="#{review.cardnumber}">Kartennummer</label>
+                                </th>
+                                <td>
+                                    <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="field fieldOption">
+                            <div>
+                                <input th:value="*{privacyAccepted}" th:field="*{privacyAccepted}" type="checkbox"
+                                       name="privacy" id="privacy" required/>
+                                <label th:utext="#{index.privacy.label}" for="privacy"></label>
+                            </div>
+                        </div>
+                        <input id="externalId" type="text" th:field="*{externalId}" th:value="*{externalId}" hidden>
+                        <input id="lastname_connect" type="text" th:field="*{lastName}" th:value="*{lastName}" hidden>
+                        <input id="firstname_connect" type="text" th:field="*{firstName}" th:value="*{firstName}" hidden>
+                        <input type="submit" class="btn btn-primary" value="Verknüpfen" th:value="#{connect}"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div th:if="${registrationRequest}" class="row">
+            <div class="col">
+                <p th:text="#{register.confirm.description}"></p>
+                <form th:action="@{/confirmRegister}" th:object="${registrationRequest}" method="post">
+                    <input id="gender" type="text" th:field="*{gender}" th:value="*{gender}" hidden>
+                    <input id="title" type="text" th:field="*{title}" th:value="*{title}" hidden>
+                    <input id="firstName" type="text" th:field="*{firstName}" th:value="*{gender}" hidden>
+                    <input id="lastName" type="text" th:field="*{lastName}" th:value="*{gender}" hidden>
+                    <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}" hidden>
+                    <input id="road" type="text" th:field="*{road}" th:value="*{road}" hidden>
+                    <input id="plz" type="text" th:field="*{plz}" th:value="*{plz}" hidden>
+                    <input id="city" type="text" th:field="*{city}" th:value="*{city}" hidden>
+                    <input id="birthDate" type="date" th:field="*{birthDate}" th:value="*{birthDate}" hidden>
+                    <input id="email" type="email" th:field="*{email}" th:value="*{email}" hidden>
+                    <input id="pinNumber" type="text" th:field="*{pinNumber}" th:value="*{pinNumber}" hidden>
+                    <input id="password" type="text" th:field="*{password}" th:value="*{password}" hidden>
+                    <input id="exists" type="checkbox" th:field="*{exists}" th:value="*{exists}" hidden>
+                    <input id="duplicateId" type="text" th:field="*{duplicateId}" th:value="*{duplicateId}" hidden>
+                    <input id="duplicateIdType" type="text" th:field="*{duplicateIdType}" th:value="*{duplicateIdType}" hidden>
+                    <input id="privacyAccepted" type="checkbox" th:field="*{privacyAccepted}" th:value="*{privacyAccepted}" hidden>
+                    <input id="termsAccepted" type="checkbox" th:field="*{termsAccepted}" th:value="*{termsAccepted}" hidden>
+                    <input id="submit" type="submit" class="btn btn-primary"
+                           th:value="#{register.confirm}"/>
                 </form>
             </div>
         </div>

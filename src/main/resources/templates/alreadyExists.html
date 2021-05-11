@@ -36,6 +36,9 @@
                     <input id="email" type="email" th:field="*{email}" th:value="*{email}" hidden>
                     <input id="pinNumber" type="text" th:field="*{pinNumber}" th:value="*{pinNumber}" hidden>
                     <input id="password" type="text" th:field="*{password}" th:value="*{password}" hidden>
+                    <input id="exists" type="checkbox" th:field="*{exists}" th:value="*{exists}" hidden>
+                    <input id="duplicateId" type="text" th:field="*{duplicateId}" th:value="*{duplicateId}" hidden>
+                    <input id="duplicateIdType" type="text" th:field="*{duplicateIdType}" th:value="*{duplicateIdType}" hidden>
                     <input id="privacyAccepted" type="checkbox" th:field="*{privacyAccepted}" th:value="*{privacyAccepted}" hidden>
                     <input id="termsAccepted" type="checkbox" th:field="*{termsAccepted}" th:value="*{termsAccepted}" hidden>
                     <input id="submit" type="submit" class="btn btn-primary"

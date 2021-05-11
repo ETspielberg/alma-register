@@ -71,15 +71,10 @@ public class SecuredController {
     @GetMapping("/review")
     public String getReviewPage(Model model) throws MissingShibbolethDataException {
         RegistrationRequest registrationRequest = this.almaUserService.generateRegistrationRequestFromShibboleth();
-
-        String duplicatedIdType = this.almaUserService.userExists(registrationRequest);
-        boolean exists = !duplicatedIdType.isEmpty();
-
+        boolean exists = this.almaUserService.userExists(registrationRequest);
         model.addAttribute("registrationRequest", registrationRequest);
         model.addAttribute("redirectUrl", redirectUrl);
         model.addAttribute("userStatus", registrationRequest.userStatus);
-        model.addAttribute("exists", exists);
-        model.addAttribute("duplicatedIdType", duplicatedIdType);
         if (registrationRequest.userStatus.equals("student") && registrationRequest.externalId == null) {
             model.addAttribute("matrikelGiven", false);
         } else

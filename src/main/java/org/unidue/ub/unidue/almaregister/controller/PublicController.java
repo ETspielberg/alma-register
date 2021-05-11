@@ -103,11 +103,9 @@ public class PublicController {
      */
     @PostMapping("/register")
     public String registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, Locale locale, Model model) {
-        if (!this.almaUserService.userExists(registrationRequest).isEmpty()) {
+        if (this.almaUserService.userExists(registrationRequest)) {
             model.addAttribute("registrationRequest", registrationRequest);
             model.addAttribute("redirectUrl", redirectUrl);
-            model.addAttribute("duplicatedId", registrationRequest.calculateHash());
-            model.addAttribute("duplicatedIdType", "Dublettencheck");
             return "alreadyExists";
         } else {
             try {
@@ -129,13 +127,14 @@ public class PublicController {
     }
 
     @PostMapping("/confirmRegister")
-    public RedirectView registerAlmaUserAnyway(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, Locale locale, final RedirectAttributes redirectAttribute) {
+    public RedirectView registerAlmaUserAnyway(@ModelAttribute RegistrationRequest registrationRequest, Locale locale, final RedirectAttributes redirectAttribute) {
         log.info(registrationRequest.firstName + " " + registrationRequest.lastName);
         log.info("Privacy: " + registrationRequest.privacyAccepted);
         log.info("Terms: " + registrationRequest.termsAccepted);
         AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage(), false), true);
         log.info(String.format("User %s %s sucessfully registered with new id %s",
                 almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
+        this.mailSenderService.sendNotificationMail(registrationRequest);
         RedirectView redirectView = new RedirectView("success");
         redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
         return redirectView;

@@ -7,8 +7,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 
 @Service
@@ -24,26 +22,22 @@ public class MailSenderService {
 
     private final JavaMailSender emailSender;
 
-    private final TemplateEngine templateEngine;
-
     private static final Logger log = LoggerFactory.getLogger(MailSenderService.class);
 
 
     MailSenderService(
             // potential error on unknown bean for emailSender can be ignored, emailSender bean is created from configuration properties
-            JavaMailSender emailSender,
-            TemplateEngine templateEngine
+            JavaMailSender emailSender
     ) {
         this.emailSender = emailSender;
-        this.templateEngine = templateEngine;
     }
 
-    public void sendNotificationMail(RegistrationRequest registrationRequest, String duplicatedId, String duplicatedIdType) {
+    public void sendNotificationMail(RegistrationRequest registrationRequest) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom(userExistsEmailFrom);
             messageHelper.setTo(userExistsEmailTo);
-            String text = buildMailBody(registrationRequest, duplicatedId, duplicatedIdType);
+            String text = buildMailBody(registrationRequest);
             messageHelper.setSubject("Nutzer eventuell dublett vorhanden");
             messageHelper.setText(text);
         };
@@ -51,11 +45,15 @@ public class MailSenderService {
         log.debug("sent dublettencheck email");
     }
 
-    private String buildMailBody(RegistrationRequest registrationRequest, String duplicatedId, String duplicatedIdType) {
-        return String.format("Der Nutzer %s %s hat sich gerade angemeldet.\n", registrationRequest.firstName, registrationRequest.lastName) +
-                String.format("Die ID %s vom Typ %s ist bereits im System vorhanden.\n", duplicatedId, duplicatedIdType) +
+    private String buildMailBody(RegistrationRequest registrationRequest) {
+        return "Liebe Kolleg:innen\n\n" +
+                String.format("Nutzer:in %s %s hat sich gerade über das Webformular angemeldet.\n",
+                        registrationRequest.firstName, registrationRequest.lastName) +
+                String.format("Die ID %s vom Typ %s ist bereits im System vorhanden.\n",
+                        registrationRequest.duplicateId, registrationRequest.duplicateIdType) +
                 "Mit freundlichen Grüßen\n" +
-                "\nDies ist eine automatisch generierte E-Mail.\n";
+                "Das Registrierungsformular\n" +
+                "\n\nDies ist eine automatisch generierte E-Mail.\n";
     }
 
 }
