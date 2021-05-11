@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{confirmation.email.title}">Herzlich Willkommen an der Universitätsbibliothek
+        Duisburg-Essen</title>
+    <style>
+        table, th, td {
+            text-align: left;
+            font-weight: normal;
+        }
+
+        .caption {
+            font-weight: bold;
+        }
+
+        .text {
+            color: black;
+        }
+
+        .title {
+            color: #004c93
+        }
+    </style>
+</head>
+<body>
+<h2 class="title" th:text="#{confirmation.email.title}">
+    Herzlich Willkommen an der Universitätsbibliothek Duisburg-Essen
+</h2>
+<div class="text" th:switch="${gender}">
+    <p th:case="Male">
+        <span th:text="#{confirmation.email.salutation.male}">Sehr geehrter Herr</span> <span
+        th:text="${title}"></span> <span th:text="${lastname}"></span>,
+    </p>
+    <p th:case="Female">
+        <span th:text="#{confirmation.email.salutation.female}">Sehr geehrte Frau</span> <span
+            th:text="${title}"></span> <span th:text="${lastname}"></span>,
+    </p>
+    <p th:case="Other">
+        <span th:text="#{confirmation.email.salutation.other}">Sehr geehrte*r </span> <span
+            th:text="${title}"></span> <span th:text="${firstname}"></span> <span th:text="${lastname}"></span>,
+    </p>
+    <p th:case="None">
+        <span th:text="#{confirmation.email.salutation.other}">Sehr geehrte*r </span> <span
+            th:text="${title}"></span> <span th:text="${firstname}"></span> <span th:text="${lastname}"></span>,
+    </p>
+</div>
+<div class="text" th:switch="${userStatus}">
+    <div th:utext="#{confirmation.email.welcome}"></div>
+    <div th:case="01">
+        <div th:utext="#{confirmation.email.contents.student}"></div>
+        <div th:utext="#{confirmation.email.contents.abisz}"></div>
+    </div>
+    <div th:default="">
+        <div th:utext="#{confirmation.email.contents.extern}"></div>
+        <div th:utext="#{confirmation.email.contents.pin.extern}"></div>
+    </div>
+
+    <div th:utext="#{confirmation.email.contents.abisz}"></div>
+    <div th:utext="#{confirmation.email.contents.contact}"></div>
+
+<p th:text="#{confirmation.email.welcome.long}">Wir freuen uns, dass Sie sich an der Universitätsbibliothek
+    Duisburg-Essen angemeldet haben.</p>
+<p th:text="#{confirmation.email.documents}"> Bitte beachten Sie: Um alle Dienste der Bibliothek zu können, benötigen Sie einen Bibliotheksausweis. Diesen erhalten Sie an einer unserer Ausleihtheken. Legen Sie dort bitte Ihren Personalausweis vor.
+    Sollten Sie keinen Personalausweis besitzen, legen Sie bitte Ihren Reisepass und eine amtliche Meldebescheinigung
+    vor.</p>
+<p th:if="${isMinor}"><span th:text="#{confirmation.email.documents.minor}"> Außerdem benötigen Sie eine unterschriebene Einverständniserklärung Ihres Erziehungsberechtigten und eine Kopie dessen/deren Personalausweises.</span>
+</p>
+
+<p th:text="#{confirmation.email.greeting}">Mit freundlichen Grüßen,</p>
+<p th:text="#{confirmation.email.signature}">Ihre Universitätsbibliothek Duisburg-Essen</p>
+</body>
+</html>
