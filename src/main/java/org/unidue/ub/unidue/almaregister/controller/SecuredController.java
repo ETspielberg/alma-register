@@ -72,12 +72,6 @@ public class SecuredController {
     public String getReviewPage(Model model) throws MissingShibbolethDataException {
         RegistrationRequest registrationRequest = this.almaUserService.generateRegistrationRequestFromShibboleth();
         model.addAttribute("registrationRequest", registrationRequest);
-        model.addAttribute("redirectUrl", redirectUrl);
-        model.addAttribute("userStatus", registrationRequest.userStatus);
-        if (registrationRequest.userStatus.equals("student") && registrationRequest.externalId == null) {
-            model.addAttribute("matrikelGiven", false);
-        } else
-            model.addAttribute("matrikelGiven", true);
         return "review";
     }
 
@@ -85,37 +79,22 @@ public class SecuredController {
      * submission controller accepting the registration request object as generated from the Shibboleth data.
      *
      * @param registrationRequest the registration request object as obtained from the Shibboleth request data
-     * @param result              the result to display rejection if the privacy conditions or the terms of use have not been accepted
      * @return the review page with errors, if the terms or the privacy was not accepted, otherwise a redirect to the success page
      * @throws AlmaConnectionException thrown if no connection to the alma Users API could be established
      */
     @PostMapping("/review")
-    public RedirectView confirmCreation(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, Locale locale, final RedirectAttributes redirectAttribute) throws AlmaConnectionException {
-        boolean error = false;
-        if (!registrationRequest.privacyAccepted) {
-            result.rejectValue("privacyAccepted", "error.privacyAccepted");
-            error = true;
-        }
-        if (!registrationRequest.termsAccepted) {
-            result.rejectValue("termsAccepted", "error.termsAccepted");
-            error = true;
-        }
-        if (error) {
-            return new RedirectView("review");
-        }
+    public String confirmCreation(@ModelAttribute RegistrationRequest registrationRequest, Model model, Locale locale, final RedirectAttributes redirectAttribute) throws AlmaConnectionException {
         boolean exists = this.almaUserService.userExists(registrationRequest);
         if (exists) {
-            RedirectView redirectView = new RedirectView("reviewExisting");
-            redirectAttribute.addFlashAttribute("redirectUrl", redirectUrl);
-            redirectAttribute.addFlashAttribute("registrationRequest", registrationRequest);
-            redirectAttribute.addFlashAttribute("userStatus", registrationRequest.userStatus);
-            return redirectView;
+            model.addAttribute("redirectUrl", redirectUrl);
+            model.addAttribute("registrationRequest", registrationRequest);
+            model.addAttribute("userStatus", registrationRequest.userStatus);
+            return "reviewExisting";
         }
         AlmaUser almaUser = registrationRequest.getAlmaUser(locale.getLanguage(), true);
         this.almaUserService.createAlmaUser(almaUser, true);
-        RedirectView redirectView = new RedirectView("success");
-        redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
-        return redirectView;
+        model.addAttribute("userGroup", almaUser.getUserGroup().getValue());
+        return "success";
     }
 
     /**
