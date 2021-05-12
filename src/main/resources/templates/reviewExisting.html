@@ -6,7 +6,7 @@
 <body>
 <div class="container-background bg-colored bg-gray" layout:fragment="content">
     <div class="container">
-        <div th:switch="registrationRequest.duplicateIdType" class="row">
+        <div th:switch="${registrationRequest.duplicateIdType}" class="row">
             <div th:case="'Dublettencheck'" class="col">
                 <h1 th:text="#{already.exists.heading}"></h1>
                 <p th:utext="#{already.exists.probably.description}"></p>
@@ -27,7 +27,6 @@
                         <a th:href="${redirectUrl}">
                             <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
                         </a>
-                        <p><span th:unless="${registrationRequest}" th:text="#{success.shibboleth.login.necessary}"></span></p>
                     </div>
                 </div>
             </div>
