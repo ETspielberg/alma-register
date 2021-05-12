@@ -94,7 +94,7 @@
                                 <label for="campus-input" th:text="#{campus}"></label>
                             </th>
                             <td>
-                                <select id="campus-input" th:field="*{campus}">
+                                <select id="campus-input" th:field="*{campus}" required>
                                     <option th:value="'essen'" th:text="#{essen}"></option>
                                     <option th:value="'duisburg'" th:text="#{duisburg}"></option>
                                     <option th:value="'clinic'" th:text="#{klinikum}"></option>

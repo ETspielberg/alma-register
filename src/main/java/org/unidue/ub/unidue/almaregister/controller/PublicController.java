@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.alma.shared.user.AlmaUser;
+import org.unidue.ub.alma.shared.user.UserStatus;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 import org.unidue.ub.unidue.almaregister.service.MailSenderService;
 import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
@@ -132,6 +133,7 @@ public class PublicController {
         log.info("Privacy: " + registrationRequest.privacyAccepted);
         log.info("Terms: " + registrationRequest.termsAccepted);
         AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage(), false), true);
+        almaUser.setStatus(new UserStatus().value("INACTIVE"));
         log.info(String.format("User %s %s sucessfully registered with new id %s",
                 almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
         this.mailSenderService.sendNotificationMail(registrationRequest);

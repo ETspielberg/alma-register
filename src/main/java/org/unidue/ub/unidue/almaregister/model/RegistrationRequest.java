@@ -353,12 +353,21 @@ public class RegistrationRequest {
             }
             //set address data for coworkers
             if ("06".equals(userStatus)) {
-                Address postalAddress = new Address()
-                        .city(city)
-                        .line1(roomNumber)
-                        .line2(campus)
-                        .preferred(true)
-                        .addAddressTypeItem(new AddressAddressType().value("work"));
+                Address postalAddress;
+                if (!roomNumber.isEmpty()) {
+                    postalAddress = new Address()
+                            .city(city)
+                            .line1(roomNumber)
+                            .line2(campus)
+                            .preferred(true)
+                            .addAddressTypeItem(new AddressAddressType().value("work"));
+                } else {
+                    postalAddress = new Address()
+                            .city(city)
+                            .line1(campus)
+                            .preferred(true)
+                            .addAddressTypeItem(new AddressAddressType().value("work"));
+                }
                 contactInfo.addAddressItem(postalAddress);
             }
             emailAddress
