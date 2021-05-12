@@ -104,18 +104,21 @@ public class AlmaUserService {
             registrationRequest.setExists(true);
             registrationRequest.setDuplicateId(registrationRequest.primaryId);
             registrationRequest.setDuplicateIdType("UniKennung");
+            log.info("user duplicate found by UniKennung");
             return true;
         }
         if (!registrationRequest.cardNumber.isEmpty() && checkExistingUser(registrationRequest.cardNumber) != null) {
             registrationRequest.setExists(true);
             registrationRequest.setDuplicateId(registrationRequest.cardNumber);
             registrationRequest.setDuplicateIdType("Strichcode");
+            log.info("user duplicate found by Strichcode");
             return true;
         }
-        if (checkExistingUser(registrationRequest.calculateHash()) != null) {
+        if (registrationRequest.calculateHash() != null && checkExistingUser(registrationRequest.calculateHash()) != null) {
             registrationRequest.setExists(true);
             registrationRequest.setDuplicateId(registrationRequest.calculateHash());
             registrationRequest.setDuplicateIdType("Dublettencheck");
+            log.info("user duplicate found by Dublettencheck");
             return true;
         }
         else

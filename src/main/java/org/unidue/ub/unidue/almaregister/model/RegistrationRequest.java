@@ -407,7 +407,7 @@ public class RegistrationRequest {
             md.update(stringToBeHashed.getBytes());
             byte[] digest = md.digest();
             return DatatypeConverter.printHexBinary(digest);
-        } catch (NoSuchAlgorithmException nsae) {
+        } catch (Exception e) {
             return null;
         }
     }
