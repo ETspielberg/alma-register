@@ -86,7 +86,7 @@
                             </th>
                             <td>
                                 <input id="roomNumber-input" type="text" size="30" class="form-control" required
-                                       th:field="*{roomNumber}" th:placeholder="#{room.number}">
+                                       th:field="*{roomNumber}" th:value="*{roomNumber}" th:placeholder="#{room.number}">
                             </td>
                         </tr>
                         <tr th:if="*{userStatus.equals('06')}">
@@ -95,9 +95,9 @@
                             </th>
                             <td>
                                 <select id="campus-input" th:field="*{campus}" required>
-                                    <option th:value="'essen'" th:text="#{essen}"></option>
-                                    <option th:value="'duisburg'" th:text="#{duisburg}"></option>
-                                    <option th:value="'clinic'" th:text="#{klinikum}"></option>
+                                    <option th:value="'Campus Essen'" th:text="#{essen}"></option>
+                                    <option th:value="'Campus Duisburg'" th:text="#{duisburg}"></option>
+                                    <option th:value="'FB Medizin'" th:text="#{klinikum}"></option>
                                 </select>
                             </td>
                         </tr>
