@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 @JacksonXmlRootElement(localName = "row")
 public class Overdue {
 
-    public final static String PATH = "/shared/Universität Duisburg-Essen 49HBZ_UDE/Reports/Benutzung/Benutzer nach 3. Mahnung";
+    public final static String PATH = "/shared/Universität Duisburg-Essen 49HBZ_UDE/libintel/BenutzerNachMahnung3";
 
     @JacksonXmlProperty(localName = "Title")
     private String title;

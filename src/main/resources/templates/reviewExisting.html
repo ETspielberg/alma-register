@@ -15,37 +15,44 @@
                         <a th:href="${redirectUrl}">
                             <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
                         </a>
-                        <p><span th:unless="${registrationRequest}" th:text="#{success.shibboleth.login.necessary}"></span></p>
+                        <p><span th:unless="${registrationRequest}"
+                                 th:text="#{success.shibboleth.login.necessary}"></span></p>
                     </div>
-                    <div th:if="${registrationRequest}" class="row">
-                        <div class="col">
-                            <p th:text="#{register.confirm.description}"></p>
-                            <form th:action="@{/confirmRegister}" th:object="${registrationRequest}" method="post">
-                                <input id="gender" type="text" th:field="*{gender}" th:value="*{gender}" hidden>
-                                <input id="title" type="text" th:field="*{title}" th:value="*{title}" hidden>
-                                <input id="firstName" type="text" th:field="*{firstName}" th:value="*{gender}" hidden>
-                                <input id="lastName" type="text" th:field="*{lastName}" th:value="*{gender}" hidden>
-                                <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}" hidden>
-                                <input id="road" type="text" th:field="*{road}" th:value="*{road}" hidden>
-                                <input id="plz" type="text" th:field="*{plz}" th:value="*{plz}" hidden>
-                                <input id="city" type="text" th:field="*{city}" th:value="*{city}" hidden>
-                                <input id="birthDate" type="date" th:field="*{birthDate}" th:value="*{birthDate}" hidden>
-                                <input id="email" type="email" th:field="*{email}" th:value="*{email}" hidden>
-                                <input id="pinNumber" type="text" th:field="*{pinNumber}" th:value="*{pinNumber}" hidden>
-                                <input id="password" type="text" th:field="*{password}" th:value="*{password}" hidden>
-                                <input id="campus" type="text" th:field="*{campus}" th:value="*{campus}" hidden>
-                                <input id="roomNumber" type="text" th:field="*{roomNumber}" th:value="*{roomNumber}" hidden>
-                                <input id="exists" type="checkbox" th:field="*{exists}" th:value="*{exists}" hidden>
-                                <input id="externalId_confirm" type="text" th:field="*{externalId}" th:value="*{externalId}" hidden>
-                                <input id="primaryID_confirm" type="text" th:field="*{primaryId}" th:value="*{primaryId}" hidden>
-                                <input id="duplicateId" type="text" th:field="*{duplicateId}" th:value="*{duplicateId}" hidden>
-                                <input id="duplicateIdType" type="text" th:field="*{duplicateIdType}" th:value="*{duplicateIdType}" hidden>
-                                <input id="privacyAccepted" type="checkbox" th:field="*{privacyAccepted}" th:value="*{privacyAccepted}" hidden>
-                                <input id="termsAccepted" type="checkbox" th:field="*{termsAccepted}" th:value="*{termsAccepted}" hidden>
-                                <input id="submit" type="submit" class="btn btn-primary"
-                                       th:value="#{register.confirm}"/>
-                            </form>
-                        </div>
+                </div>
+                <div th:if="${registrationRequest}" class="row">
+                    <div class="col">
+                        <p th:text="#{register.confirm.description}"></p>
+                        <form th:action="@{/confirmRegister}" th:object="${registrationRequest}" method="post">
+                            <input id="gender" type="text" th:field="*{gender}" th:value="*{gender}" hidden>
+                            <input id="title" type="text" th:field="*{title}" th:value="*{title}" hidden>
+                            <input id="firstName" type="text" th:field="*{firstName}" th:value="*{gender}" hidden>
+                            <input id="lastName" type="text" th:field="*{lastName}" th:value="*{gender}" hidden>
+                            <input id="userStatus" type="text" th:field="*{userStatus}" th:value="*{userStatus}" hidden>
+                            <input id="road" type="text" th:field="*{road}" th:value="*{road}" hidden>
+                            <input id="plz" type="text" th:field="*{plz}" th:value="*{plz}" hidden>
+                            <input id="city" type="text" th:field="*{city}" th:value="*{city}" hidden>
+                            <input id="birthDate" type="date" th:field="*{birthDate}" th:value="*{birthDate}" hidden>
+                            <input id="email" type="email" th:field="*{email}" th:value="*{email}" hidden>
+                            <input id="pinNumber" type="text" th:field="*{pinNumber}" th:value="*{pinNumber}" hidden>
+                            <input id="password" type="text" th:field="*{password}" th:value="*{password}" hidden>
+                            <input id="campus" type="text" th:field="*{campus}" th:value="*{campus}" hidden>
+                            <input id="roomNumber" type="text" th:field="*{roomNumber}" th:value="*{roomNumber}" hidden>
+                            <input id="exists" type="checkbox" th:field="*{exists}" th:value="*{exists}" hidden>
+                            <input id="externalId_confirm" type="text" th:field="*{externalId}" th:value="*{externalId}"
+                                   hidden>
+                            <input id="primaryID_confirm" type="text" th:field="*{primaryId}" th:value="*{primaryId}"
+                                   hidden>
+                            <input id="duplicateId" type="text" th:field="*{duplicateId}" th:value="*{duplicateId}"
+                                   hidden>
+                            <input id="duplicateIdType" type="text" th:field="*{duplicateIdType}"
+                                   th:value="*{duplicateIdType}" hidden>
+                            <input id="privacyAccepted" type="checkbox" th:field="*{privacyAccepted}"
+                                   th:value="*{privacyAccepted}" hidden>
+                            <input id="termsAccepted" type="checkbox" th:field="*{termsAccepted}"
+                                   th:value="*{termsAccepted}" hidden>
+                            <input id="submit" type="submit" class="btn btn-primary"
+                                   th:value="#{register.confirm}"/>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -76,7 +83,8 @@
                                     <label for="cardNumber" th:text="#{review.cardnumber}">Kartennummer</label>
                                 </th>
                                 <td>
-                                    <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
+                                    <input id="cardNumber" type="text" th:field="*{cardNumber}"
+                                           th:value="*{cardNumber}">
                                 </td>
                             </tr>
                         </table>
@@ -89,7 +97,8 @@
                         </div>
                         <input id="externalId" type="text" th:field="*{externalId}" th:value="*{externalId}" hidden>
                         <input id="lastname_connect" type="text" th:field="*{lastName}" th:value="*{lastName}" hidden>
-                        <input id="firstname_connect" type="text" th:field="*{firstName}" th:value="*{firstName}" hidden>
+                        <input id="firstname_connect" type="text" th:field="*{firstName}" th:value="*{firstName}"
+                               hidden>
                         <input type="submit" class="btn btn-primary" value="Verknüpfen" th:value="#{connect}"/>
                     </form>
 
