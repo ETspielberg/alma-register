@@ -71,7 +71,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     antMatcher("/api/**").
                     csrf().disable().
                     sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
-                    and().addFilter(filter).authorizeRequests().anyRequest().authenticated();
+                    and().addFilter(filter).authorizeRequests().anyRequest().access( "hasIpAddress('95.172.90.160/27') or hasIpAddress('31.186.254.128/28') or hasIpAddress('216.147.214.128/26') or hasIpAddress('216.147.218.128/26') or hasIpAddress('216.147.218.64/26') or hasIpAddress('216.147.215.0/27')");
         }
     }
 

@@ -136,7 +136,7 @@ public class PublicController {
         almaUser.setStatus(new UserStatus().value("INACTIVE"));
         log.info(String.format("User %s %s sucessfully registered with new id %s",
                 almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
-        this.mailSenderService.sendNotificationMail(registrationRequest);
+        // this.mailSenderService.sendNotificationMail(registrationRequest);
         RedirectView redirectView = new RedirectView("success");
         redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
         return redirectView;
