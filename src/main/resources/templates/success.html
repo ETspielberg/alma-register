@@ -5,43 +5,82 @@
 </head>
 <body>
 <div class="container-background bg-colored bg-gray" layout:fragment="content">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h1 th:text="#{success.heading}"></h1>
-                <p th:utext="#{success.description}"></p>
+    <div th:switch="${userGroup}" class="container">
+
+        <!-- Studierende -->
+        <div th:case="'01'">
+            <div class="row">
+                <div class="col">
+                    <h1 th:text="#{success.heading}"></h1>
+                    <p th:utext="#{success.description}"></p>
+                </div>
+                <div class="col">
+                    <a th:href="${redirectUrl}">
+                        <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
+                    </a>
+                    <p><span th:utext="#{success.shibboleth.login.necessary}"></span></p>
+                </div>
             </div>
         </div>
-        <div th:switch="${userGroup}" class="row">
-            <div th:case="'01'" class="col">
-                <a th:href="${redirectUrl}">
-                    <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
-                </a>
-                <p><span th:utext="#{success.shibboleth.login.necessary}"></span></p>
+
+        <!-- Mitarbeiter -->
+        <div th:case="'06'">
+            <div class="row">
+                <div class="col">
+                    <h1 th:text="#{success.heading}"></h1>
+                    <p th:utext="#{success.description}"></p>
+                </div>
+                <div class="col">
+                    <a th:href="${redirectUrl}">
+                        <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
+                    </a>
+                    <p><span th:utext="#{success.shibboleth.login.necessary}"></span></p>
+                </div>
             </div>
-            <div th:case="'06'" class="col">
-                <a th:href="${redirectUrl}">
-                    <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
-                </a>
-                <p><span th:utext="#{success.shibboleth.login.necessary}"></span></p>
-            </div>
-            <div th:case="'20'" class="col">
-                <p>
-                    <span th:utext="#{success.documents.necessary}"></span>
+        </div>
+
+        <!-- nicht-Uni-Angahörige -->
+        <div th:case="'20'">
+            <div class="row">
+                <div class="col">
+                    <h1 th:text="#{successful.registration.heading}"></h1>
+                    <p th:utext="#{successful.registration.description}"></p>
+                </div>
+                <div class="col">
                     <a href="https://www.uni-due.de/ub/abisz/anmeldung.php">
                         <button class="btn btn-primary" th:text="#{information.for.activation}"></button>
                     </a>
-                </p>
+                </div>
             </div>
-            <div th:case="'22'" class="col">
-                <p>
-                    <span th:utext="#{success.documents.necessary}"></span>
-                </p>
+        </div>
+
+        <!-- nicht-Uni-Angahörige -->
+        <div th:case="'23'">
+            <div class="row">
+                <div class="col">
+                    <h1 th:text="#{successful.registration.heading}"></h1>
+                    <p th:utext="#{successful.registration.description}"></p>
+                </div>
+                <div class="col">
+                    <a href="https://www.uni-due.de/ub/abisz/anmeldung.php">
+                        <button class="btn btn-primary" th:text="#{information.for.activation}"></button>
+                    </a>
+                </div>
             </div>
-            <div th:case="*" class="col">
-                <p>
-                    <span th:utext="#{success.documents.necessary}"></span>
-                </p>
+        </div>
+
+        <!-- nicht-Uni-Angahörige -->
+        <div th:case="'*'">
+            <div class="row">
+                <div class="col">
+                    <h1 th:text="#{successful.registration.heading}"></h1>
+                    <p th:utext="#{successful.registration.description}"></p>
+                </div>
+                <div class="col">
+                    <a href="https://www.uni-due.de/ub/abisz/anmeldung.php">
+                        <button class="btn btn-primary" th:text="#{information.for.activation}"></button>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
