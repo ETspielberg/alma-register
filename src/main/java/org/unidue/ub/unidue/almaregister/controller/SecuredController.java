@@ -46,7 +46,6 @@ public class SecuredController {
 
     @GetMapping("/success")
     public String getSuccessPage(Model model, @ModelAttribute("userGroup") final String userGroup) {
-        model.addAttribute("userGroup", userGroup);
         model.addAttribute("redirectUrl", redirectUrl);
         return "success";
     }
@@ -93,7 +92,6 @@ public class SecuredController {
         }
         AlmaUser almaUser = registrationRequest.getAlmaUser(locale.getLanguage(), true);
         this.almaUserService.createAlmaUser(almaUser, true);
-        model.addAttribute("userGroup", almaUser.getUserGroup().getValue());
         return "success";
     }
 
@@ -145,9 +143,8 @@ public class SecuredController {
         UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("03");
         UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(registrationRequest.externalId).segmentType("external");
         almaUser.addUserIdentifierItem(userIdentifier);
-        almaUser = this.almaUserService.updateAlmaUser(registrationRequest.cardNumber, almaUser);
+        this.almaUserService.updateAlmaUser(registrationRequest.cardNumber, almaUser);
         RedirectView redirectView = new RedirectView("success");
-        redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
         return redirectView;
     }
 

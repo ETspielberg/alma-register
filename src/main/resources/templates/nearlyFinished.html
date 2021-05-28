@@ -8,16 +8,15 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1 th:text="#{success.heading}"></h1>
-                <p th:utext="#{success.description}"></p>
+                <h1 th:text="#{successful.registration.heading}"></h1>
+                <p th:utext="#{successful.registration.description}"></p>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <a th:href="${redirectUrl}">
-                    <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
+                <a href="https://www.uni-due.de/ub/abisz/anmeldung.php">
+                    <button class="btn btn-primary" th:text="#{information.for.activation}"></button>
                 </a>
-                <p><span th:utext="#{success.shibboleth.login.necessary}"></span></p>
             </div>
         </div>
     </div>

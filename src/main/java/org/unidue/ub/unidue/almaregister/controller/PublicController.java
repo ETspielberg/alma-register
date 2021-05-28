@@ -113,8 +113,7 @@ public class PublicController {
                 AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage(), true), true);
                 log.info(String.format("User %s %s sucessfully registered with new id %s",
                         almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
-                model.addAttribute("userGroup", almaUser.getUserGroup().getValue());
-                return "success";
+                return "nearlyFinished";
             } catch (Exception e) {
                 log.warn("An error occurred", e);
                 throw new AlmaConnectionException("could not create user");
@@ -128,7 +127,7 @@ public class PublicController {
     }
 
     @PostMapping("/confirmRegister")
-    public RedirectView registerAlmaUserAnyway(@ModelAttribute RegistrationRequest registrationRequest, Locale locale, final RedirectAttributes redirectAttribute) {
+    public String registerAlmaUserAnyway(@ModelAttribute RegistrationRequest registrationRequest, Locale locale, final RedirectAttributes redirectAttribute) {
         log.info(registrationRequest.firstName + " " + registrationRequest.lastName);
         log.info("Privacy: " + registrationRequest.privacyAccepted);
         log.info("Terms: " + registrationRequest.termsAccepted);
@@ -136,9 +135,6 @@ public class PublicController {
         almaUser.setStatus(new UserStatus().value("INACTIVE"));
         log.info(String.format("User %s %s sucessfully registered with new id %s",
                 almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
-        // this.mailSenderService.sendNotificationMail(registrationRequest);
-        RedirectView redirectView = new RedirectView("success");
-        redirectAttribute.addFlashAttribute("userGroup", almaUser.getUserGroup().getValue());
-        return redirectView;
+        return "nearlyFinished";
     }
 }
