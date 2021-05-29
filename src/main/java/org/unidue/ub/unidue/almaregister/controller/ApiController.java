@@ -19,7 +19,7 @@ public class ApiController {
         this.addressWebServiceClient = addressWebServiceClient;
     }
 
-    @GetMapping(name="address/{zimId}", produces=MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(name="/address/{zimId}", produces=MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Address> getAddressdata(@PathVariable String zimId) {
         return ResponseEntity.ok(addressWebServiceClient.getAddressByZimId(zimId).getAddress());
     }
