@@ -10,7 +10,7 @@ import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
 import org.unidue.ub.unidue.almaregister.model.wsclient.Address;
 
 @Controller
-@RequestMapping("/api")
+@RequestMapping(value = "/api")
 public class ApiController {
 
     private final AddressWebServiceClient addressWebServiceClient;
@@ -19,7 +19,7 @@ public class ApiController {
         this.addressWebServiceClient = addressWebServiceClient;
     }
 
-    @GetMapping(name="/address/{zimId}", produces=MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(value="/address/{zimId}", produces=MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Address> getAddressdata(@PathVariable String zimId) {
         return ResponseEntity.ok(addressWebServiceClient.getAddressByZimId(zimId).getAddress());
     }
