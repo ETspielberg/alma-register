@@ -387,7 +387,7 @@ public class RegistrationRequest {
                     .accountType(new UserAccountType().value("EXTERNAL"))
                     .externalId(externalId);
 
-            if (!cardNumber.isEmpty()) {
+            if (!cardNumber.isEmpty() && !cardNumber.equals(primaryId)) {
                 UserIdentifierIdType userIdentifierIdTypeCard = new UserIdentifierIdType().value("01");
                 UserIdentifier cardIdentifier = new UserIdentifier().idType(userIdentifierIdTypeCard).status("ACTIVE").value(cardNumber).segmentType("external");
                 almaUser.addUserIdentifierItem(cardIdentifier);
