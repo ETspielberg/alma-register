@@ -6,7 +6,6 @@ import org.unidue.ub.alma.shared.user.*;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -42,7 +41,7 @@ public class RegistrationRequest {
 
     public String email = "";
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd", fallbackPatterns = { "M/d/yy", "dd.MM.yyyy" })
     public LocalDate birthDate;
 
     public String password = "";
