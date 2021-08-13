@@ -26,6 +26,12 @@ public class Overdue {
     @JacksonXmlProperty(localName = "Barcode")
     private String barcode;
 
+    @JacksonXmlProperty(localName = "ItemLoanId")
+    private String itemLoanId;
+
+    @JacksonXmlProperty(localName = "UserGroup")
+    private String userGroup;
+
     public String getTitle() {
         return title;
     }
@@ -72,5 +78,21 @@ public class Overdue {
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
+    }
+
+    public String getItemLoanId() {
+        return itemLoanId;
+    }
+
+    public void setItemLoanId(String itemLoanId) {
+        this.itemLoanId = itemLoanId;
+    }
+
+    public String getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(String userGroup) {
+        this.userGroup = userGroup;
     }
 }
