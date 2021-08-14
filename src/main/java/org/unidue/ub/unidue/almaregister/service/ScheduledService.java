@@ -1,5 +1,6 @@
 package org.unidue.ub.unidue.almaregister.service;
 
+import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
@@ -89,31 +90,43 @@ public class ScheduledService {
     }
 
     private void extendUser(String primaryId) {
-        AlmaUser user = this.almaUserApiClient.getUser(primaryId, "application/json");
-        long userNumber = 0L;
-        if (!"01".equals(user.getUserGroup().getValue())) {
-            log.warn(String.format("could not update addresse for user %s: not a student", primaryId));
+        AlmaUser user;
+        try {
+            user = this.almaUserApiClient.getUser(primaryId, "application/json");
+        } catch (FeignException fe) {
+            log.warn("could not retrieve user with id " + primaryId, fe);
             return;
         }
-        for (UserIdentifier userIdentifier : user.getUserIdentifier())
-            if ("02".equals(userIdentifier.getIdType().getValue()))
-                userNumber = Long.parseLong(userIdentifier.getValue());
-        log.info(String.format("updating user with id %d", userNumber));
-        if (userNumber != 0L) {
-            ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddressByMatrikel(userNumber);
-            if (response != null) {
-                Address address = new Address().addAddressTypeItem(new AddressAddressType().value("home"))
-                        .city(response.getAddress().getCity())
-                        .country(new AddressCountry().value(response.getAddress().getCountry()))
-                        .line1(response.getAddress().getStreet())
-                        .line2(response.getAddress().getAddressaddition())
-                        .line3(response.getAddress().getPostcode() + " " + response.getAddress().getCity());
-                user.getContactInfo().addAddressItem(address);
-                this.almaUserApiClient.updateUser(user.getPrimaryId(), user);
-                log.info(String.format("retrieved address for user %s", primaryId ));
+            long userNumber = 0L;
+            if (!"01".equals(user.getUserGroup().getValue())) {
+                log.warn(String.format("could not update addresse for user %s: not a student", primaryId));
+                return;
+            }
+            for (UserIdentifier userIdentifier : user.getUserIdentifier())
+                if ("02".equals(userIdentifier.getIdType().getValue()))
+                    userNumber = Long.parseLong(userIdentifier.getValue());
+            log.info(String.format("updating user with id %d", userNumber));
+            if (userNumber != 0L) {
+                ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddressByMatrikel(userNumber);
+                if (response != null) {
+                    Address address = new Address().addAddressTypeItem(new AddressAddressType().value("home"))
+                            .city(response.getAddress().getCity())
+                            .country(new AddressCountry().value(response.getAddress().getCountry()))
+                            .line1(response.getAddress().getStreet())
+                            .line2(response.getAddress().getAddressaddition())
+                            .line3(response.getAddress().getPostcode() + " " + response.getAddress().getCity());
+                    user.getContactInfo().addAddressItem(address);
+                    try {
+                        this.almaUserApiClient.updateUser(user.getPrimaryId(), user);
+                    } catch (FeignException fe) {
+                        log.warn("could not update user with id " + primaryId, fe);
+                        return;
+                    }
+                    log.info(String.format("retrieved address for user %s", primaryId));
+                } else
+                    log.warn(String.format("could not get address for user %s from his system.", primaryId));
             } else
-                log.warn(String.format("could not get address for user %s from his system.", primaryId));
-        } else
-            log.warn(String.format("could not update addresse for user %s: no matrikel number", primaryId));
+                log.warn(String.format("could not update addresse for user %s: no matrikel number", primaryId));
+
     }
 }
