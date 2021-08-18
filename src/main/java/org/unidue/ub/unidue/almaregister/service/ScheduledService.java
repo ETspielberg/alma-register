@@ -22,10 +22,7 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ScheduledService {
@@ -111,10 +108,11 @@ public class ScheduledService {
                 if (response != null) {
                     Address address = new Address().addAddressTypeItem(new AddressAddressType().value("home"))
                             .city(response.getAddress().getCity())
-                            .country(new AddressCountry().value(response.getAddress().getCountry()))
                             .line1(response.getAddress().getStreet())
                             .line2(response.getAddress().getAddressaddition())
                             .line3(response.getAddress().getPostcode() + " " + response.getAddress().getCity());
+                    if ("D".equals(response.getAddress().getCity().toUpperCase(Locale.ROOT)))
+                            address.setCountry(new AddressCountry().value("DEU"));
                     user.getContactInfo().addAddressItem(address);
                     try {
                         this.almaUserApiClient.updateUser(user.getPrimaryId(), user);
