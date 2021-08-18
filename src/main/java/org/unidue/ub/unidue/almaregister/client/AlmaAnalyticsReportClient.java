@@ -23,7 +23,7 @@ public class AlmaAnalyticsReportClient {
     /**
      * The general path for all Alma analytics reports
      */
-    private final static String urlTemplate = "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/analytics/reports?path=%s&apikey=%s";
+    private final static String urlTemplate = "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/analytics/reports?path=%s&apikey=%s&limit=%d";
 
     @Value("${alma.api.user.key}")
     private String almaUserApiKey;
@@ -37,7 +37,7 @@ public class AlmaAnalyticsReportClient {
      * @throws IOException thrown if no connection could be established
      */
     public <T> T getReport(String reportPath, Class<T> clazz) throws IOException {
-        String url = String.format(urlTemplate, reportPath, almaUserApiKey);
+        String url = String.format(urlTemplate, reportPath, almaUserApiKey, 500);
         log.debug("querying url: " + url);
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(url, String.class);
