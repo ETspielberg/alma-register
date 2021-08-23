@@ -104,7 +104,17 @@ public class ScheduledService {
         }
          */
         for (UserIdentifier userIdentifier : user.getUserIdentifier()) {
-            if ("02".equals(userIdentifier.getIdType().getValue()))
+            if ("01".equals(userIdentifier.getIdType().getValue())) {
+                String barcode = userIdentifier.getValue();
+                if (barcode.startsWith("es"))
+                    barcode = barcode.replace("es", "");
+                else if (barcode.startsWith("ds"))
+                    barcode = barcode.replace("es", "");
+                else
+                    continue;
+                barcode = barcode.substring(0, barcode.length() - 2);
+                userNumber = Long.parseLong(barcode);
+            } else if ("02".equals(userIdentifier.getIdType().getValue()))
                 userNumber = Long.parseLong(userIdentifier.getValue());
             else if ("03".equals(userIdentifier.getIdType().getValue()))
                 zimId = userIdentifier.getValue();
@@ -140,7 +150,8 @@ public class ScheduledService {
         }
         try {
             this.almaUserApiClient.updateUser(user.getPrimaryId(), user);
-        } catch (FeignException fe) {
+        } catch (
+                FeignException fe) {
             log.warn("could not update user with id " + primaryId, fe);
             return;
         }
