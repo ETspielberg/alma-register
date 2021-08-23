@@ -37,7 +37,7 @@ public class AlmaAnalyticsReportClient {
      * @throws IOException thrown if no connection could be established
      */
     public <T> T getReport(String reportPath, Class<T> clazz) throws IOException {
-        String url = String.format(urlTemplate, reportPath, almaUserApiKey, 500);
+        String url = String.format(urlTemplate, reportPath, almaUserApiKey, 1000);
         log.debug("querying url: " + url);
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(url, String.class);
