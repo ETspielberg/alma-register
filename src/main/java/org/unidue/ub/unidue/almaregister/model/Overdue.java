@@ -8,8 +8,6 @@ public class Overdue {
 
     public final static String PATH = "/shared/Universität Duisburg-Essen 49HBZ_UDE/libintel/BenutzerNachMahnung3";
 
-    @JacksonXmlProperty(localName = "Title")
-    private String title;
 
     @JacksonXmlProperty(localName = "FirstName")
     private String firstName;
@@ -23,22 +21,8 @@ public class Overdue {
     @JacksonXmlProperty(localName = "DueDate")
     private String dueDate;
 
-    @JacksonXmlProperty(localName = "Barcode")
-    private String barcode;
-
-    @JacksonXmlProperty(localName = "ItemLoanId")
-    private String itemLoanId;
-
     @JacksonXmlProperty(localName = "UserGroup")
     private String userGroup;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -70,22 +54,6 @@ public class Overdue {
 
     public void setDueDate(String dueDate) {
         this.dueDate = dueDate;
-    }
-
-    public String getBarcode() {
-        return barcode;
-    }
-
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
-    }
-
-    public String getItemLoanId() {
-        return itemLoanId;
-    }
-
-    public void setItemLoanId(String itemLoanId) {
-        this.itemLoanId = itemLoanId;
     }
 
     public String getUserGroup() {
