@@ -16,6 +16,7 @@ import org.unidue.ub.unidue.almaregister.client.AlmaAnalyticsReportClient;
 import org.unidue.ub.unidue.almaregister.client.AlmaUserApiClient;
 import org.unidue.ub.unidue.almaregister.model.Overdue;
 import org.unidue.ub.unidue.almaregister.model.OverdueReport;
+import org.unidue.ub.unidue.almaregister.model.wsclient.ReadAddressByAccountResponse;
 import org.unidue.ub.unidue.almaregister.model.wsclient.ReadAddressByRegistrationnumberResponse;
 
 import java.io.IOException;
@@ -57,11 +58,11 @@ public class ScheduledService {
         JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate today = LocalDate.now();
-        if (today.getDayOfWeek()== DayOfWeek.SUNDAY)
+        if (today.getDayOfWeek() == DayOfWeek.SUNDAY)
             today = today.minusDays(2);
-        else if (today.getDayOfWeek()== DayOfWeek.SATURDAY)
+        else if (today.getDayOfWeek() == DayOfWeek.SATURDAY)
             today = today.minusDays(1);
-        String filename =  today.format(formatter) + "-1";
+        String filename = today.format(formatter) + "-1";
         jobParametersBuilder.addString("his.filename", filename).toJobParameters();
         jobParametersBuilder.addDate("date", new Date()).toJobParameters();
         JobParameters jobParameters = jobParametersBuilder.toJobParameters();
@@ -94,37 +95,55 @@ public class ScheduledService {
             log.warn("could not retrieve user with id " + primaryId, fe);
             return;
         }
-            long userNumber = 0L;
-            if (!"01".equals(user.getUserGroup().getValue())) {
-                log.warn(String.format("could not update addresse for user %s: not a student", primaryId));
-                return;
+        long userNumber = 0L;
+        String zimId = "";
+        /*
+        if (!"01".equals(user.getUserGroup().getValue()) || !"01".equals(user.getUserGroup().getValue()) || !"01".equals(user.getUserGroup().getValue())) {
+            log.warn(String.format("could not update address for user %s: not a student", primaryId));
+            return;
+        }
+         */
+        for (UserIdentifier userIdentifier : user.getUserIdentifier()) {
+            if ("02".equals(userIdentifier.getIdType().getValue()))
+                userNumber = Long.parseLong(userIdentifier.getValue());
+            else if ("03".equals(userIdentifier.getIdType().getValue()))
+                zimId = userIdentifier.getValue();
+        }
+        log.info(String.format("updating user with id %d and zim id %s", userNumber, zimId));
+        if (userNumber != 0L) {
+            ReadAddressByRegistrationnumberResponse matrikelResponse = this.addressWebServiceClient.getAddressByMatrikel(userNumber);
+            if (matrikelResponse != null) {
+                Address address = new Address().addAddressTypeItem(new AddressAddressType().value("home"))
+                        .city(matrikelResponse.getAddress().getCity())
+                        .line1(matrikelResponse.getAddress().getStreet())
+                        .line2(matrikelResponse.getAddress().getAddressaddition())
+                        .line3(matrikelResponse.getAddress().getPostcode() + " " + matrikelResponse.getAddress().getCity());
+                if ("D".equals(matrikelResponse.getAddress().getCity().toUpperCase(Locale.ROOT)))
+                    address.setCountry(new AddressCountry().value("DEU"));
+                user.getContactInfo().addAddressItem(address);
             }
-            for (UserIdentifier userIdentifier : user.getUserIdentifier())
-                if ("02".equals(userIdentifier.getIdType().getValue()))
-                    userNumber = Long.parseLong(userIdentifier.getValue());
-            log.info(String.format("updating user with id %d", userNumber));
-            if (userNumber != 0L) {
-                ReadAddressByRegistrationnumberResponse response = this.addressWebServiceClient.getAddressByMatrikel(userNumber);
-                if (response != null) {
-                    Address address = new Address().addAddressTypeItem(new AddressAddressType().value("home"))
-                            .city(response.getAddress().getCity())
-                            .line1(response.getAddress().getStreet())
-                            .line2(response.getAddress().getAddressaddition())
-                            .line3(response.getAddress().getPostcode() + " " + response.getAddress().getCity());
-                    if ("D".equals(response.getAddress().getCity().toUpperCase(Locale.ROOT)))
-                            address.setCountry(new AddressCountry().value("DEU"));
-                    user.getContactInfo().addAddressItem(address);
-                    try {
-                        this.almaUserApiClient.updateUser(user.getPrimaryId(), user);
-                    } catch (FeignException fe) {
-                        log.warn("could not update user with id " + primaryId, fe);
-                        return;
-                    }
-                    log.info(String.format("retrieved address for user %s", primaryId));
-                } else
-                    log.warn(String.format("could not get address for user %s from his system.", primaryId));
-            } else
-                log.warn(String.format("could not update addresse for user %s: no matrikel number", primaryId));
-
+        } else if (!zimId.isEmpty()) {
+            ReadAddressByAccountResponse zimIdResponse = this.addressWebServiceClient.getAddressByZimId(zimId);
+            if (zimIdResponse != null) {
+                Address address = new Address().addAddressTypeItem(new AddressAddressType().value("home"))
+                        .city(zimIdResponse.getAddress().getCity())
+                        .line1(zimIdResponse.getAddress().getStreet())
+                        .line2(zimIdResponse.getAddress().getAddressaddition())
+                        .line3(zimIdResponse.getAddress().getPostcode() + " " + zimIdResponse.getAddress().getCity());
+                if ("D".equals(zimIdResponse.getAddress().getCity().toUpperCase(Locale.ROOT)))
+                    address.setCountry(new AddressCountry().value("DEU"));
+                user.getContactInfo().addAddressItem(address);
+            }
+        } else {
+            log.warn(String.format("could not get address for user %s from his system.", primaryId));
+            return;
+        }
+        try {
+            this.almaUserApiClient.updateUser(user.getPrimaryId(), user);
+        } catch (FeignException fe) {
+            log.warn("could not update user with id " + primaryId, fe);
+            return;
+        }
+        log.info(String.format("retrieved address for user %s", primaryId));
     }
 }
