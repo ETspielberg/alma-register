@@ -123,25 +123,44 @@ public class ScheduledService {
         if (userNumber != 0L) {
             ReadAddressByRegistrationnumberResponse matrikelResponse = this.addressWebServiceClient.getAddressByMatrikel(userNumber);
             if (matrikelResponse != null) {
-                Address address = new Address().addAddressTypeItem(new AddressAddressType().value("home"))
+                Address address = new Address().preferred(true)
+                        .addAddressTypeItem(new AddressAddressType().value("home"))
                         .city(matrikelResponse.getAddress().getCity())
                         .line1(matrikelResponse.getAddress().getStreet())
                         .line2(matrikelResponse.getAddress().getAddressaddition())
                         .line3(matrikelResponse.getAddress().getPostcode() + " " + matrikelResponse.getAddress().getCity());
                 if ("D".equals(matrikelResponse.getAddress().getCity().toUpperCase(Locale.ROOT)))
                     address.setCountry(new AddressCountry().value("DEU"));
+                Iterator<Address> iterator = user.getContactInfo().getAddress().iterator();
+                while (iterator.hasNext()) {
+                    Address oldAddress = iterator.next();
+                    if (isSameAddress(oldAddress, address))
+                        iterator.remove();
+                    else
+                        oldAddress.preferred(false);
+                }
                 user.getContactInfo().addAddressItem(address);
+
             }
         } else if (!zimId.isEmpty()) {
             ReadAddressByAccountResponse zimIdResponse = this.addressWebServiceClient.getAddressByZimId(zimId);
             if (zimIdResponse != null) {
-                Address address = new Address().addAddressTypeItem(new AddressAddressType().value("home"))
+                Address address = new Address().preferred(true)
+                        .addAddressTypeItem(new AddressAddressType().value("home"))
                         .city(zimIdResponse.getAddress().getCity())
                         .line1(zimIdResponse.getAddress().getStreet())
                         .line2(zimIdResponse.getAddress().getAddressaddition())
                         .line3(zimIdResponse.getAddress().getPostcode() + " " + zimIdResponse.getAddress().getCity());
                 if ("D".equals(zimIdResponse.getAddress().getCity().toUpperCase(Locale.ROOT)))
                     address.setCountry(new AddressCountry().value("DEU"));
+                Iterator<Address> iterator = user.getContactInfo().getAddress().iterator();
+                while (iterator.hasNext()) {
+                    Address oldAddress = iterator.next();
+                    if (isSameAddress(oldAddress, address))
+                        iterator.remove();
+                    else
+                        oldAddress.preferred(false);
+                }
                 user.getContactInfo().addAddressItem(address);
             }
         } else {
@@ -156,5 +175,15 @@ public class ScheduledService {
             return;
         }
         log.info(String.format("retrieved address for user %s", primaryId));
+    }
+
+    public boolean isSameAddress(Address address, Address other) {
+        try {
+            return address.getCity().equals(other.getCity()) &&
+                address.getPostalCode().equals(other.getPostalCode()) &&
+                address.getLine1().equals(other.getLine1());
+        } catch (NullPointerException npe) {
+            return false;
+        }
     }
 }
