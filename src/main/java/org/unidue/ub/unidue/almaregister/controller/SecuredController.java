@@ -18,7 +18,6 @@ import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.alma.shared.user.UserIdentifier;
 import org.unidue.ub.alma.shared.user.UserIdentifierIdType;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
-import org.unidue.ub.unidue.almaregister.service.MailSenderService;
 import org.unidue.ub.unidue.almaregister.service.ScheduledService;
 import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
