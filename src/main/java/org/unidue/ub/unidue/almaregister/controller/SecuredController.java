@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.unidue.ub.alma.shared.user.UserIdentifier;
 import org.unidue.ub.alma.shared.user.UserIdentifierIdType;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
 import org.unidue.ub.unidue.almaregister.service.MailSenderService;
+import org.unidue.ub.unidue.almaregister.service.ScheduledService;
 import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 import org.unidue.ub.unidue.almaregister.service.exceptions.MissingHisDataException;
@@ -40,7 +42,7 @@ public class SecuredController {
     @Value("${alma.redirect.url:https://www.uni-due.de/ub}")
     private String redirectUrl;
 
-    private final MailSenderService mailSenderService;
+    private final ScheduledService scheduledService;
 
     private final Logger log = LoggerFactory.getLogger(SecuredController.class);
 
@@ -55,9 +57,9 @@ public class SecuredController {
      *
      * @param almaUserService the Alma user service, responsible for retrieving the registration request object from the Shibboleth request attributes and to submit the corresponding AlmaUser object to the Alma Users API
      */
-    SecuredController(AlmaUserService almaUserService, MailSenderService mailSenderService) {
+    SecuredController(AlmaUserService almaUserService, ScheduledService scheduledService) {
         this.almaUserService = almaUserService;
-        this.mailSenderService = mailSenderService;
+        this.scheduledService = scheduledService;
     }
 
     /**
@@ -167,6 +169,12 @@ public class SecuredController {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @GetMapping(value = "/updateUserAddresses", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateUserAddresses() {
+        this.scheduledService.updateUserAdresses();
+        return ResponseEntity.ok().build();
     }
 
     /**
