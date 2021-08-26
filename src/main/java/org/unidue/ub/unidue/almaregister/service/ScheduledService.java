@@ -105,11 +105,11 @@ public class ScheduledService {
          */
         for (UserIdentifier userIdentifier : user.getUserIdentifier()) {
             if ("01".equals(userIdentifier.getIdType().getValue())) {
-                String barcode = userIdentifier.getValue();
+                String barcode = userIdentifier.getValue().toLowerCase(Locale.ROOT);
                 if (barcode.startsWith("es"))
                     barcode = barcode.replace("es", "");
                 else if (barcode.startsWith("ds"))
-                    barcode = barcode.replace("es", "");
+                    barcode = barcode.replace("ds", "");
                 else
                     continue;
                 barcode = barcode.substring(0, barcode.length() - 2);

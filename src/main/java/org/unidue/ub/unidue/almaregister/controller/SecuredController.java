@@ -173,6 +173,7 @@ public class SecuredController {
     @GetMapping(value = "/updateUserAddresses", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUserAddresses() {
         this.scheduledService.updateUserAdresses();
+        log.info("manually started updating addresses");
         return ResponseEntity.ok().build();
     }
 
