@@ -14,8 +14,8 @@ import org.unidue.ub.alma.shared.user.*;
 import org.unidue.ub.unidue.almaregister.client.AddressWebServiceClient;
 import org.unidue.ub.unidue.almaregister.client.AlmaAnalyticsReportClient;
 import org.unidue.ub.unidue.almaregister.client.AlmaUserApiClient;
-import org.unidue.ub.unidue.almaregister.model.Overdue;
-import org.unidue.ub.unidue.almaregister.model.OverdueReport;
+import org.unidue.ub.unidue.almaregister.model.reports.Overdue;
+import org.unidue.ub.unidue.almaregister.model.reports.OverdueReport;
 import org.unidue.ub.unidue.almaregister.model.wsclient.ReadAddressByAccountResponse;
 import org.unidue.ub.unidue.almaregister.model.wsclient.ReadAddressByRegistrationnumberResponse;
 
@@ -179,9 +179,14 @@ public class ScheduledService {
 
     public boolean isSameAddress(Address address, Address other) {
         try {
-            return address.getCity().equals(other.getCity()) &&
-                address.getPostalCode().equals(other.getPostalCode()) &&
-                address.getLine1().equals(other.getLine1());
+            if (address.getCity().equals(other.getCity()) && address.getLine1().equals(other.getLine1())) {
+                if (address.getPostalCode().equals(other.getPostalCode()))
+                    return true;
+                else if (address.getLine3().equals(other.getPostalCode() + " " + other.getCity()))
+                    return true;
+                return true;
+            } else
+                return false;
         } catch (NullPointerException npe) {
             return false;
         }
