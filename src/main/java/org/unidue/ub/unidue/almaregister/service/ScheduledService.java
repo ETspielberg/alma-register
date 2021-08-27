@@ -126,10 +126,10 @@ public class ScheduledService {
                 Address address = new Address().preferred(true)
                         .addAddressTypeItem(new AddressAddressType().value("home"))
                         .city(matrikelResponse.getAddress().getCity())
+                        .postalCode(matrikelResponse.getAddress().getPostcode())
                         .line1(matrikelResponse.getAddress().getStreet())
-                        .line2(matrikelResponse.getAddress().getAddressaddition())
-                        .line3(matrikelResponse.getAddress().getPostcode() + " " + matrikelResponse.getAddress().getCity());
-                if ("D".equals(matrikelResponse.getAddress().getCity().toUpperCase(Locale.ROOT)))
+                        .line2(matrikelResponse.getAddress().getAddressaddition());
+                if ("D".equals(matrikelResponse.getAddress().getCountry().toUpperCase(Locale.ROOT)))
                     address.setCountry(new AddressCountry().value("DEU"));
                 Iterator<Address> iterator = user.getContactInfo().getAddress().iterator();
                 while (iterator.hasNext()) {
@@ -148,10 +148,10 @@ public class ScheduledService {
                 Address address = new Address().preferred(true)
                         .addAddressTypeItem(new AddressAddressType().value("home"))
                         .city(zimIdResponse.getAddress().getCity())
+                        .postalCode(zimIdResponse.getAddress().getPostcode())
                         .line1(zimIdResponse.getAddress().getStreet())
-                        .line2(zimIdResponse.getAddress().getAddressaddition())
-                        .line3(zimIdResponse.getAddress().getPostcode() + " " + zimIdResponse.getAddress().getCity());
-                if ("D".equals(zimIdResponse.getAddress().getCity().toUpperCase(Locale.ROOT)))
+                        .line2(zimIdResponse.getAddress().getAddressaddition());
+                if ("D".equals(zimIdResponse.getAddress().getCountry().toUpperCase(Locale.ROOT)))
                     address.setCountry(new AddressCountry().value("DEU"));
                 Iterator<Address> iterator = user.getContactInfo().getAddress().iterator();
                 while (iterator.hasNext()) {
