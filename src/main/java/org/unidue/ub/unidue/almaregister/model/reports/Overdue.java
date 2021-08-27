@@ -1,4 +1,4 @@
-package org.unidue.ub.unidue.almaregister.model;
+package org.unidue.ub.unidue.almaregister.model.reports;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
