@@ -66,15 +66,15 @@
                         </tr>
                         <tr>
                             <th>
-                                <label for="cardNumber" th:text="#{review.cardnumber}">Kartennummer</label>
+                                <label for="cardNumber" th:text="#{review.cardnumber}">Kartennummer</label><strong>*</strong>
                             </th>
                             <td>
-                                <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}">
+                                <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}" required>
                             </td>
                         </tr>
                         <tr>
                             <th>
-                                <label for="birthdate-input" th:text="#{birth.date}"></label>
+                                <label for="birthdate-input" th:text="#{birth.date}"></label><strong>*</strong>
                             </th>
                             <td>
                                 <input id="birthdate-input" type="date" th:field="*{birthDate}" required>
@@ -82,7 +82,7 @@
                         </tr>
                         <tr th:if="*{userStatus.equals('06')}">
                             <th>
-                                <label for="roomNumber-input" th:text="#{room.number}"></label>
+                                <label for="roomNumber-input" th:text="#{room.number}"><strong>*</strong></label>
                             </th>
                             <td>
                                 <input id="roomNumber-input" type="text" size="30" class="form-control" required
@@ -91,7 +91,7 @@
                         </tr>
                         <tr th:if="*{userStatus.equals('06')}">
                             <th>
-                                <label for="campus-input" th:text="#{campus}"></label>
+                                <label for="campus-input" th:text="#{campus}"></label><strong>*</strong>
                             </th>
                             <td>
                                 <select id="campus-input" th:field="*{campus}" required>
@@ -103,12 +103,12 @@
                         </tr>
                         <tr>
                             <th>
-                                <label for="pin-input" th:text="#{pin.number}"></label>
+                                <label for="pin-input" th:text="#{pin.number}"></label><strong>*</strong>
                             </th>
                             <td>
                                 <input id="pin-input" type="text" th:field="*{pinNumber}"
                                        th:placeholder="#{pin.number}" required pattern="\d{8}"
-                                       th:title="#{pin.number.title}"/>
+                                       th:title="#{pin.number.title}" required/>
                             </td>
                         </tr>
                     </table>
@@ -116,12 +116,12 @@
                         <div>
                             <input th:value="*{termsAccepted}" th:field="*{termsAccepted}" type="checkbox"
                                    name="termsAndConditions" id="termsAndConditions" required/>
-                            <label th:utext="#{index.terms.label}" for="termsAndConditions"> </label>
+                            <label th:utext="#{index.terms.label}" for="termsAndConditions"> </label><strong>*</strong>
                         </div>
                         <div>
                             <input th:value="*{privacyAccepted}" th:field="*{privacyAccepted}" type="checkbox"
                                    name="privacy" id="privacy" required/>
-                            <label th:utext="#{index.privacy.label}" for="privacy"></label>
+                            <label th:utext="#{index.privacy.label}" for="privacy"></label><strong>*</strong>
                         </div>
                     </div>
                     <input id="externalId" type="text" th:field="*{externalId}" th:value="*{externalId}" hidden>
