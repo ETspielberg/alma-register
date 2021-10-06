@@ -18,7 +18,14 @@
                     <button class="btn btn-primary" th:text="#{success.to.primo}"></button>
                 </a>
                 <p><span th:utext="#{success.shibboleth.login.necessary}"></span></p>
-                <p><span th:utext="#{success.shibboleth.logout}"</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="https://register.ub.uni-due.de/Shibboleth.sso/Logout">
+                    <button class="btn btn-danger">Logout</button>
+                </a>
+                <p><span th:utext="#{success.shibboleth.logout}"></span></p>
             </div>
         </div>
     </div>
