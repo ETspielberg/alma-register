@@ -22,10 +22,11 @@
         </div>
         <div class="row">
             <div class="col">
-                <a href="https://register.ub.uni-due.de/Shibboleth.sso/Logout">
+                <p><span th:utext="#{success.shibboleth.logout}"></span></p>
+                <a href="/Shibboleth.sso/Logout">
                     <button class="btn btn-danger">Logout</button>
                 </a>
-                <p><span th:utext="#{success.shibboleth.logout}"></span></p>
+
             </div>
         </div>
     </div>
