@@ -92,12 +92,23 @@ public class PublicController {
         return "register";
     }
 
+
+    /**
+     * showing the alreadyExists.html if the submitted user already exists in Alma
+     * @return the already exists page
+     */
+    @GetMapping("/alreadyExists")
+    public String showAlreadyExistPage() {
+        return "alreadyExists";
+    }
+
     /**
      * controller for the registration request submission (POST).
      *
-     * @param registrationRequest the registration request object, from which the AlmaUser object can be retreived.
+     * @param registrationRequest the registration request object, from which the AlmaUser object can be retrieved.
      * @param locale the selected locale (currently 'en' and 'de' supported)
      * @param model the model to be used for the display of the results
+     * @param httpServletRequest the request object used to retrieve user agent and remote address
      * @return the registration page with errors, if the terms or the privacy was not accepted, otherwise a redirect to the success page
      */
     @PostMapping("/register")
@@ -113,27 +124,32 @@ public class PublicController {
                 this.logService.logSuccess(almaUser,httpServletRequest);
                 return "nearlyFinished";
             } catch (Exception e) {
+                this.logService.logError(registrationRequest, httpServletRequest, e);
                 log.warn("An error occurred", e);
                 throw new AlmaConnectionException("could not create user");
             }
         }
     }
 
-    @GetMapping("/alreadyExists")
-    public String showAlreadyExistPage() {
-        return "alreadyExists";
-    }
-
+    /**
+     * registers a user, which already exists in Alma as inactive user.
+     * @param registrationRequest the registration request object, from which the AlmaUser object can be retrieved.
+     * @param locale the selected locale (currently 'en' and 'de' supported)
+     * @param httpServletRequest the request object used to retrieve user agent and remote address
+     * @return the registration page with errors, if the terms or the privacy was not accepted, otherwise a redirect to the success page
+     */
     @PostMapping("/confirmRegister")
-    public String registerAlmaUserAnyway(@ModelAttribute RegistrationRequest registrationRequest, Locale locale) {
-        log.info(registrationRequest.firstName + " " + registrationRequest.lastName);
-        log.info("Privacy: " + registrationRequest.privacyAccepted);
-        log.info("Terms: " + registrationRequest.termsAccepted);
-        AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage(), false), true);
-        almaUser.setStatus(new UserStatus().value("INACTIVE"));
-        log.info(String.format("User %s %s sucessfully registered with new id %s",
-                almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
-        return "nearlyFinished";
+    public String registerAlmaUserAnyway(@ModelAttribute RegistrationRequest registrationRequest, Locale locale, HttpServletRequest httpServletRequest) {
+        try {
+            AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage(), false), true);
+            almaUser.setStatus(new UserStatus().value("INACTIVE"));
+            logService.logSuccess(almaUser, httpServletRequest);
+            return "nearlyFinished";
+        } catch (Exception e) {
+            this.logService.logError(registrationRequest, httpServletRequest, e);
+            log.warn("An error occurred", e);
+            throw new AlmaConnectionException("could not create user");
+        }
     }
 
 
