@@ -17,6 +17,7 @@ import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.alma.shared.user.UserIdentifier;
 import org.unidue.ub.alma.shared.user.UserIdentifierIdType;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
+import org.unidue.ub.unidue.almaregister.service.LogService;
 import org.unidue.ub.unidue.almaregister.service.ScheduledService;
 import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
@@ -43,6 +44,8 @@ public class SecuredController {
 
     private final ScheduledService scheduledService;
 
+    private final LogService logService;
+
     private final Logger log = LoggerFactory.getLogger(SecuredController.class);
 
     @GetMapping("/success")
@@ -56,9 +59,10 @@ public class SecuredController {
      *
      * @param almaUserService the Alma user service, responsible for retrieving the registration request object from the Shibboleth request attributes and to submit the corresponding AlmaUser object to the Alma Users API
      */
-    SecuredController(AlmaUserService almaUserService, ScheduledService scheduledService) {
+    SecuredController(AlmaUserService almaUserService, ScheduledService scheduledService, LogService logService) {
         this.almaUserService = almaUserService;
         this.scheduledService = scheduledService;
+        this.logService = logService;
     }
 
     /**
@@ -93,13 +97,7 @@ public class SecuredController {
         }
         AlmaUser almaUser = registrationRequest.getAlmaUser(locale.getLanguage(), true);
         this.almaUserService.createAlmaUser(almaUser, true);
-        log.info(String.format("User %s %s sucessfully registered. primaryId: %s, userGroup: %s, remoteAddress: %s, userAgent: %s",
-                almaUser.getFirstName(),
-                almaUser.getLastName(),
-                almaUser.getPrimaryId(),
-                almaUser.getUserGroup().getValue(),
-                httpServletRequest.getRemoteAddr(),
-                httpServletRequest.getHeader("User-Agent")));
+        this.logService.logSuccess(almaUser, httpServletRequest);
         return "success";
     }
 

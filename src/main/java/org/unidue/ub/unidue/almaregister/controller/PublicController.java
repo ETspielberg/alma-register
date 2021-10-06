@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.alma.shared.user.UserStatus;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
+import org.unidue.ub.unidue.almaregister.service.LogService;
 import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 
@@ -28,6 +29,8 @@ public class PublicController {
 
     private final AlmaUserService almaUserService;
 
+    private final LogService logService;
+
     private final Logger log = LoggerFactory.getLogger(PublicController.class);
 
     /**
@@ -35,8 +38,10 @@ public class PublicController {
      *
      * @param almaUserService saves AlmaUser objects to Alma
      */
-    PublicController(AlmaUserService almaUserService) {
+    PublicController(AlmaUserService almaUserService,
+                     LogService logService) {
         this.almaUserService = almaUserService;
+        this.logService = logService;
     }
 
     /**
@@ -97,22 +102,7 @@ public class PublicController {
      */
     @PostMapping("/register")
     public String registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, Locale locale, Model model, HttpServletRequest httpServletRequest) {
-        String userAgent;
-        String remoteAddress;
-        try {
-            remoteAddress = httpServletRequest.getRemoteAddr();
-            if (remoteAddress == null)
-                remoteAddress = "n.a.";
-        } catch (Exception e) {
-            remoteAddress = "n.a.";
-        }
-        try {
-            userAgent = httpServletRequest.getHeader("User-Agent");
-            if (userAgent == null)
-                userAgent = "n.a.";
-        } catch (Exception e) {
-            userAgent = "n.a.";
-        }
+
         if (this.almaUserService.userExists(registrationRequest)) {
             model.addAttribute("registrationRequest", registrationRequest);
             model.addAttribute("redirectUrl", redirectUrl);
@@ -120,13 +110,7 @@ public class PublicController {
         } else {
             try {
                 AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage(), true), true);
-                log.info(String.format("User '%s, %s' successfully registered | primaryId: %s, userGroup: %s, remoteAddress: %s, userAgent; %s",
-                        almaUser.getFirstName(),
-                        almaUser.getLastName(),
-                        almaUser.getPrimaryId(),
-                        almaUser.getUserGroup().getValue(),
-                        remoteAddress,
-                        userAgent));
+                this.logService.logSuccess(almaUser,httpServletRequest);
                 return "nearlyFinished";
             } catch (Exception e) {
                 log.warn("An error occurred", e);
@@ -151,4 +135,6 @@ public class PublicController {
                 almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
         return "nearlyFinished";
     }
+
+
 }
