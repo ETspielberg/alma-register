@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.alma.shared.user.UserIdentifier;
@@ -24,6 +23,7 @@ import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 import org.unidue.ub.unidue.almaregister.service.exceptions.MissingHisDataException;
 import org.unidue.ub.unidue.almaregister.service.exceptions.MissingShibbolethDataException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -83,7 +83,7 @@ public class SecuredController {
      * @throws AlmaConnectionException thrown if no connection to the alma Users API could be established
      */
     @PostMapping("/review")
-    public String confirmCreation(@ModelAttribute RegistrationRequest registrationRequest, Model model, Locale locale, final RedirectAttributes redirectAttribute) throws AlmaConnectionException {
+    public String confirmCreation(@ModelAttribute RegistrationRequest registrationRequest, Model model, Locale locale, HttpServletRequest httpServletRequest) throws AlmaConnectionException {
         boolean exists = this.almaUserService.userExists(registrationRequest);
         if (exists) {
             model.addAttribute("redirectUrl", redirectUrl);
@@ -93,6 +93,13 @@ public class SecuredController {
         }
         AlmaUser almaUser = registrationRequest.getAlmaUser(locale.getLanguage(), true);
         this.almaUserService.createAlmaUser(almaUser, true);
+        log.info(String.format("User %s %s sucessfully registered. primaryId: %s, userGroup: %s, remoteAddress: %s, userAgent: %s",
+                almaUser.getFirstName(),
+                almaUser.getLastName(),
+                almaUser.getPrimaryId(),
+                almaUser.getUserGroup().getValue(),
+                httpServletRequest.getRemoteAddr(),
+                httpServletRequest.getHeader("User-Agent")));
         return "success";
     }
 
@@ -130,7 +137,7 @@ public class SecuredController {
      * @throws AlmaConnectionException thrown if no connection to the alma Users API could be established
      */
     @PostMapping("/connect")
-    public RedirectView confirmConnect(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result, final RedirectAttributes redirectAttribute) throws AlmaConnectionException {
+    public RedirectView confirmConnect(@ModelAttribute RegistrationRequest registrationRequest, BindingResult result) throws AlmaConnectionException {
         if (!registrationRequest.privacyAccepted) {
             result.rejectValue("privacyAccepted", "error.privacyAccepted");
             return new RedirectView("review");
@@ -145,8 +152,7 @@ public class SecuredController {
         UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(registrationRequest.externalId).segmentType("external");
         almaUser.addUserIdentifierItem(userIdentifier);
         this.almaUserService.updateAlmaUser(registrationRequest.cardNumber, almaUser);
-        RedirectView redirectView = new RedirectView("success");
-        return redirectView;
+        return new RedirectView("success");
     }
 
 

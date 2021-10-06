@@ -5,19 +5,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 import org.unidue.ub.alma.shared.user.AlmaUser;
 import org.unidue.ub.alma.shared.user.UserStatus;
 import org.unidue.ub.unidue.almaregister.model.RegistrationRequest;
-import org.unidue.ub.unidue.almaregister.service.MailSenderService;
 import org.unidue.ub.unidue.almaregister.service.exceptions.AlmaConnectionException;
 import org.unidue.ub.unidue.almaregister.service.AlmaUserService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 /**
@@ -31,8 +28,6 @@ public class PublicController {
 
     private final AlmaUserService almaUserService;
 
-    private final MailSenderService mailSenderService;
-
     private final Logger log = LoggerFactory.getLogger(PublicController.class);
 
     /**
@@ -40,10 +35,8 @@ public class PublicController {
      *
      * @param almaUserService saves AlmaUser objects to Alma
      */
-    PublicController(AlmaUserService almaUserService,
-                     MailSenderService mailSenderService) {
+    PublicController(AlmaUserService almaUserService) {
         this.almaUserService = almaUserService;
-        this.mailSenderService = mailSenderService;
     }
 
     /**
@@ -103,7 +96,7 @@ public class PublicController {
      * @return the registration page with errors, if the terms or the privacy was not accepted, otherwise a redirect to the success page
      */
     @PostMapping("/register")
-    public String registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, Locale locale, Model model) {
+    public String registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, Locale locale, Model model, HttpServletRequest httpServletRequest) {
         if (this.almaUserService.userExists(registrationRequest)) {
             model.addAttribute("registrationRequest", registrationRequest);
             model.addAttribute("redirectUrl", redirectUrl);
@@ -111,8 +104,13 @@ public class PublicController {
         } else {
             try {
                 AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage(), true), true);
-                log.info(String.format("User %s %s sucessfully registered with new id %s",
-                        almaUser.getFirstName(), almaUser.getLastName(), almaUser.getPrimaryId()));
+                log.info(String.format("User %s %s sucessfully registered. primaryId: %s, userGroup: %s, remoteAddress: %s, userAgent; %s",
+                        almaUser.getFirstName(),
+                        almaUser.getLastName(),
+                        almaUser.getPrimaryId(),
+                        almaUser.getUserGroup().getValue(),
+                        httpServletRequest.getRemoteAddr(),
+                        httpServletRequest.getHeader("User-Agent")));
                 return "nearlyFinished";
             } catch (Exception e) {
                 log.warn("An error occurred", e);
@@ -122,12 +120,12 @@ public class PublicController {
     }
 
     @GetMapping("/alreadyExists")
-    public String showAlreadyExistPage(Model model) {
+    public String showAlreadyExistPage() {
         return "alreadyExists";
     }
 
     @PostMapping("/confirmRegister")
-    public String registerAlmaUserAnyway(@ModelAttribute RegistrationRequest registrationRequest, Locale locale, final RedirectAttributes redirectAttribute) {
+    public String registerAlmaUserAnyway(@ModelAttribute RegistrationRequest registrationRequest, Locale locale) {
         log.info(registrationRequest.firstName + " " + registrationRequest.lastName);
         log.info("Privacy: " + registrationRequest.privacyAccepted);
         log.info("Terms: " + registrationRequest.termsAccepted);
