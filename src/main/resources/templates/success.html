@@ -31,5 +31,14 @@
         </div>
     </div>
 </div>
+<script>
+    function goBack() {
+        window.location.href = '/Shibboleth.sso/Logout';
+    }
+    (function() {
+        window.setTimeout('goBack()', 5000);
+    })();
+</script>
+
 </body>
 </html>
