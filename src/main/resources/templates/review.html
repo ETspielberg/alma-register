@@ -17,7 +17,7 @@
                                 <label for="title-input" th:text="#{title}"></label>
                             </th>
                             <td>
-                                <select id="title-input" th:field="*{title}">
+                                <select id="title-input" class="form-control" th:field="*{title}">
                                     <option th:value="''" th:text="#{title.none}"></option>
                                     <option th:value="'DR'" th:text="#{title.dr}"></option>
                                     <option th:value="'PROF'" th:text="#{title.prof}"></option>
@@ -69,7 +69,7 @@
                                 <label for="cardNumber" th:text="#{review.cardnumber}">Kartennummer</label><strong>*</strong>
                             </th>
                             <td>
-                                <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}" required>
+                                <input id="cardNumber" type="text" th:field="*{cardNumber}" th:value="*{cardNumber}" class="text form-control notempty" required>
                             </td>
                         </tr>
                         <tr>
@@ -77,7 +77,7 @@
                                 <label for="birthdate-input" th:text="#{birth.date}"></label><strong>*</strong>
                             </th>
                             <td>
-                                <input id="birthdate-input" type="date" th:field="*{birthDate}" required>
+                                <input id="birthdate-input" type="date" th:field="*{birthDate}" class="form-control" required>
                             </td>
                         </tr>
                         <tr th:if="*{userStatus.equals('06')}">
@@ -85,7 +85,7 @@
                                 <label for="roomNumber-input" th:text="#{room.number}"><strong>*</strong></label>
                             </th>
                             <td>
-                                <input id="roomNumber-input" type="text" size="30" class="form-control" required
+                                <input id="roomNumber-input" type="text" size="30" class="text form-control notempty" required
                                        th:field="*{roomNumber}" th:value="*{roomNumber}" th:placeholder="#{room.number}">
                             </td>
                         </tr>
@@ -94,7 +94,7 @@
                                 <label for="campus-input" th:text="#{campus}"></label><strong>*</strong>
                             </th>
                             <td>
-                                <select id="campus-input" th:field="*{campus}" required>
+                                <select id="campus-input" th:field="*{campus}" class="form-control" required>
                                     <option th:value="'Campus Essen'" th:text="#{essen}"></option>
                                     <option th:value="'Campus Duisburg'" th:text="#{duisburg}"></option>
                                     <option th:value="'FB Medizin'" th:text="#{klinikum}"></option>
@@ -106,7 +106,7 @@
                                 <label for="pin-input" th:text="#{pin.number}"></label><strong>*</strong>
                             </th>
                             <td>
-                                <input id="pin-input" type="text" th:field="*{pinNumber}"
+                                <input id="pin-input" type="text" th:field="*{pinNumber}" class="text form-control notempty"
                                        th:placeholder="#{pin.number}" pattern="\d{8}"
                                        th:title="#{pin.number.title}" required/>
                             </td>

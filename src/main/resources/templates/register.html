@@ -16,7 +16,7 @@
                         <table class="table table-striped">
                             <tr>
                                 <th>
-                                    <label for="gender-input" th:text="#{gender}"></label>
+                                    <label for="gender-input" th:text="#{gender}" class="form-control-label"></label>
                                 </th>
                                 <td>
                                     <select id="gender-input" th:field="*{gender}" required>
@@ -30,7 +30,7 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="title-input" th:text="#{title}"></label>
+                                    <label for="title-input" th:text="#{title}" class="form-control-label"></label>
                                 </th>
                                 <td>
                                     <select id="title-input" th:field="*{title}">
@@ -43,25 +43,25 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="firstName-input" th:text="#{first.name}"></label>
+                                    <label for="firstName-input" th:text="#{first.name}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="firstName-input" type="text" size="30" class="form-control" autofocus
+                                    <input id="firstName-input" type="text" size="30" class="text form-control notempty" autofocus
                                            required th:field="*{firstName}" th:placeholder="#{first.name}">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="lastName-input" th:text="#{last.name}"></label>
+                                    <label for="lastName-input" th:text="#{last.name}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="lastName-input" type="text" size="30" class="form-control" required
+                                    <input id="lastName-input" type="text" size="30" class="text form-control notempty" required
                                            th:field="*{lastName}" th:placeholder="#{last.name}">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="userStatus-input" th:text="#{user.status}"></label>
+                                    <label for="userStatus-input" th:text="#{user.status}" class="form-control-label"></label>
                                 </th>
                                 <td>
                                     <select id="userStatus-input" th:field="*{userStatus}" required>
@@ -76,51 +76,51 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="road-input" th:text="#{road}"></label>
+                                    <label for="road-input" th:text="#{road}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="road-input" type="text" size="30" class="form-control" required
+                                    <input id="road-input" type="text" size="30" class="text form-control notempty" required
                                            th:field="*{road}" th:placeholder="#{road}">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="plz-input" th:text="#{plz}"></label>
+                                    <label for="plz-input" th:text="#{plz}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="plz-input" type="text" size="30" class="form-control" required
+                                    <input id="plz-input" type="text" size="30" class="text form-control notempty" required
                                            th:field="*{plz}" th:placeholder="#{plz}">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="city-input" th:text="#{city}"></label>
+                                    <label for="city-input" th:text="#{city}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="city-input" type="text" size="30" class="form-control" required
+                                    <input id="city-input" type="text" size="30" class="text form-control notempty" required
                                            th:field="*{city}" th:placeholder="#{city}">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="birthdate-input" th:text="#{birth.date}"></label>
+                                    <label for="birthdate-input" th:text="#{birth.date}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="birthdate-input" type="date" th:field="*{birthDate}" required>
+                                    <input id="birthdate-input" type="date" th:field="*{birthDate}" required class="form-control notempty">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="email-input" th:text="#{email}"></label>
+                                    <label for="email-input" th:text="#{email}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="email-input" type="email" size="30" class="form-control" required
+                                    <input id="email-input" type="email" size="30" class="text form-control notempty" required
                                            th:field="*{email}" th:placeholder="#{email}">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="pin-input" th:text="#{pin.number}"></label>
+                                    <label for="pin-input" th:text="#{pin.number}" class="form-control-label"></label>
                                 </th>
                                 <td>
                                     <input id="pin-input" type="text" th:field="*{pinNumber}"
@@ -130,19 +130,19 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="password-input" th:text="#{password}"></label>
+                                    <label for="password-input" th:text="#{password}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="password-input" type="password" size="30" class="form-control" required
+                                    <input id="password-input" type="password" size="30" class="text form-control notempty" required
                                            th:field="*{password}" th:placeholder="#{password}">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="password-repeat" th:text="#{password}"></label>
+                                    <label for="password-repeat" th:text="#{password}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="password-repeat" type="password" size="30" class="form-control" required
+                                    <input id="password-repeat" type="password" size="30" class="text form-control notempty" required
                                            th:placeholder="#{password.repeat}">
                                 </td>
                             </tr>
