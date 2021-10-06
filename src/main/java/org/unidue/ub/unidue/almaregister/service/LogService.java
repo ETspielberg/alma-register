@@ -27,6 +27,7 @@ public class LogService {
         log.error(String.format("'An error occurred upon registering %s %s' | primaryId: '%s', userGroup: '%s', remoteAddress: %s, userAgent: '%s', error: true, errorMessage: '%s'",
                 registrationRequest.getFirstName(),
                 registrationRequest.getLastName(),
+                registrationRequest.getPrimaryId(),
                 registrationRequest.getUserStatus(),
                 getRemoteAddress(httpServletRequest),
                 getUserAgent(httpServletRequest),
