@@ -97,6 +97,22 @@ public class PublicController {
      */
     @PostMapping("/register")
     public String registerAlmaUser(@ModelAttribute RegistrationRequest registrationRequest, Locale locale, Model model, HttpServletRequest httpServletRequest) {
+        String userAgent;
+        String remoteAddress;
+        try {
+            remoteAddress = httpServletRequest.getRemoteAddr();
+            if (remoteAddress == null)
+                remoteAddress = "n.a.";
+        } catch (Exception e) {
+            remoteAddress = "n.a.";
+        }
+        try {
+            userAgent = httpServletRequest.getHeader("User-Agent");
+            if (userAgent == null)
+                userAgent = "n.a.";
+        } catch (Exception e) {
+            userAgent = "n.a.";
+        }
         if (this.almaUserService.userExists(registrationRequest)) {
             model.addAttribute("registrationRequest", registrationRequest);
             model.addAttribute("redirectUrl", redirectUrl);
@@ -104,13 +120,13 @@ public class PublicController {
         } else {
             try {
                 AlmaUser almaUser = this.almaUserService.createAlmaUser(registrationRequest.getAlmaUser(locale.getLanguage(), true), true);
-                log.info(String.format("User %s %s sucessfully registered. primaryId: %s, userGroup: %s, remoteAddress: %s, userAgent; %s",
+                log.info(String.format("User '%s, %s' successfully registered | primaryId: %s, userGroup: %s, remoteAddress: %s, userAgent; %s",
                         almaUser.getFirstName(),
                         almaUser.getLastName(),
                         almaUser.getPrimaryId(),
                         almaUser.getUserGroup().getValue(),
-                        httpServletRequest.getRemoteAddr(),
-                        httpServletRequest.getHeader("User-Agent")));
+                        remoteAddress,
+                        userAgent));
                 return "nearlyFinished";
             } catch (Exception e) {
                 log.warn("An error occurred", e);
