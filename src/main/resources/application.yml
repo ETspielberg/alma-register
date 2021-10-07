@@ -11,7 +11,8 @@ spring:
       ddl-auto: update
   batch:
     job.enabled: false
-    initialize-schema: always
+    jdbc:
+      initialize-schema: always
   mail:
     host: mailout.uni-duisburg-essen.de
     port: 587
@@ -42,11 +43,5 @@ alma:
     email:
       from: information.ub@uni-due.de
 logging:
-  level:
-    org:
-      unidue:
-        ub:
-          unidue:
-            almaregister:
-              client:
-                AlmaUserApiClient: DEBUG
+  file:
+    name: /var/log/libintel/register.log
