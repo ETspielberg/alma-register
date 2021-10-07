@@ -14,7 +14,7 @@ public class LogService {
     private final Logger log = LoggerFactory.getLogger(LogService.class);
 
     public void logSuccess(AlmaUser almaUser, HttpServletRequest httpServletRequest) {
-        log.info(String.format("'User '%s %s' successfully registered' | primaryId: '%s', userGroup: '%s', remoteAddress: %s, userAgent: '%s', error: false, errorMessage: ''",
+        log.info(String.format("'User %s %s successfully registered' | primaryId: '%s', userGroup: '%s', remoteAddress: %s, userAgent: '%s', error: false, errorMessage: ''",
                 almaUser.getFirstName(),
                 almaUser.getLastName(),
                 almaUser.getPrimaryId(),
