@@ -123,7 +123,7 @@
                                     <label for="pin-input" th:text="#{pin.number}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="pin-input" type="text" th:field="*{pinNumber}"
+                                    <input id="pin-input" type="password" th:field="*{pinNumber}"
                                            th:placeholder="#{pin.number}" required pattern="\d{8}"
                                            th:title="#{pin.number.title}"/>
                                 </td>
