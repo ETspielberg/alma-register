@@ -391,6 +391,11 @@ public class RegistrationRequest {
                 UserIdentifier cardIdentifier = new UserIdentifier().idType(userIdentifierIdTypeCard).status("ACTIVE").value(cardNumber).segmentType("external");
                 almaUser.addUserIdentifierItem(cardIdentifier);
             }
+            if (!matrikelNumber.isEmpty()) {
+                UserIdentifierIdType userIdentifierIdTypeCard = new UserIdentifierIdType().value("02");
+                UserIdentifier cardIdentifier = new UserIdentifier().idType(userIdentifierIdTypeCard).status("ACTIVE").value(matrikelNumber).segmentType("external");
+                almaUser.addUserIdentifierItem(cardIdentifier);
+            }
             UserIdentifierIdType userIdentifierIdType = new UserIdentifierIdType().value("03");
             UserIdentifier userIdentifier = new UserIdentifier().idType(userIdentifierIdType).status("ACTIVE").value(primaryId).segmentType("external");
             if (hashActive) {

@@ -186,6 +186,7 @@ public class AlmaUserService {
 
                 // calculate card number from his export data
                 long matrikel = Long.parseLong(hisExports.getMtknr());
+                registrationRequest.matrikelNumber = hisExports.getMtknr();
                 long cardCurrens = 0L;
                 if (hisExports.getCardCurrens() != null && !hisExports.getCardCurrens().isEmpty()) {
                     cardCurrens = Long.parseLong(hisExports.getCardCurrens());
