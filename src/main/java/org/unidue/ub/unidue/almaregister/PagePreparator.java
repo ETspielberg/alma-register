@@ -76,14 +76,6 @@ public class PagePreparator {
         Elements elements = doc.select(tag + "[" + attribute + "]");
         for (Element src : elements) {
             String path = src.attr(attribute);
-            if ("/ub/en/eindex.php".equals(path)) {
-                src.attr("th:href", "|/${module}?lang=en|");
-                src.removeAttr("href");
-            }
-            if ("/ub/index.php".equals(path)) {
-                src.attr("th:href", "|/${module}?lang=de|");
-                src.removeAttr("href");
-            }
             if (path.startsWith("/"))
                 src.attr(attribute, masterTemplateHost + path);
         }
