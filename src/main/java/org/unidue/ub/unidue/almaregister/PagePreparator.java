@@ -61,6 +61,8 @@ public class PagePreparator {
                 setAbsolutePaths(doc, "img", "src");
                 setAbsolutePaths(doc, "link", "href");
                 setAbsolutePaths(doc, "a", "href");
+                if ("en".equals(language))
+                    fixHomePageLink(doc);
                 setAbsolutePaths(doc, "script", "src");
                 setAbsolutePaths(doc, "meta", "content");
                 File f = new File(localTemplateFolder, templateFile);
@@ -69,6 +71,13 @@ public class PagePreparator {
             } catch (IOException ioe) {
                 log.warn("could not update page for " + language, ioe);
             }
+        }
+    }
+
+    private void fixHomePageLink(Document doc) {
+        Elements elements = doc.select ("#orgaunitTitle a");
+        for (Element src : elements) {
+            src.removeAttr("th:href");
         }
     }
 
