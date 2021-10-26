@@ -164,64 +164,29 @@ public class AlmaUserService {
         registrationRequest.email = coreectEncoding((String) this.httpServletRequest.getAttribute("SHIB_mail"));
         registrationRequest.primaryId = zimId;
 
-        // if no data can be obtained from the shibboleth response
-        if (type == null)
-            throw new MissingShibbolethDataException("no type given");
-        if (type.contains("student")) {
-            registrationRequest.userStatus = "01";
-
-            // if the user is a student collect the data from the student system to fill in further user information
-            log.debug("setting attributes for student");
-            try {
-                HisExport hisExports = this.hisService.getByZimId(zimId);
-                if (!hisExports.getEmail().equals(registrationRequest.email))
-                    registrationRequest.additionalEmailAdresses.add(hisExports.getEmail());
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-                try {
-                    LocalDate birthday = LocalDate.parse(hisExports.getGebdat(), formatter);
-                    registrationRequest.setBirthDate(birthday);
-                } catch (Exception e) {
-                    log.warn("could not parse birthday", e);
-                }
-
-                // calculate card number from his export data
-                long matrikel = Long.parseLong(hisExports.getMtknr());
-                registrationRequest.matrikelNumber = hisExports.getMtknr();
-                long cardCurrens = 0L;
-                if (hisExports.getCardCurrens() != null && !hisExports.getCardCurrens().isEmpty()) {
-                    cardCurrens = Long.parseLong(hisExports.getCardCurrens());
-                }
-                registrationRequest.cardNumber = String.format("%sS%08d%02d", hisExports.getCampus(), matrikel, cardCurrens);
-
-                // set gender
-                switch (String.valueOf(hisExports.getGeschl())) {
-                    case "0": {
-                        registrationRequest.setGender("NONE");
-                        break;
-                    }
-                    case "1": {
-                        registrationRequest.setGender("MALE");
-                        break;
-                    }
-                    case "2": {
-                        registrationRequest.setGender("FEMALE");
-                        break;
-                    }
-                    case "3": {
-                        registrationRequest.setGender("OTHER");
-                        break;
-                    }
-                }
-            } catch (Exception e) {
-                log.warn("an error occurred: could not extract matrikel number", e);
-                return registrationRequest;
-            }
-        } else if (type.contains("staff")) {
+        // first check: if type is set and has the staff options, set the account as staff
+        if (type != null && type.contains("staff")) {
             log.debug("setting attributes for staff member");
             registrationRequest.userStatus = "06";
         } else {
-            log.debug("setting attributes for external user");
-            registrationRequest.userStatus = "22";
+            //if it is not a staff account, retrieve the student data
+            HisExport hisExport = this.hisService.getByZimId(zimId);
+            // if there are student data, set the account type to student and add the student data
+            if (hisExport != null) {
+                registrationRequest.userStatus = "01";
+                addStudentData(registrationRequest, hisExport);
+                log.debug("adding his data for student");
+            } else {
+                // if there are no sudent data, but the type is set as student, set the account type to student
+                if (type != null && type.contains("student")) {
+                    log.debug("setting attributes for student");
+                    registrationRequest.userStatus = "01";
+                } else {
+                    // if there are no student data and if there is no student type, set the account to external
+                    log.debug("setting attributes for external");
+                    registrationRequest.userStatus = "22";
+                }
+            }
         }
         return registrationRequest;
     }
@@ -230,5 +195,51 @@ public class AlmaUserService {
         Charset fromCharset = StandardCharsets.ISO_8859_1;
         Charset toCharset = StandardCharsets.UTF_8;
         return new String(string.getBytes(fromCharset), toCharset);
+    }
+
+    private void addStudentData(RegistrationRequest registrationRequest, HisExport hisExport) {
+        try {
+
+            if (!hisExport.getEmail().equals(registrationRequest.email))
+                registrationRequest.additionalEmailAdresses.add(hisExport.getEmail());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            try {
+                LocalDate birthday = LocalDate.parse(hisExport.getGebdat(), formatter);
+                registrationRequest.setBirthDate(birthday);
+            } catch (Exception e) {
+                log.warn("could not parse birthday", e);
+            }
+
+            // calculate card number from his export data
+            long matrikel = Long.parseLong(hisExport.getMtknr());
+            registrationRequest.matrikelNumber = hisExport.getMtknr();
+            long cardCurrens = 0L;
+            if (hisExport.getCardCurrens() != null && !hisExport.getCardCurrens().isEmpty()) {
+                cardCurrens = Long.parseLong(hisExport.getCardCurrens());
+            }
+            registrationRequest.cardNumber = String.format("%sS%08d%02d", hisExport.getCampus(), matrikel, cardCurrens);
+
+            // set gender
+            switch (String.valueOf(hisExport.getGeschl())) {
+                case "1": {
+                    registrationRequest.setGender("MALE");
+                    break;
+                }
+                case "2": {
+                    registrationRequest.setGender("FEMALE");
+                    break;
+                }
+                case "3": {
+                    registrationRequest.setGender("OTHER");
+                    break;
+                }
+                default: {
+                    registrationRequest.setGender("NONE");
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            log.warn("an error occurred: could not extract matrikel number", e);
+        }
     }
 }
