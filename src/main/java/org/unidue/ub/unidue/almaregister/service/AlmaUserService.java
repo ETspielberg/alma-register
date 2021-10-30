@@ -160,6 +160,11 @@ public class AlmaUserService {
         registrationRequest.lastName = coreectEncoding(((String) this.httpServletRequest.getAttribute("SHIB_sn")));
         String type = (String) this.httpServletRequest.getAttribute("SHIB_affiliation");
         String zimId = (String) this.httpServletRequest.getAttribute("SHIB_uid");
+        if (zimId == null) {
+            String eppn = (String) this.httpServletRequest.getAttribute("SHIB_eppn");
+            if (eppn != null && eppn.contains("@"))
+                zimId = eppn.split("@")[0];
+        }
         registrationRequest.externalId = zimId;
         registrationRequest.email = coreectEncoding((String) this.httpServletRequest.getAttribute("SHIB_mail"));
         registrationRequest.primaryId = zimId;
