@@ -69,7 +69,6 @@ public class ScheduledService {
         jobLauncher.run(hisJob, jobParameters);
     }
 
-    @Async("threadPoolTaskExecutor")
     @Scheduled(cron = "0 0 7 * * *")
     public void updateUserAdresses() {
         Set<String> primaryIds = new HashSet<>();
