@@ -119,7 +119,28 @@ public class ScheduledService {
                 zimId = userIdentifier.getValue();
         }
         log.info(String.format("updating user with id %d and zim id %s", userNumber, zimId));
-        if (userNumber != 0L) {
+        if (!zimId.isEmpty()) {
+            ReadAddressByAccountResponse zimIdResponse = this.addressWebServiceClient.getAddressByZimId(zimId);
+            if (zimIdResponse != null) {
+                Address address = new Address().preferred(true)
+                        .addAddressTypeItem(new AddressAddressType().value("home"))
+                        .city(zimIdResponse.getAddress().getCity())
+                        .postalCode(zimIdResponse.getAddress().getPostcode())
+                        .line1(zimIdResponse.getAddress().getStreet())
+                        .line2(zimIdResponse.getAddress().getAddressaddition());
+                if ("D".equals(zimIdResponse.getAddress().getCountry().toUpperCase(Locale.ROOT)))
+                    address.setCountry(new AddressCountry().value("DEU"));
+                Iterator<Address> iterator = user.getContactInfo().getAddress().iterator();
+                while (iterator.hasNext()) {
+                    Address oldAddress = iterator.next();
+                    if (isSameAddress(oldAddress, address))
+                        iterator.remove();
+                    else
+                        oldAddress.preferred(false);
+                }
+                user.getContactInfo().addAddressItem(address);
+            }
+        } else if (userNumber != 0L) {
             ReadAddressByRegistrationnumberResponse matrikelResponse = this.addressWebServiceClient.getAddressByMatrikel(userNumber);
             if (matrikelResponse != null) {
                 Address address = new Address().preferred(true)
@@ -141,28 +162,7 @@ public class ScheduledService {
                 user.getContactInfo().addAddressItem(address);
 
             }
-        } else if (!zimId.isEmpty()) {
-            ReadAddressByAccountResponse zimIdResponse = this.addressWebServiceClient.getAddressByZimId(zimId);
-            if (zimIdResponse != null) {
-                Address address = new Address().preferred(true)
-                        .addAddressTypeItem(new AddressAddressType().value("home"))
-                        .city(zimIdResponse.getAddress().getCity())
-                        .postalCode(zimIdResponse.getAddress().getPostcode())
-                        .line1(zimIdResponse.getAddress().getStreet())
-                        .line2(zimIdResponse.getAddress().getAddressaddition());
-                if ("D".equals(zimIdResponse.getAddress().getCountry().toUpperCase(Locale.ROOT)))
-                    address.setCountry(new AddressCountry().value("DEU"));
-                Iterator<Address> iterator = user.getContactInfo().getAddress().iterator();
-                while (iterator.hasNext()) {
-                    Address oldAddress = iterator.next();
-                    if (isSameAddress(oldAddress, address))
-                        iterator.remove();
-                    else
-                        oldAddress.preferred(false);
-                }
-                user.getContactInfo().addAddressItem(address);
-            }
-        } else {
+        }  else {
             log.warn(String.format("could not get address for user %s from his system.", primaryId));
             return;
         }

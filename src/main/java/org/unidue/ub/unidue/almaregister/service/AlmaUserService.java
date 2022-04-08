@@ -157,7 +157,7 @@ public class AlmaUserService {
 
         // set the values as obtained by the shibboleth attributes
         registrationRequest.firstName = coreectEncoding(((String) this.httpServletRequest.getAttribute("SHIB_givenName")));
-        registrationRequest.lastName = coreectEncoding(((String) this.httpServletRequest.getAttribute("SHIB_sn")));
+        registrationRequest.lastName = coreectEncoding((String) this.httpServletRequest.getAttribute("SHIB_sn"));
         String type = (String) this.httpServletRequest.getAttribute("SHIB_affiliation");
         String zimId = (String) this.httpServletRequest.getAttribute("SHIB_uid");
         if (zimId == null) {

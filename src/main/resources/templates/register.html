@@ -3,6 +3,7 @@
 <head>
     <title th:text="#{register.heading}"></title>
     <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css"/>
+    <script type="application/javascript" th:src="@{/js/quagga.js}"></script>
 </head>
 <body>
 <div class="container-background bg-colored bg-gray" layout:fragment="content">
@@ -43,25 +44,30 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="firstName-input" th:text="#{first.name}" class="form-control-label"></label>
+                                    <label for="firstName-input" th:text="#{first.name}"
+                                           class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="firstName-input" type="text" size="30" class="text form-control notempty" autofocus
+                                    <input id="firstName-input" type="text" size="30" class="text form-control notempty"
+                                           autofocus
                                            required th:field="*{firstName}" th:placeholder="#{first.name}">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="lastName-input" th:text="#{last.name}" class="form-control-label"></label>
+                                    <label for="lastName-input" th:text="#{last.name}"
+                                           class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="lastName-input" type="text" size="30" class="text form-control notempty" required
+                                    <input id="lastName-input" type="text" size="30" class="text form-control notempty"
+                                           required
                                            th:field="*{lastName}" th:placeholder="#{last.name}">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="userStatus-input" th:text="#{user.status}" class="form-control-label"></label>
+                                    <label for="userStatus-input" th:text="#{user.status}"
+                                           class="form-control-label"></label>
                                 </th>
                                 <td>
                                     <select id="userStatus-input" th:field="*{userStatus}" required>
@@ -79,8 +85,12 @@
                                     <label for="road-input" th:text="#{road}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="road-input" type="text" size="30" class="text form-control notempty" required
-                                           th:field="*{road}" th:placeholder="#{road}">
+                                    <div class="input-field">
+                                        <input id="road-input" type="text" size="30" class="text form-control notempty"
+                                               required
+                                               th:field="*{road}" th:placeholder="#{road}">
+                                        <button type="button" class="icon-barcode button scan" data-toggle="modal" data-target="#livestream_scanner">Scan Barcode <i class="fa fa-barcode"></i></button>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -88,7 +98,8 @@
                                     <label for="plz-input" th:text="#{plz}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="plz-input" type="text" size="30" class="text form-control notempty" required
+                                    <input id="plz-input" type="text" size="30" class="text form-control notempty"
+                                           required
                                            th:field="*{plz}" th:placeholder="#{plz}">
                                 </td>
                             </tr>
@@ -97,16 +108,19 @@
                                     <label for="city-input" th:text="#{city}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="city-input" type="text" size="30" class="text form-control notempty" required
+                                    <input id="city-input" type="text" size="30" class="text form-control notempty"
+                                           required
                                            th:field="*{city}" th:placeholder="#{city}">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="birthdate-input" th:text="#{birth.date}" class="form-control-label"></label>
+                                    <label for="birthdate-input" th:text="#{birth.date}"
+                                           class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="birthdate-input" type="date" th:field="*{birthDate}" required class="form-control notempty">
+                                    <input id="birthdate-input" type="date" th:field="*{birthDate}" required
+                                           class="form-control notempty">
                                 </td>
                             </tr>
                             <tr>
@@ -114,7 +128,8 @@
                                     <label for="email-input" th:text="#{email}" class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="email-input" type="email" size="30" class="text form-control notempty" required
+                                    <input id="email-input" type="email" size="30" class="text form-control notempty"
+                                           required
                                            th:field="*{email}" th:placeholder="#{email}">
                                 </td>
                             </tr>
@@ -130,19 +145,23 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="password-input" th:text="#{password}" class="form-control-label"></label>
+                                    <label for="password-input" th:text="#{password}"
+                                           class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="password-input" type="password" size="30" class="text form-control notempty" required
+                                    <input id="password-input" type="password" size="30"
+                                           class="text form-control notempty" required
                                            th:field="*{password}" th:placeholder="#{password}">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="password-repeat" th:text="#{password}" class="form-control-label"></label>
+                                    <label for="password-repeat" th:text="#{password}"
+                                           class="form-control-label"></label>
                                 </th>
                                 <td>
-                                    <input id="password-repeat" type="password" size="30" class="text form-control notempty" required
+                                    <input id="password-repeat" type="password" size="30"
+                                           class="text form-control notempty" required
                                            th:placeholder="#{password.repeat}">
                                 </td>
                             </tr>
@@ -183,6 +202,29 @@
                 </form>
             </div>
         </div>
+        <div class="modal" id="livestream_scanner">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Barcode Scanner</h4>
+                    </div>
+                    <div class="modal-body" style="position: static">
+                        <div id="interactive" class="viewport"></div>
+                        <div class="error"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <label class="btn btn-default pull-left">
+                            <i class="fa fa-camera"></i> Use camera app
+                            <input type="file" accept="image/*;capture=camera" capture="camera" class="hidden" />
+                        </label>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
     </div>
     <!--/* from https://www.w3schools.com/howto/howto_js_password_validation.asp */-->
     <script>
@@ -268,6 +310,110 @@
                 submit.disabled = true;
             }
         }
+    </script>
+    <script>
+        $(function() {
+            // Create the QuaggaJS config object for the live stream
+            var liveStreamConfig = {
+                inputStream: {
+                    type : "LiveStream",
+                    constraints: {
+                        width: {min: 640},
+                        height: {min: 480},
+                        facingMode: "environment" // or "user" for the front camera
+                    }
+                },
+                locator: {
+                    patchSize: "large",
+                    halfSample: true
+                },
+                numOfWorkers: (navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 4),
+                decoder: {
+                    "readers":[
+                        {"format":"code_128_reader","config":{}}
+                    ]
+                },
+                locate: true
+            };
+            // The fallback to the file API requires a different inputStream option.
+            // The rest is the same
+            var fileConfig = $.extend(
+                {},
+                liveStreamConfig,
+                {
+                    inputStream: {
+                        size: 800
+                    }
+                }
+            );
+            // Start the live stream scanner when the modal opens
+            $('#livestream_scanner').on('shown.bs.modal', function (e) {
+                Quagga.init(
+                    liveStreamConfig,
+                    function(err) {
+                        if (err) {
+                            $('#livestream_scanner .modal-body .error').html('<div class="alert alert-danger"><strong><i class="fa fa-exclamation-triangle"></i> '+err.name+'</strong>: '+err.message+'</div>');
+                            Quagga.stop();
+                            return;
+                        }
+                        Quagga.start();
+                    }
+                );
+            });
+
+            // Make sure, QuaggaJS draws frames an lines around possible
+            // barcodes on the live stream
+            Quagga.onProcessed(function(result) {
+                var drawingCtx = Quagga.canvas.ctx.overlay,
+                    drawingCanvas = Quagga.canvas.dom.overlay;
+
+                if (result) {
+                    if (result.boxes) {
+                        drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+                        result.boxes.filter(function (box) {
+                            return box !== result.box;
+                        }).forEach(function (box) {
+                            Quagga.ImageDebug.drawPath(box, {x: 0, y: 1}, drawingCtx, {color: "green", lineWidth: 2});
+                        });
+                    }
+
+                    if (result.box) {
+                        Quagga.ImageDebug.drawPath(result.box, {x: 0, y: 1}, drawingCtx, {color: "#00F", lineWidth: 2});
+                    }
+
+                    if (result.codeResult && result.codeResult.code) {
+                        Quagga.ImageDebug.drawPath(result.line, {x: 'x', y: 'y'}, drawingCtx, {color: 'red', lineWidth: 3});
+                    }
+                }
+            });
+
+            // Once a barcode had been read successfully, stop quagga and
+            // close the modal after a second to let the user notice where
+            // the barcode had actually been found.
+            Quagga.onDetected(function(result) {
+                console.log(result)
+                if (result.codeResult.code){
+                    $('#scanner_input').val(result.codeResult.code);
+                    Quagga.stop();
+                    setTimeout(function(){ $('#livestream_scanner').modal('hide'); }, 1000);
+                }
+            });
+
+            // Stop quagga in any case, when the modal is closed
+            $('#livestream_scanner').on('hide.bs.modal', function(){
+                if (Quagga){
+                    Quagga.stop();
+                }
+            });
+
+            // Call Quagga.decodeSingle() for every file selected in the
+            // file input
+            $("#livestream_scanner input:file").on("change", function(e) {
+                if (e.target.files && e.target.files.length) {
+                    Quagga.decodeSingle($.extend({}, fileConfig, {src: URL.createObjectURL(e.target.files[0])}), function(result) {alert(result.codeResult.code);});
+                }
+            });
+        });
     </script>
 </div>
 
