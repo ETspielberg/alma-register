@@ -1,18 +1,6 @@
 spring:
   main:
     allow-bean-definition-overriding: true
-  datasource:
-    his:
-      jdbc-url: jdbc:postgresql://localhost:5432/services
-      username: services
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
-  batch:
-    job.enabled: false
-    jdbc:
-      initialize-schema: always
   mail:
     host: mailout.uni-duisburg-essen.de
     port: 587

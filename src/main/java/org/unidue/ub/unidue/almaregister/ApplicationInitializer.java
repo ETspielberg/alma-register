@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
-import org.unidue.ub.unidue.almaregister.service.ScheduledService;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -27,20 +26,6 @@ public class ApplicationInitializer {
 
     private final static Logger log = LoggerFactory.getLogger(ApplicationInitializer.class);
 
-    private final PagePreparator pagePreparator;
-
-    private final ScheduledService scheduledService;
-
-    /**
-     * constructor based autowiring of the page preparator bean
-     *
-     * @param pagePreparator The page preparator responsible for constructing a themed page template.
-     */
-    ApplicationInitializer(PagePreparator pagePreparator,
-                           ScheduledService scheduledService) {
-        this.pagePreparator = pagePreparator;
-        this.scheduledService = scheduledService;
-    }
 
     @PostConstruct
     private void init() {
@@ -67,12 +52,6 @@ public class ApplicationInitializer {
             }
         } catch (Exception e) {
             log.error("could not copy files", e);
-        }
-        this.pagePreparator.collectMasterTemplate();
-        try {
-            this.scheduledService.runImportJob();
-        } catch (Exception e) {
-            log.warn("could not collect his data.", e);
         }
     }
 }
